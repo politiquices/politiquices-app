@@ -6,6 +6,18 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
+import politicians_objects from './persons.json';
+
+
+/*
+const politicians = [
+  { label: 'Francisco Louçã', wiki_id: 'Q1442096' },
+  { label: 'José Sócrates', wiki_id: 'Q182367' },
+  { label: 'Durão Barroso', wiki_id: 'Q15849' },
+  { label: 'André Ventura', wiki_id: 'Q69935603' },
+  { label: 'Cavaco Silva', wiki_id: 'Q57398' },
+];
+
 
 const politicians = [
   { label: 'Francisco Louçã', wiki_id: 'Q1442096' },
@@ -14,6 +26,10 @@ const politicians = [
   { label: 'André Ventura', wiki_id: 'Q69935603' },
   { label: 'Cavaco Silva', wiki_id: 'Q57398' },
 ];
+*/
+
+const politicians = politicians_objects.map(politicians_objects => ({label: politicians_objects.name, wiki_id: politicians_objects.wiki_id}))
+
 
 
 function ColumnsGrid(props) {
@@ -84,13 +100,14 @@ function ComboBox(props) {
 
   const [selectedPerson, setSelectedPerson] = useState({})
 
+  // this functions uses the setData defined in App() - which triggers automatically changes in the DOM
+  // done together with Tiago Viegas
   function auxFun(selected_person) {
     fetch('http://localhost:5000/entity_raw?q='+selected_person.wiki_id).then(
       response => response.json()).then(
           x => props.func(x)
       )
   }
-
 
   return (
     <div>
