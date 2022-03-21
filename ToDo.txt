@@ -23,8 +23,6 @@ Effect + Hook
 
 https://blog.logrocket.com/guide-to-react-useeffect-hook/
 
-https://blog.logrocket.com/guide-to-react-useeffect-hook/
-
 https://overreacted.io/a-complete-guide-to-useeffect/
 
 https://betterprogramming.pub/stop-lying-to-react-about-missing-dependencies-10612e9aeeda
