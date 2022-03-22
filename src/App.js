@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import LanguageIcon from '@mui/icons-material/Language';
 import Link from '@material-ui/core/Link';
 
 import Card from '@mui/material/Card';
@@ -14,7 +13,22 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 
-import politicians_objects from './persons.json';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+import politicians_objects from './json/persons.json';
+import { Switch } from '@mui/material';
+
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
+
+import { SiWikidata } from "react-icons/si";
+import { HiAcademicCap } from "react-icons/hi";
+
+
+console.log("members:")
+console.log(politicians_objects.length)
 
 
 // convert JSON objects to React objects
@@ -25,51 +39,101 @@ const politicians = politicians_objects.map(
     })
   )
 
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
+
+
   
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
-  
+ 
 function BasicCard(props) {
 
-  const test = props.data.other  
-  const relationships = test.map(
-    test => ({title: test.title, url: test.url})
-    )
+  console.log(props.data.image)
+  
+  if (props.data.raw_relationships.opposes) {
+    console.log("selected opposes")
+    var rels = props.data.raw_relationships.opposes
 
-  console.log(relationships)
+  } else if (props.data.raw_relationships.supports) {
+    console.log("selected supports")
+    var rels = props.data.raw_relationships.supports
+  
+  } else if (props.data.raw_relationships.opposed_by) {
+    console.log("selected opposed_by")
+    var rels = props.data.raw_relationships.opposed_by
+  
+  } else if (props.data.raw_relationships.supported_by) {
+    console.log("selected supported_by")
+    var rels = props.data.raw_relationships.supported_by
+  
+  } else {
+    console.log("selected None")
+  }
+  
+  const relations = rels.map(rels => (
+    {
+      title: rels.title, 
+      url: rels.url, 
+      date: rels.date,
+      main_ent_image: props.data.image,
+      other_ent_image: rels.other_ent_image,
+      other_ent_name: rels.other_ent_name,
+    }
+    ))
 
-  return relationships.map((member) => (
-    <Card sx={{ minWidth: 275 }}>
-      <CardContent>        
-        <Typography variant="body2">          
-          {member.title}
-        </Typography>
-      </CardContent>
-    </Card>
+  return relations.map((entry) => (
+    <Grid item md={1}>
+      <Card variant="outlined" sx={{ minWidth: 275 }}>
+        <CardContent>        
+          <Typography variant="body2">          
+            {entry.date}
+          </Typography>
+        </CardContent>
+        <CardContent>
+
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+            <Avatar alt={entry.focus_ent} src={entry.main_ent_image} sx={{ width: 76, height: 76 }}/>
+            </Grid>
+            <Grid item xs={6}>
+            <Avatar alt={entry.other_ent_name} src={entry.other_ent_image} sx={{ width: 76, height: 76 }}/>
+            </Grid>
+          </Grid>
+        
+        </CardContent>
+        <CardContent>
+          <Typography variant="body2">          
+            {entry.title}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Grid>
   ))
 }
 
 
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 
 function FillIn(occupations) {
   if (occupations.length > 0) {
     return occupations.map((member) => (
-      <Typography sx={{ mb: 1.5 }} color="text.secondary">
-        {member}
-      </Typography>
+      <Link href="#">
+        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          {member}
+        </Typography>
+        </Link>
     ))              
   }
   return <Typography sx={{ mb: 1.5 }} color="text.secondary">-</Typography>
 }
 
-// present a person card/info
+// present a person card/info + news titles
 function ColumnsGrid(props) {
 
   const wiki_url = "http://www.wikidata.org/wiki/"+props.data.wiki_id
@@ -90,12 +154,12 @@ function ColumnsGrid(props) {
         {/* Foto + Nome + WikiData link */} 
         <Grid item xs={4}>
           <center>
-            <Avatar alt={props.data.name} src={props.data.image} sx={{ width: 124, height: 124 }}/>
+            <Avatar alt={props.data.name} src={props.data.image} sx={{ width: 160, height: 160 }}/>
             <Typography variant="h6" component="div">
               <b>{props.data.name}</b>
             </Typography>
             <Link href={wiki_url} target="_blank" >
-              <LanguageIcon/>
+              <SiWikidata size={35}/>
             </Link>
           </center>
         </Grid>
@@ -108,7 +172,7 @@ function ColumnsGrid(props) {
             ) : (
               props.data.parties.map((member, i) => (
                 <div>
-                  <img key="{member.name}" width="48" src={member.image_url}></img>
+                  <img key="{member.name}" width="68" src={member.image_url}></img>
                   <br/>
                 </div>
               ))
@@ -125,8 +189,9 @@ function ColumnsGrid(props) {
         )}
         </Grid>
 
-        {/* Estudos */} 
+        {/* Estudos */}         
         <Grid item xs={4}>
+        <HiAcademicCap size={35}/>
         {(!props.data || !props.data.education)
           ? (<p>Loading...</p>) 
           : (FillIn(props.data.education)
@@ -134,19 +199,27 @@ function ColumnsGrid(props) {
         </Grid>
 
       </Grid>
-    
-
-      <Grid 
-        container 
+          
+      <Grid
+        container
         spacing={1} 
-        columns={32}
-        alignItems="center"
+        columns={1}
+        direction='row'
+        alignItems="left"
         justifyContent="center"
+        width={500}
       >
+      
+      <FormGroup>
+        <FormControlLabel control={<Switch defaultChecked />} label="all" />
+      </FormGroup>
+
+      <br></br>
+
     
     {(!props.data || !props.data.occupations) 
           ? (<p>Loading...</p>) 
-          : <BasicCard data={props.data.raw_relationships}/>
+          : <BasicCard data={props.data}/>
         }
     
       </Grid>
@@ -209,7 +282,7 @@ function App() {
           <ComboBox func={setData}/>
         </center>
       <br></br>
-      <div id="personality">
+      <div id="personality">        
         <center>
           <ColumnsGrid data={data} />
           </center>
