@@ -26,10 +26,11 @@ import Paper from '@mui/material/Paper';
 import { SiWikidata } from "react-icons/si";
 import { HiAcademicCap } from "react-icons/hi";
 
+import PublicoLogo from "./images/114px-Logo_publico.png"
+import ArquivoLogo from "./images/color_vertical.png"
 
-console.log("members:")
-console.log(politicians_objects.length)
 
+//const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 // convert JSON objects to React objects
 const politicians = politicians_objects.map(
@@ -39,21 +40,8 @@ const politicians = politicians_objects.map(
     })
   )
 
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
-
-  
- 
-function BasicCard(props) {
-
-  console.log(props.data.image)
+// Loads news titles for a given personality
+function NewsTitles(props) {
   
   if (props.data.raw_relationships.opposes) {
     console.log("selected opposes")
@@ -79,10 +67,12 @@ function BasicCard(props) {
     {
       title: rels.title, 
       url: rels.url, 
-      date: rels.date,
+      date: rels.date,      
       main_ent_image: props.data.image,
+      rel_type: rels.rel_type,
       other_ent_image: rels.other_ent_image,
       other_ent_name: rels.other_ent_name,
+      other_ent_url: rels.other_ent_url
     }
     ))
 
@@ -90,55 +80,57 @@ function BasicCard(props) {
     <Grid item md={1}>
       <Card variant="outlined" sx={{ minWidth: 275 }}>
         <CardContent>        
-          <Typography variant="body2">          
+          <Typography variant="h6" component="div">          
             {entry.date}
           </Typography>
         </CardContent>
         <CardContent>
 
           <Grid container spacing={2}>
-            <Grid item xs={6}>
-            <Avatar alt={entry.focus_ent} src={entry.main_ent_image} sx={{ width: 76, height: 76 }}/>
+            <Grid item xs={4}>
+              <Avatar alt={entry.focus_ent} src={entry.main_ent_image} sx={{ width: 76, height: 76 }}/>
             </Grid>
-            <Grid item xs={6}>
-            <Avatar alt={entry.other_ent_name} src={entry.other_ent_image} sx={{ width: 76, height: 76 }}/>
+            <Grid item xs={4}>
+              {entry.rel_type}
+            </Grid>
+            <Grid item xs={4}>
+              <Link href={entry.other_ent_url} onClick={console.log(entry.other_ent_url)}>
+                <Avatar alt={entry.other_ent_name} src={entry.other_ent_image} sx={{ width: 76, height: 76 }}/>
+              </Link>
             </Grid>
           </Grid>
         
         </CardContent>
-        <CardContent>
-          <Typography variant="body2">          
-            {entry.title}
-          </Typography>
+        <CardContent>          
+            <Typography variant="h10">          
+              {entry.title}              
+            </Typography>
+
+            <Link href={entry.url} target="_blank"><img width="25" src={PublicoLogo}/></Link>                               
         </CardContent>
       </Card>
     </Grid>
   ))
 }
 
+// Loads person card/info + news titles
+function PersonalidadeInfo(props) {
 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
-
-function FillIn(occupations) {
-  if (occupations.length > 0) {
-    return occupations.map((member) => (
-      <Link href="#">
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {member}
-        </Typography>
+  function FillIn(occupations) {
+    if (occupations.length > 0) {
+      return occupations.map((member) => (
+        <Link href="#">
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            {member}
+          </Typography>
         </Link>
-    ))              
+      ))              
+    }
+    return <Typography sx={{ mb: 1.5 }} color="text.secondary">-</Typography>
   }
-  return <Typography sx={{ mb: 1.5 }} color="text.secondary">-</Typography>
-}
-
-// present a person card/info + news titles
-function ColumnsGrid(props) {
+  
 
   const wiki_url = "http://www.wikidata.org/wiki/"+props.data.wiki_id
-
-  // console.log(props.data.raw_relationships)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -164,24 +156,26 @@ function ColumnsGrid(props) {
           </center>
         </Grid>
 
-        {/* Partido Político */} 
+        {/* Partido(s) Político(s) */} 
         <Grid item xs={4}>
           <center>
             {(!props.data || !props.data.parties) ? (
             <p>Loading...</p>
-            ) : (
+            ) : (              
               props.data.parties.map((member, i) => (
+                <Link href="#">
                 <div>
                   <img key="{member.name}" width="68" src={member.image_url}></img>
                   <br/>
                 </div>
+                </Link>              
               ))
           )}
 
           </center>
         </Grid>
 
-        {/* Profissão */} 
+        {/* Profissão/ões */} 
         <Grid item xs={4}>      
         {(!props.data || !props.data.occupations) 
           ? (<p>Loading...</p>) 
@@ -199,15 +193,16 @@ function ColumnsGrid(props) {
         </Grid>
 
       </Grid>
-          
+      
+      {/* Títulos de Notícias */}
       <Grid
         container
-        spacing={1} 
+        spacing={2} 
         columns={1}
         direction='row'
         alignItems="left"
         justifyContent="center"
-        width={500}
+        width={650}
       >
       
       <FormGroup>
@@ -215,21 +210,19 @@ function ColumnsGrid(props) {
       </FormGroup>
 
       <br></br>
-
     
-    {(!props.data || !props.data.occupations) 
-          ? (<p>Loading...</p>) 
-          : <BasicCard data={props.data}/>
-        }
-    
+      {(!props.data || !props.data.raw_relationships) 
+        ? (<p>Loading...</p>) 
+        : <NewsTitles data={props.data}/>
+      }    
       </Grid>
 
     </Box>
   );
 }
 
-
-function ComboBox(props) {
+// Autocomplete with all personalities
+function Personalidades(props) {
 
   const [selectedPerson, setSelectedPerson] = useState({})
 
@@ -279,12 +272,12 @@ function App() {
   return (
     <div>
         <center>
-          <ComboBox func={setData}/>
+          <Personalidades func={setData}/>
         </center>
       <br></br>
       <div id="personality">        
         <center>
-          <ColumnsGrid data={data} />
+          <PersonalidadeInfo data={data} />
           </center>
       </div>
     </div>
