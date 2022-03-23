@@ -9,19 +9,13 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Link from '@material-ui/core/Link';
 
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 
-import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 import politicians_objects from './json/persons.json';
 import { Switch } from '@mui/material';
-
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 
 import { SiWikidata } from "react-icons/si";
 import { HiAcademicCap } from "react-icons/hi";
@@ -29,8 +23,6 @@ import { HiAcademicCap } from "react-icons/hi";
 import PublicoLogo from "./images/114px-Logo_publico.png"
 import ArquivoLogo from "./images/color_vertical.png"
 
-
-//const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 // convert JSON objects to React objects
 const politicians = politicians_objects.map(
@@ -93,8 +85,8 @@ function NewsTitles(props) {
             <Grid item xs={4}>
               {entry.rel_type}
             </Grid>
-            <Grid item xs={4}>
-              <Link href={entry.other_ent_url} onClick={console.log(entry.other_ent_url)}>
+            <Grid item xs={4}>              
+              <Link href="#"> {/* onClick={setSelectedPerson(entry.other_ent_url) */}
                 <Avatar alt={entry.other_ent_name} src={entry.other_ent_image} sx={{ width: 76, height: 76 }}/>
               </Link>
             </Grid>
@@ -116,6 +108,8 @@ function NewsTitles(props) {
 // Loads person card/info + news titles
 function PersonalidadeInfo(props) {
 
+  const wiki_url = "http://www.wikidata.org/wiki/"+props.data.wiki_id
+
   function FillIn(occupations) {
     if (occupations.length > 0) {
       return occupations.map((member) => (
@@ -129,9 +123,6 @@ function PersonalidadeInfo(props) {
     return <Typography sx={{ mb: 1.5 }} color="text.secondary">-</Typography>
   }
   
-
-  const wiki_url = "http://www.wikidata.org/wiki/"+props.data.wiki_id
-
   return (
     <Box sx={{ flexGrow: 1 }}>
     
@@ -221,11 +212,79 @@ function PersonalidadeInfo(props) {
   );
 }
 
+
+function App() {
+
+  const [selectedPerson, setSelectedPerson] = useState({})
+  const [data, setData] = useState()
+  
+  // this function uses the 'setData' defined in App() - received in props.func() 
+  // which triggers automatically changes in the DOM done together with Tiago Viegas
+  function auxFun(selected_person) {
+    console.log('triggered')
+    fetch('http://localhost:3000/entity_raw?q='+selected_person.wiki_id).then(
+      response => response.json()).then(
+          x => setData(x)
+      )
+  }
+
+  if (!data || !data.occupations) {
+    return (
+      <div>
+        <center>
+        <Autocomplete        
+          id="combo-box-demo"
+          options={politicians}
+          sx={{ width: 300 }}
+          onChange={(event, value) => {
+            setSelectedPerson(value)
+            auxFun(value)
+          }} 
+          renderInput={(params) => <TextField {...params} label="Personalidade" />}
+        />
+        </center>
+      </div>
+    )
+  }
+  
+  else {
+      return (
+        <div>
+          <center>
+          <Autocomplete        
+            id="combo-box-demo"
+            options={politicians}
+            sx={{ width: 300 }}
+            onChange={(event, value) => {
+              setSelectedPerson(value)
+              auxFun(value)
+            }} 
+            renderInput={(params) => <TextField {...params} label="Personalidade" />}
+          />
+          </center>
+          <br></br>
+          <div id="personality">        
+            <center>
+               <PersonalidadeInfo data={data} />
+              </center>
+          </div>
+        </div>
+      )
+    }   
+}
+
+export default App;
+
+
+
+
+
+/*
 // Autocomplete with all personalities
 function Personalidades(props) {
 
   const [selectedPerson, setSelectedPerson] = useState({})
-
+  
   // this function uses the 'setData' defined in App() - received in props.func() 
   // which triggers automatically changes in the DOM done together with Tiago Viegas
   function auxFun(selected_person) {
@@ -237,8 +296,7 @@ function Personalidades(props) {
 
   return (
     <div>
-      <Autocomplete
-        
+      <Autocomplete        
         id="combo-box-demo"
         options={politicians}
         sx={{ width: 300 }}
@@ -254,7 +312,7 @@ function Personalidades(props) {
 
 
 function App() {
-  
+
   const [data, setData] = useState({})
 
   useEffect(() => {
@@ -277,7 +335,7 @@ function App() {
       <br></br>
       <div id="personality">        
         <center>
-          <PersonalidadeInfo data={data} />
+           <PersonalidadeInfo data={data} />
           </center>
       </div>
     </div>
@@ -285,3 +343,5 @@ function App() {
 }
 
 export default App;
+*/
+
