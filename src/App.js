@@ -1,5 +1,5 @@
-import React, { useEffect, useState} from 'react'
 import './App.css';
+import React, { useEffect, useState, Component} from 'react'
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -7,6 +7,8 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Link from '@material-ui/core/Link';
+
+import ResponsiveAppBar from './NavigationBar'
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -23,6 +25,28 @@ import { HiAcademicCap } from "react-icons/hi";
 import PublicoLogo from "./images/114px-Logo_publico.png"
 import ArquivoLogo from "./images/color_vertical.png"
 
+export const MContext = React.createContext();  //exporting context object
+
+class MyProvider extends Component {
+  state = {
+    message: "",
+    selectedPerson: {}
+  }
+  render() {
+      return (
+          <MContext.Provider value={
+            {
+              state: this.state, 
+              setMessage: (value) => this.setState({message: value }),
+              setSelectedPerson: (value) => this.setState({selectedPerson: value })
+            }
+            }
+          >
+          {this.props.children}   {/* this indicates that all the child tags with MyProvider as Parent can access the global store. */} 
+          </MContext.Provider>)
+  }
+}
+
 
 // convert JSON objects to React objects
 const politicians = politicians_objects.map(
@@ -38,21 +62,14 @@ function NewsTitles(props) {
   if (props.data.raw_relationships.opposes) {
     console.log("selected opposes")
     var rels = props.data.raw_relationships.opposes
-
   } else if (props.data.raw_relationships.supports) {
     console.log("selected supports")
     var rels = props.data.raw_relationships.supports
-  
   } else if (props.data.raw_relationships.opposed_by) {
     console.log("selected opposed_by")
     var rels = props.data.raw_relationships.opposed_by
-  
-  } else if (props.data.raw_relationships.supported_by) {
-    console.log("selected supported_by")
-    var rels = props.data.raw_relationships.supported_by
-  
   } else {
-    console.log("selected None")
+    var rels = props.data.raw_relationships.supported_by
   }
   
   const relations = rels.map(rels => (
@@ -86,7 +103,7 @@ function NewsTitles(props) {
               {entry.rel_type}
             </Grid>
             <Grid item xs={4}>              
-              <Link href="#"> {/* onClick={setSelectedPerson(entry.other_ent_url) */}
+              <Link href="#"> {/* onClick=setSelectedPerson(entry.other_ent_url) */}
                 <Avatar alt={entry.other_ent_name} src={entry.other_ent_image} sx={{ width: 76, height: 76 }}/>
               </Link>
             </Grid>
@@ -231,6 +248,8 @@ function App() {
   if (!data || !data.occupations) {
     return (
       <div>
+        <ResponsiveAppBar/>
+        <br></br>
         <center>
         <Autocomplete        
           id="combo-box-demo"
@@ -250,24 +269,26 @@ function App() {
   else {
       return (
         <div>
-          <center>
-          <Autocomplete        
-            id="combo-box-demo"
-            options={politicians}
-            sx={{ width: 300 }}
-            onChange={(event, value) => {
-              setSelectedPerson(value)
-              auxFun(value)
-            }} 
-            renderInput={(params) => <TextField {...params} label="Personalidade" />}
-          />
-          </center>
-          <br></br>
-          <div id="personality">        
+          <ResponsiveAppBar/>
+            <br></br>
             <center>
-               <PersonalidadeInfo data={data} />
-              </center>
-          </div>
+            <Autocomplete        
+              id="combo-box-demo"
+              options={politicians}
+              sx={{ width: 300 }}
+              onChange={(event, value) => {
+                setSelectedPerson(value)
+                auxFun(value)
+              }} 
+              renderInput={(params) => <TextField {...params} label="Personalidade" />}
+            />
+            </center>
+            <br></br>
+            <div id="personality">        
+              <center>
+                <PersonalidadeInfo data={data} />
+                </center>
+            </div>
         </div>
       )
     }   
