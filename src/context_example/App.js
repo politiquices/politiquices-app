@@ -31,7 +31,6 @@ class Child2 extends React.Component {
         return (
         <div>
             <MContext.Consumer>
-                console.log('triggered')
                 {(context) => (<p>{context.state.message}</p>)}
             </MContext.Consumer>
          </div>
