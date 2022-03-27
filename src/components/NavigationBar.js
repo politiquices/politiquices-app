@@ -35,6 +35,7 @@ const ResponsiveAppBar = () => {
   };
 
   return (
+    <React.Fragment>
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -142,6 +143,8 @@ const ResponsiveAppBar = () => {
         </Toolbar>
       </Container>
     </AppBar>
+    <br></br>
+    </React.Fragment>
   );
 };
 

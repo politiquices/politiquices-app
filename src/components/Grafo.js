@@ -1,6 +1,6 @@
 import React from "react"
 
-const Home = () => {
+const Grafo = () => {
     return (
       <div>
           Grafos React?
@@ -8,4 +8,4 @@ const Home = () => {
     );
   }
   
-export default Home;
+export default Grafo;

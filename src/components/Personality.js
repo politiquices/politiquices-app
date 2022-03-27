@@ -8,15 +8,13 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Link from '@material-ui/core/Link';
 
-import ResponsiveAppBar from './components/NavigationBar'
-
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import politicians_objects from './json/persons.json';
+import politicians_objects from '../json/persons.json';
 import { Switch } from '@mui/material';
 
 import { SiWikidata } from "react-icons/si";
@@ -248,7 +246,6 @@ function App() {
   if (!data || !data.occupations) {
     return (
       <div>
-        <ResponsiveAppBar/>
         <br></br>
         <center>
         <Autocomplete        
@@ -269,26 +266,25 @@ function App() {
   else {
       return (
         <div>
-          <ResponsiveAppBar/>
-            <br></br>
+          <br></br>
+          <center>
+          <Autocomplete        
+            id="combo-box-demo"
+            options={politicians}
+            sx={{ width: 300 }}
+            onChange={(event, value) => {
+              setSelectedPerson(value)
+              auxFun(value)
+            }} 
+            renderInput={(params) => <TextField {...params} label="Personalidade" />}
+          />
+          </center>
+          <br></br>
+          <div id="personality">        
             <center>
-            <Autocomplete        
-              id="combo-box-demo"
-              options={politicians}
-              sx={{ width: 300 }}
-              onChange={(event, value) => {
-                setSelectedPerson(value)
-                auxFun(value)
-              }} 
-              renderInput={(params) => <TextField {...params} label="Personalidade" />}
-            />
-            </center>
-            <br></br>
-            <div id="personality">        
-              <center>
-                <PersonalidadeInfo data={data} />
-                </center>
-            </div>
+              <PersonalidadeInfo data={data} />
+              </center>
+          </div>
         </div>
       )
     }   
