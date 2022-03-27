@@ -10,6 +10,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Link from '@material-ui/core/Link';
 
 const Partidos = () => {
     
@@ -37,8 +38,8 @@ const Partidos = () => {
             const { wiki_id, label, logo, nr_members, country} = props
             return (
                 <React.Fragment>
-                    
-                    <Card sx={{ maxWidth: 180 }}>
+                    <Link>
+                    <Card sx={{ maxWidth: 180 }} className="card">
                         <center>
                         <CardMedia style={{width: "auto"}}
                             align='center'
@@ -61,6 +62,7 @@ const Partidos = () => {
                         </Typography>
                     </CardContent>
                     </Card>
+                    </Link>
                 </React.Fragment>
             )
         }

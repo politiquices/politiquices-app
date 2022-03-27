@@ -1,10 +1,9 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
 
-const GridSystem = ({ children, md }) => {
+const GridSystem = ({ children }) => {
 
-    // returns an array of columns with the children inside.
-    const renderCols = () => {
+    const renderGrid = () => {
         let cols = []
         for(let index = 0; index < children.length; index++) {
             cols.push(
@@ -24,7 +23,7 @@ const GridSystem = ({ children, md }) => {
             //justifyContent="center"
             style={{ minHeight: '100vh' }}
             >
-            {renderCols()}
+            {renderGrid()}
         </Grid>
     );
 };
