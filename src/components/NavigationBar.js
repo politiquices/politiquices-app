@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom'
 
 
-const pages = ['Grafo', 'Personalidades', 'Partidos', 'Sobre'];
+const pages = ['Grafo', 'Cronologia', 'Personalidades', 'Partidos', 'Sobre'];
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const ResponsiveAppBar = () => {
