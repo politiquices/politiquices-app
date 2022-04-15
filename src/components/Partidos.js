@@ -75,7 +75,7 @@ const Partidos = () => {
                     { data.length > 0 
                     ? data.map(item => <Item key={item.wiki_id} wiki_id={item.wiki_id} label={item.party_label} 
                                              logo={item.party_logo} nr_members={item.nr_personalities} country={item.country}/>) 
-                    : [<p>Não foram encontras partidos</p>] }
+                    : [<p>Não foram encontrados partidos</p>] }
                 </GridSystem>
             </React.Fragment>
           );

@@ -1,8 +1,11 @@
-import React, { useEffect, useState, Component} from 'react'
+import React from 'react'
 import Select from 'react-select'
 import politicians_objects from '../json/persons.json';
+import Grid from '@mui/material/Grid';
 //import 'bootstrap/dist/css/bootstrap.css';
 import Button from '@mui/material/Button';
+import NewsTitles from './Utils'
+
 
 // convert JSON objects to React objects
 const politicians = politicians_objects.map(
@@ -17,7 +20,6 @@ var state = {
     selectedOption: null,
 }
 
-
 const Cronologia = () => {
 
   const [response, setResponse] = React.useState();
@@ -29,7 +31,7 @@ const Cronologia = () => {
         console.log(state);
         
         let result = state.map(a => 'wd:'+a.value);
-        const recipeUrl = 'http://127.0.0.1:5000/timeline';
+        const recipeUrl = 'http://0.0.0.0:5030/timeline';
         const postBody = result
 
         const requestMetadata = {
@@ -44,7 +46,7 @@ const Cronologia = () => {
           .then(res => res.json())
           .then(data => {
             console.log(data)
-            //this.setState({ recipes });
+            setResponse(data);
         });
     };
    
@@ -53,34 +55,52 @@ const Cronologia = () => {
     //this.setState({options: e});
     state = e
     console.log(`Option selected:`, e);
-    console.log(state)
+    console.log(`state:`, state)
   }
     
-    const MyComponent = () => (
-      <Select  className="mt-4 col-md- col-offset-3"
+  const MyComponent = () => (
+      <Select class="centered"
         isMulti={true}
         options={politicians}
         onChange={handleChange}
         />
-    )
+  )
     
-    return (
-      <div>
+
+  return (
+    <div>
+      <br></br>
+      <center>
+        <MyComponent/>
         <br></br>
-        <center>
-          <MyComponent/>
-          <br></br>
-          <Button 
-            variant="contained"
-            onClick={() => { handleClick(); }}
-            // see: https://dirask.com/posts/React-button-with-AJAX-request-1XokYj
-          >  
-            Cronologia
-          </Button>
-          {response && <div>{response}</div>}
-        </center> 
-      </div>
-    )
-  }
+        <Button 
+          variant="contained"
+          onClick={() => { handleClick(); }}
+          // see: https://dirask.com/posts/React-button-with-AJAX-request-1XokYj
+        >  
+          Cronologia
+        </Button>
+      </center> 
+      
+      <Grid
+        container
+        spacing={2} 
+        columns={1}
+        direction='row'
+        alignItems="left"
+        justifyContent="center"
+        width={650}
+      >
+    
+      {(!response) 
+        ? (<p>Loading...</p>) 
+        : <NewsTitles data={response}/>
+      }
+
+      </Grid>
+
+    </div>    
+  )
+}
   
 export default Cronologia;

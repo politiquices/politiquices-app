@@ -25,6 +25,7 @@ import ArquivoLogo from "./images/color_vertical.png"
 
 export const MContext = React.createContext();  //exporting context object
 
+/*
 class MyProvider extends Component {
   state = {
     message: "",
@@ -40,10 +41,11 @@ class MyProvider extends Component {
             }
             }
           >
-          {this.props.children}   {/* this indicates that all the child tags with MyProvider as Parent can access the global store. */} 
+          {this.props.children}   {// this indicates that all the child tags with MyProvider as Parent can access the global store.} 
           </MContext.Provider>)
   }
 }
+*/
 
 
 // convert JSON objects to React objects
