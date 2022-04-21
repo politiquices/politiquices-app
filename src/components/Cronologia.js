@@ -31,7 +31,7 @@ const Cronologia = () => {
         console.log(state);
         
         let result = state.map(a => 'wd:'+a.value);
-        const recipeUrl = 'http://0.0.0.0:5030/timeline';
+        const recipeUrl = 'http://0.0.0.0/timeline';
         const postBody = result
 
         const requestMetadata = {

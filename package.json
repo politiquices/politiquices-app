@@ -2,7 +2,7 @@
   "name": "politiquices-app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://0.0.0.0:5030",
+  "proxy": "http://0.0.0.0",
   "dependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
