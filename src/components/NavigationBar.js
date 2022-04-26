@@ -12,8 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom'
 
 
-const pages = ['Grafo', 'Cronologia', 'Personalidades', 'Partidos', 'Sobre'];
-// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Grafo', 'Cronologia', 'Personalidades', 'Partidos', 'Estatistica', 'Sobre'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

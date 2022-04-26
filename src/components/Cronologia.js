@@ -5,6 +5,7 @@ import Grid from '@mui/material/Grid';
 //import 'bootstrap/dist/css/bootstrap.css';
 import Button from '@mui/material/Button';
 import NewsTitles from './Utils'
+import RangeSlider from './DateSlider'
 
 
 // convert JSON objects to React objects
@@ -31,7 +32,7 @@ const Cronologia = () => {
         console.log(state);
         
         let result = state.map(a => 'wd:'+a.value);
-        const recipeUrl = 'http://0.0.0.0/timeline';
+        const recipeUrl = '/timeline';
         const postBody = result
 
         const requestMetadata = {
@@ -54,8 +55,7 @@ const Cronologia = () => {
   const handleChange = (e) => {
     //this.setState({options: e});
     state = e
-    console.log(`Option selected:`, e);
-    console.log(`state:`, state)
+    console.log(`selected:`, e);
   }
     
   const MyComponent = () => (
@@ -63,7 +63,7 @@ const Cronologia = () => {
         isMulti={true}
         options={politicians}
         onChange={handleChange}
-        />
+      />
   )
     
 
@@ -73,6 +73,8 @@ const Cronologia = () => {
       <center>
         <MyComponent/>
         <br></br>
+        <RangeSlider/>
+        <br></br>
         <Button 
           variant="contained"
           onClick={() => { handleClick(); }}
@@ -81,7 +83,8 @@ const Cronologia = () => {
           Cronologia
         </Button>
       </center> 
-      
+      <br></br>
+      <center>
       <Grid
         container
         spacing={2} 
@@ -91,13 +94,12 @@ const Cronologia = () => {
         justifyContent="center"
         width={650}
       >
-    
       {(!response) 
         ? (<p>Loading...</p>) 
         : <NewsTitles data={response}/>
       }
-
       </Grid>
+      </center>
 
     </div>    
   )
