@@ -1,14 +1,8 @@
-import React, { useEffect, useState, Component} from 'react'
-import Grid from '@mui/material/Grid';
+import React, { useEffect, useState} from 'react'
 import GridSystem from './GridSystem';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import MediaCard from './MediaCard';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Link from '@material-ui/core/Link';
 
@@ -17,7 +11,7 @@ const Partidos = () => {
     const [data, setData] = useState([])
 
     useEffect(() => {
-      fetch('http://localhost:3000/parties_raw').then(
+      fetch('/parties/').then(
         response => response.json()
       ).then( data => { 
           setData(data) 
@@ -35,7 +29,7 @@ const Partidos = () => {
         // display parties in the Grid
         const Item = props => {
             // destructure the props
-            const { wiki_id, label, logo, nr_members, country} = props
+            const { label, logo, nr_members, country} = props
             return (
                 <React.Fragment>
                     <Link>

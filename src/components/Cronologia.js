@@ -2,7 +2,6 @@ import React from 'react'
 import Select from 'react-select'
 import politicians_objects from '../json/persons.json';
 import Grid from '@mui/material/Grid';
-//import 'bootstrap/dist/css/bootstrap.css';
 import Button from '@mui/material/Button';
 import NewsTitles from './Utils'
 import RangeSlider from './DateSlider'
@@ -29,26 +28,22 @@ const Cronologia = () => {
 
         // see: https://www.pluralsight.com/guides/how-to-send-data-via-ajax-in-react
 
-        console.log(state);
-        
-        let result = state.map(a => 'wd:'+a.value);
-        const recipeUrl = '/timeline';
-        const postBody = result
+        let result = state.map(a => a.value);
 
-        const requestMetadata = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(postBody)
-        };
+        let params = ''
+        for (let i=0; i< result.length; i++) {
+          params += '&q='+result[i]
+        }
 
-        fetch(recipeUrl, requestMetadata)
+        fetch(`/timeline?${params}`, {
+          method: "GET",
+          headers: {'Content-Type': 'application/json'}})
           .then(res => res.json())
-          .then(data => {
-            console.log(data)
-            setResponse(data);
-        });
+            .then(data => {
+              console.log(data)
+              setResponse(data);
+            });
+
     };
    
   // handle onChange event of the dropdown
@@ -65,7 +60,6 @@ const Cronologia = () => {
         onChange={handleChange}
       />
   )
-    
 
   return (
     <div>

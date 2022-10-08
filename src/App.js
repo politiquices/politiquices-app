@@ -1,6 +1,6 @@
-import React, { useEffect, useState, Component} from 'react'
+import React from 'react'
 import './App.css';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import ResponsiveAppBar from './components/NavigationBar'
 import Home from './components/Home'
 import Cronologia from './components/Cronologia';
@@ -8,7 +8,7 @@ import Grafo from './components/Grafo';
 import Partidos from './components/Partidos';
 import Personalidades from './components/Personalidades';
 import PersonalidadeInfo from './components/Personalidade';
-import Test from './components/Personalidade';
+import DataFetching from './components/Test';
 import Estatistica from './components/Estatistica';
 import Sobre from './components/Sobre';
 
@@ -24,7 +24,7 @@ function App() {
               <Route path="/partidos" element={<Partidos />} />
               <Route path="/estatistica" element={<Estatistica/>} />
               <Route path="/sobre" element={<Sobre />} />
-              <Route path="/personalidade/:id" element={<PersonalidadeInfo />}
+              <Route path="/personalidade/:id" element={<DataFetching />}              
         />
           </Routes>
       </React.Fragment>
