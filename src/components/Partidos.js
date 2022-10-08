@@ -1,17 +1,17 @@
 import React, { useEffect, useState} from 'react'
-import GridSystem from './GridSystem';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Link from '@material-ui/core/Link';
+import GridSystem from './utils/GridSystem';
 
 const Partidos = () => {
     
     const [data, setData] = useState([])
 
     useEffect(() => {
-      fetch('/parties/').then(
+      fetch('http://127.0.0.1:8000/parties/').then(
         response => response.json()
       ).then( data => { 
           setData(data) 

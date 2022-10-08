@@ -1,14 +1,14 @@
 import React from 'react'
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import ResponsiveAppBar from './components/NavigationBar'
+import ResponsiveAppBar from './components/utils/NavigationBar'
 import Home from './components/Home'
 import Cronologia from './components/Cronologia';
 import Grafo from './components/Grafo';
 import Partidos from './components/Partidos';
 import Personalidades from './components/Personalidades';
 import PersonalidadeInfo from './components/Personalidade';
-import DataFetching from './components/Test';
+// import DataFetching from './components/Test';
 import Estatistica from './components/Estatistica';
 import Sobre from './components/Sobre';
 
@@ -24,7 +24,7 @@ function App() {
               <Route path="/partidos" element={<Partidos />} />
               <Route path="/estatistica" element={<Estatistica/>} />
               <Route path="/sobre" element={<Sobre />} />
-              <Route path="/personalidade/:id" element={<DataFetching />}              
+              <Route path="/personalidade/:id" element={<PersonalidadeInfo />}              
         />
           </Routes>
       </React.Fragment>

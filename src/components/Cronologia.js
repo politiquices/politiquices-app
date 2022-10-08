@@ -3,8 +3,8 @@ import Select from 'react-select'
 import politicians_objects from '../json/persons.json';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import NewsTitles from './Utils'
-import RangeSlider from './DateSlider'
+import NewsTitles from './utils/NewsTitles'
+import RangeSlider from './utils/DateSlider'
 
 
 // convert JSON objects to React objects
@@ -35,14 +35,19 @@ const Cronologia = () => {
           params += '&q='+result[i]
         }
 
-        fetch(`/timeline?${params}`, {
+        console.log(`/timeline/?${params}`)
+        
+        fetch(`http://127.0.0.1:8000/timeline/?${params}`, {
           method: "GET",
           headers: {'Content-Type': 'application/json'}})
           .then(res => res.json())
             .then(data => {
               console.log(data)
               setResponse(data);
-            });
+            })
+          .catch(err => {
+              console.log(err)
+          });
 
     };
    
