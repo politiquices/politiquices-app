@@ -18,8 +18,6 @@ const pages = ['Grafo', 'Cronologia', 'Personalidades', 'Partidos', 'Estatistica
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  /* const [anchorElUser, setAnchorElUser] = React.useState(null); */
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -27,16 +25,6 @@ const ResponsiveAppBar = () => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
-  /*
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-  */
 
   return (
     <React.Fragment>
