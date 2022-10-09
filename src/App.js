@@ -5,9 +5,9 @@ import ResponsiveAppBar from './components/utils/NavigationBar'
 import Home from './components/Home'
 import Cronologia from './components/Cronologia';
 import Grafo from './components/Grafo';
-import Partidos from './components/Partidos';
-import Personalidades from './components/Personalidades';
-import FetchPersonalidade from './components/Personalidade';
+// import Partidos from './components/Partidos';
+import ListPersonalidades from './components/ListPersonalidades';
+import FetchPersonalidade from './components/PersonalidadeInfo';
 import Estatistica from './components/Estatistica';
 import Sobre from './components/Sobre';
 
@@ -19,8 +19,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/cronologia" element={<Cronologia />} />
               <Route path="/grafo" element={<Grafo />} />
-              <Route path="/personalidades" element={<Personalidades />} />
-              <Route path="/partidos" element={<Partidos />} />
+              <Route path="/personalidades" element={<ListPersonalidades />} />              
               <Route path="/estatistica" element={<Estatistica/>} />
               <Route path="/sobre" element={<Sobre />} />
               <Route path="/personalidade/:id" element={<FetchPersonalidade />}

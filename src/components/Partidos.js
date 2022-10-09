@@ -5,41 +5,32 @@ import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Link from '@material-ui/core/Link';
 import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
 
 function Partido(parties) {            
                 
     const partidos = parties.data.map(party => (
         {
-          // country: party.country.value, 
           nr_members: party.nr_personalities,
           label: party.party_label,
           logo: party.party_logo,     
           wiki_id: party.wiki_id,
         }))
     
-    console.log(partidos)
-    
     return partidos.map((entry) => (
-        <React.Fragment>
-            <Link>
-                <Card sx={{ maxWidth: 180 }} className="card">
-                    <center>
-                    <CardMedia style={{width: "auto"}}
-                        align='center'
-                        component="img"
-                        height="50"
-                        image={entry.logo}
-                        alt={entry.label}
-                    />
-                    </center>
-                    
-                <CardContent>
-                    <Typography gutterBottom variant="h7" component="div" align='center'>{entry.label}</Typography>
-                    <Typography variant="body2" color="text.secondary" align='center'>{entry.nr_members}</Typography>                    
-                </CardContent>
-                </Card>
-                </Link>
-        </React.Fragment>        
+        <Grid item width={150}>
+        <Link>
+        <CardActionArea>
+            <Card sx={{ maxWidth: 180 }} className="card">
+            <CardMedia style={{width: "auto"}} align='center' component="img" height="75" image={entry.logo} alt={entry.label}/>                
+            <CardContent>
+                <Typography gutterBottom variant="body2" color="text.secondary" align='center'>{entry.label}</Typography>
+                <Typography variant="body2" color="text.secondary" align='center'>{entry.nr_members}</Typography>                    
+            </CardContent>
+            </Card>
+        </CardActionArea>
+        </Link>
+        </Grid>
     ))
 }
 
@@ -66,7 +57,7 @@ const Partidos = () => {
     else {
         return (
             <React.Fragment>
-                <Grid container direction="row" spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="space-evenly">
+                <Grid container direction="row" spacing={2} columns={{ xs: 2, sm: 3, md: 4, lg:8 }} justifyContent="space-evenly">
                     {(!data) 
                     ? (<p></p>) 
                     : <Partido data={data}/>

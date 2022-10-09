@@ -2,6 +2,7 @@ import React from 'react'
 import Select from 'react-select'
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import Switch from '@mui/material/Switch';
 import NewsTitles from './utils/NewsTitles'
 import RangeSlider from './utils/DateSlider'
 import politicians_objects from '../json/persons.json';
@@ -64,8 +65,7 @@ const Cronologia = () => {
 
   return (
     <React.Fragment>
-        { /* search box */}
-        
+        { /* personalities to select */}        
         <Grid container>
           <Grid item xs={4}></Grid>
           <Grid item xs={4} sx={{ paddingTop: 2 }}><MyComponent/></Grid>
@@ -74,7 +74,8 @@ const Cronologia = () => {
         
         <Grid container>
           <Grid item xs={4}></Grid>
-          <Grid item xs={4}><center><RangeSlider/></center></Grid>
+          <Grid item xs={2}><center><RangeSlider/></center></Grid>
+          <Grid item xs={2}>Todas<Switch defaultChecked />Entre Seleccionados</Grid>
           <Grid item xs={4}></Grid>
         </Grid>        
 

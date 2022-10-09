@@ -10,7 +10,7 @@ import Supports from "../../images/handshake.png"
 import Opposes from "../../images/discrimination.png"
 import Neutral from "../../images/conversation.png"
 
-// Loads news titles for a given personality
+// loads news titles
 function NewsTitles(props) {
 
     let raw_data = props.data

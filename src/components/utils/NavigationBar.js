@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom'
 import logo from "../../images/politiquices_logo.jpg"
 
-const pages = ['Grafo', 'Cronologia', 'Personalidades', 'Partidos', 'Estatistica', 'Sobre'];
+const pages = ['Grafo', 'Cronologia', 'Personalidades', 'Estatistica', 'Sobre'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
