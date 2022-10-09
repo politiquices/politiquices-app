@@ -9,3 +9,5 @@ const Personalidades = () => {
   }
   
 export default Personalidades;
+
+// http://localhost:8000/personalities/

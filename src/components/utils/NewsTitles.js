@@ -4,7 +4,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Link from '@material-ui/core/Link';
 import CardContent from '@mui/material/CardContent';
-import PublicoLogo from "../images/114px-Logo_publico.png"
+import PublicoLogo from "../../images/114px-Logo_publico.png"
 
 // Loads news titles for a given personality
 function NewsTitles(props) {

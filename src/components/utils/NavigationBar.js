@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Image from "material-ui-image";
 import { Link } from 'react-router-dom'
-import logo from "../images/politiquices_logo.jpg"
+import logo from "../../images/politiquices_logo.jpg"
 
 
 const pages = ['Grafo', 'Cronologia', 'Personalidades', 'Partidos', 'Estatistica', 'Sobre'];

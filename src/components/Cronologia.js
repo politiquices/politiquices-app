@@ -1,10 +1,10 @@
 import React from 'react'
 import Select from 'react-select'
-import politicians_objects from '../json/persons.json';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import NewsTitles from './utils/NewsTitles'
 import RangeSlider from './utils/DateSlider'
+import politicians_objects from '../json/persons.json';
 
 
 // convert JSON objects to React objects

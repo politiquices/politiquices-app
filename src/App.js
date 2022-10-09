@@ -7,8 +7,7 @@ import Cronologia from './components/Cronologia';
 import Grafo from './components/Grafo';
 import Partidos from './components/Partidos';
 import Personalidades from './components/Personalidades';
-import PersonalidadeInfo from './components/Personalidade';
-// import DataFetching from './components/Test';
+import FetchPersonalidade from './components/Personalidade';
 import Estatistica from './components/Estatistica';
 import Sobre from './components/Sobre';
 
@@ -24,7 +23,7 @@ function App() {
               <Route path="/partidos" element={<Partidos />} />
               <Route path="/estatistica" element={<Estatistica/>} />
               <Route path="/sobre" element={<Sobre />} />
-              <Route path="/personalidade/:id" element={<PersonalidadeInfo />}              
+              <Route path="/personalidade/:id" element={<FetchPersonalidade />}
         />
           </Routes>
       </React.Fragment>
