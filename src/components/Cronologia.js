@@ -5,7 +5,10 @@ import Button from '@mui/material/Button';
 import NewsTitles from './utils/NewsTitles'
 import RangeSlider from './utils/DateSlider'
 import politicians_objects from '../json/persons.json';
+import { Container } from '@mui/material';
+import GridSystem from './utils/GridSystem';
 
+// see: https://dirask.com/posts/React-button-with-AJAX-request-1XokYj
 
 // convert JSON objects to React objects
 const politicians = politicians_objects.map(
@@ -59,48 +62,41 @@ const Cronologia = () => {
   }
     
   const MyComponent = () => (
-      <Select class="centered"
-        isMulti={true}
-        options={politicians}
-        onChange={handleChange}
-      />
+      <Select class="centered" isMulti={true} options={politicians} onChange={handleChange}/>
   )
 
   return (
-    <div>
-      <br></br>
-      <center>
-        <MyComponent/>
-        <br></br>
-        <RangeSlider/>
-        <br></br>
-        <Button 
-          variant="contained"
-          onClick={() => { handleClick(); }}
-          // see: https://dirask.com/posts/React-button-with-AJAX-request-1XokYj
-        >  
-          Cronologia
-        </Button>
-      </center> 
-      <br></br>
-      <center>
-      <Grid
-        container
-        spacing={2} 
-        columns={1}
-        direction='row'
-        alignItems="left"
-        justifyContent="center"
-        width={550}
-      >
+    <React.Fragment>
+        { /* search box */}
+        
+        <Grid container>
+          <Grid item xs={4}></Grid>
+          <Grid item xs={4} sx={{ paddingTop: 2 }}><MyComponent/></Grid>
+          <Grid item xs={4}></Grid>
+        </Grid>        
+        
+        <Grid container>
+          <Grid item xs={4}></Grid>
+          <Grid item xs={4}><center><RangeSlider/></center></Grid>
+          <Grid item xs={4}></Grid>
+        </Grid>        
+
+        <Grid container>
+          <Grid item xs={4}></Grid>
+          <Grid item xs={4} sx={{ paddingBottom: 2 }}><center><Button variant="contained" onClick={() => { handleClick(); }}> Actualizar </Button></center></Grid>
+          <Grid item xs={4}></Grid>
+        </Grid>
+        
+
+      { /* news titles */}
+      <Grid container sx={{ flexGrow: 1 }} 
+      direction="row" spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="space-evenly">
       {(!response) 
-        ? (<p>Loading...</p>) 
+        ? (<p></p>) 
         : <NewsTitles data={response}/>
       }
       </Grid>
-      </center>
-
-    </div>    
+    </React.Fragment>
   )
 }
   

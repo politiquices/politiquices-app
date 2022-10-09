@@ -26,11 +26,10 @@ const ResponsiveAppBar = () => {
   };
 
   return (
-    <center>
     <React.Fragment>
-    <AppBar position="sticky" align="center">
+    <AppBar position="sticky">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{mx: 'auto'}}>
           
           
           <Link to="/">
@@ -80,24 +79,9 @@ const ResponsiveAppBar = () => {
               ))}
             </Menu>
           </Box>
-
-          {/*          
-          <Typography
-            variant="h1"
-            noWrap
-            fontWeight="600"
-            component="div"
-            sx={{ flexGrow: 10, display: { xs: 'flex', md: 'none' } }}
-          >
-
-            <Link to="/">
-              <Image src="src/politiquices_logo.jpg" height={80}/>
-            </Link>
-          </Typography>
-          */}
           
           {/* Buttons text is here */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex'} }}>
             {pages.map((page) => (
               <Link to={`/${page}`}>
                 <Button key={page}
@@ -114,7 +98,6 @@ const ResponsiveAppBar = () => {
       </Container>
     </AppBar>
     </React.Fragment>
-    </center>
   );
 };
 

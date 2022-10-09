@@ -15,19 +15,25 @@ function NewsTitles(props) {
 
     let raw_data = props.data
 
-    function process(rel_type){
+    function process_rel(rel_type){
       if (rel_type.includes('opposes')) {return Opposes} 
       else if (rel_type.includes('supports')) {return Supports}
       return Neutral
     }
 
+    function process_article_link(rel_type){
+      if (rel_type.startsWith('https://publico.pt')) {return <img width="15" src={PublicoLogo}/>} 
+      return <img width="35" src={ArquivoLogo}/>
+    }
+
     const headlines = raw_data.map(raw_data => (
       {
         title: raw_data.title.value, 
-        url: raw_data.arquivo_doc.value, 
+        url: raw_data.arquivo_doc.value,
+        url_image: process_article_link(raw_data.arquivo_doc.value),
         date: raw_data.date.value,     
         rel_type: raw_data.rel_type.value,
-        rel_image: process(raw_data.rel_type.value),
+        rel_image: process_rel(raw_data.rel_type.value),
         
         main_ent_image: raw_data.ent1_img.image_url,
         main_ent_name: raw_data.ent1_str.value,
@@ -38,55 +44,59 @@ function NewsTitles(props) {
         other_ent_url: raw_data.ent2.value.match(/Q\d+/g)[0]
       }))
 
-    
-
     return headlines.map((entry) => (
 
-      <Grid item md={4}>
-        <Card variant="elevation" sx={{ minWidth: 15 }}>
+      <Grid item sx={{ paddingTop: 1.5}} width={450}>
+        <Card variant="elevation" raised="true">
           <CardContent>        
            
-           {/* Date + Article Link */}
+           {/* Date */}
           <Grid container spacing={0.5}>
-            <Grid item xs={3}></Grid>            
-            <Grid item xs={3}><Typography variant="subtitle1" component="div" className="title-card" gutterBottom>{entry.date}</Typography></Grid>
-            <Grid item xs={3}><Link href={entry.url} target="_blank"><img width="50" src={ArquivoLogo}/></Link></Grid>            
-            <Grid item xs={3}></Grid>          
+            <Grid item xs={4}></Grid>            
+              <Grid item xs={4}>
+                <Typography variant="subtitle1" component="div" className="title-card" gutterBottom>
+                  {entry.date}
+                </Typography>
+              </Grid>
+            <Grid item xs={4}></Grid>          
           </Grid>
 
           {/* Entities */}
           <Grid container spacing={1}>
 
             <Grid item xs={2}></Grid>
-
+            
             <Grid item xs={3}>
               <Link href={`personalidade/${entry.main_ent_url}`} target="_blank">
                 <Avatar alt={entry.focus_ent} src={entry.main_ent_image} sx={{ width: 66, height: 66 }}/>
+                {entry.main_ent_name}
               </Link>
             </Grid>
 
             <Grid item xs={2}>
               <Link target="_blank">
                 {/* <Typography variant="h10">{entry.rel_type}</Typography> */}
-                <img width="50" src={entry.rel_image}/>
+                <img width="40" src={entry.rel_image}/>
               </Link>
             </Grid>
 
             <Grid item xs={3}>              
             <Link href={`personalidade/${entry.other_ent_url}`} target="_blank">
                 <Avatar alt={entry.other_ent_name} src={entry.other_ent_image} sx={{ width: 66, height: 66 }}/>
+                {entry.other_ent_name}
             </Link>
             </Grid>
 
             <Grid item xs={2}></Grid>
+            
           
           </Grid>
 
           {/* Title */}
           <Grid container spacing={1} sx={{ paddingTop: 2 }}>
-            <Grid item xs={12}>            
-              <Typography variant="h10" component="div" align='center' fontWeight="350">
-                {entry.title}
+            <Grid item xs={12}>
+              <Typography variant="h7" component="div" align='center' fontWeight="450">"{entry.title}"
+                <Link sx={{ m: 0.5 }} href={entry.url} target="_blank">{entry.url_image}</Link>
               </Typography>
             </Grid>
           </Grid>
