@@ -51,20 +51,17 @@ function NewsTitles(props) {
           <CardContent>        
            
            {/* Date */}
-          <Grid container spacing={0.5}>
-            <Grid item xs={4}></Grid>            
-              <Grid item xs={4}>
+          <Grid container>
+              <Grid item alignContent={"center"}>
                 <Typography variant="subtitle1" component="div" className="title-card" gutterBottom>
                   {entry.date}
                 </Typography>
               </Grid>
-            <Grid item xs={4}></Grid>          
           </Grid>
 
           {/* Entities */}
-          <Grid container spacing={1}>
-
-            <Grid item xs={2}></Grid>
+          <Grid container>
+            <Grid item xs={2}></Grid>            
             
             <Grid item xs={3}>
               <Link href={`personalidade/${entry.main_ent_url}`} target="_blank">
@@ -74,9 +71,8 @@ function NewsTitles(props) {
             </Grid>
 
             <Grid item xs={2}>
-              <Link target="_blank">
-                {/* <Typography variant="h10">{entry.rel_type}</Typography> */}
-                <img width="40" src={entry.rel_image}/>
+              <Link target="_blank">                
+                <img width="40" src={entry.rel_image} alt={entry.rel_type}/>
               </Link>
             </Grid>
 
@@ -87,14 +83,12 @@ function NewsTitles(props) {
             </Link>
             </Grid>
 
-            <Grid item xs={2}></Grid>
-            
-          
+            <Grid item xs={2}></Grid>                      
           </Grid>
 
           {/* Title */}
           <Grid container spacing={1} sx={{ paddingTop: 2 }}>
-            <Grid item xs={12}>
+            <Grid item>
               <Typography variant="h7" component="div" align='center' fontWeight="450">"{entry.title}"
                 <Link sx={{ m: 0.5 }} href={entry.url} target="_blank">{entry.url_image}</Link>
               </Typography>

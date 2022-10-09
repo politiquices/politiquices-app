@@ -9,7 +9,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import Image from "material-ui-image";
 import { Link } from 'react-router-dom'
 import logo from "../../images/politiquices_logo.jpg"
 
@@ -29,9 +28,7 @@ const ResponsiveAppBar = () => {
     <React.Fragment>
     <AppBar position="sticky">
       <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{mx: 'auto'}}>
-          
-          
+        <Toolbar disableGutters sx={{mx: 'auto'}}>          
           <Link to="/">
             <Typography variant="title">
               <img src={logo} alt="bug" height={80} />

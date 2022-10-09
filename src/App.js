@@ -1,5 +1,5 @@
 import React from 'react'
-import './App.css';
+// import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import ResponsiveAppBar from './components/utils/NavigationBar'
 import Home from './components/Home'

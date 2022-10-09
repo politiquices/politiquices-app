@@ -5,9 +5,6 @@ import Button from '@mui/material/Button';
 import NewsTitles from './utils/NewsTitles'
 import RangeSlider from './utils/DateSlider'
 import politicians_objects from '../json/persons.json';
-import { Container } from '@mui/material';
-import GridSystem from './utils/GridSystem';
-
 // see: https://dirask.com/posts/React-button-with-AJAX-request-1XokYj
 
 // convert JSON objects to React objects
@@ -89,7 +86,7 @@ const Cronologia = () => {
         
 
       { /* news titles */}
-      <Grid container sx={{ flexGrow: 1 }} 
+      <Grid container 
       direction="row" spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="space-evenly">
       {(!response) 
         ? (<p></p>) 
