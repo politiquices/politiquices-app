@@ -13,7 +13,6 @@ import Image from "material-ui-image";
 import { Link } from 'react-router-dom'
 import logo from "../../images/politiquices_logo.jpg"
 
-
 const pages = ['Grafo', 'Cronologia', 'Personalidades', 'Partidos', 'Estatistica', 'Sobre'];
 
 const ResponsiveAppBar = () => {
@@ -27,28 +26,32 @@ const ResponsiveAppBar = () => {
   };
 
   return (
+    <center>
     <React.Fragment>
-    <AppBar position="static">
+    <AppBar position="sticky" align="center">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           
+          
           <Link to="/">
             <Typography variant="title">
-              <img src={logo} alt="bug" height={120} />
+              <img src={logo} alt="bug" height={80} />
             </Typography>
           </Link>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+
             <IconButton
               size="large"
-              aria-label="account of current user"
+
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              //color="inherit"
+              color="inherit"
             >
               <MenuIcon />
             </IconButton>
+            
             {/* When buttons appear as menu */}  
             <Menu
               id="menu-appbar"
@@ -77,7 +80,8 @@ const ResponsiveAppBar = () => {
               ))}
             </Menu>
           </Box>
-          
+
+          {/*          
           <Typography
             variant="h1"
             noWrap
@@ -85,28 +89,32 @@ const ResponsiveAppBar = () => {
             component="div"
             sx={{ flexGrow: 10, display: { xs: 'flex', md: 'none' } }}
           >
+
             <Link to="/">
-              <Image src="src/politiquices_logo.jpg"/>
+              <Image src="src/politiquices_logo.jpg" height={80}/>
             </Link>
           </Typography>
+          */}
           
           {/* Buttons text is here */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'black', display: 'block' }}                
-              >
-                <Link to={`/${page}`}>{page}</Link>
-              </Button>
+              <Link to={`/${page}`}>
+                <Button key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{ border: 1, gap: 4, margin: 2, my: 2, color: 'black', display: 'block' }}>
+                  <Typography style={{ fontWeight: 800 }}>
+                    {page}
+                  </Typography>
+                </Button>
+              </Link>
             ))}
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
-    <br></br>
     </React.Fragment>
+    </center>
   );
 };
 

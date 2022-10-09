@@ -91,7 +91,7 @@ const Cronologia = () => {
         direction='row'
         alignItems="left"
         justifyContent="center"
-        width={650}
+        width={550}
       >
       {(!response) 
         ? (<p>Loading...</p>) 
