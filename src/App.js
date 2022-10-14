@@ -3,7 +3,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom';
 import ResponsiveAppBar from './components/utils/NavigationBar'
 import Home from './components/Home'
-import Cronologia from './components/Cronologia';
+import Relacoes from './components/Relacoes';
 import Grafo from './components/Grafo';
 // import Partidos from './components/Partidos';
 import ListPersonalidades from './components/ListPersonalidades';
@@ -17,7 +17,7 @@ function App() {
         <ResponsiveAppBar/>
           <Routes>                            
               <Route path="/" element={<Home />} />
-              <Route path="/cronologia" element={<Cronologia />} />
+              <Route path="/relacoes" element={<Relacoes />} />
               <Route path="/grafo" element={<Grafo />} />
               <Route path="/personalidades" element={<ListPersonalidades />} />              
               <Route path="/estatistica" element={<Estatistica/>} />
