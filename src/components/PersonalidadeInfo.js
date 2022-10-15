@@ -10,6 +10,14 @@ import { HiAcademicCap } from "react-icons/hi";
 
 // https://blog.openreplay.com/data-fetching-techniques-with-react
 
+const gridStyles = {
+  backgroundColor: "white",
+  marginTop: 1,
+  marginLeft: "148",
+  marginRight: "158",
+};
+
+
 const PersonalidadeInfo = ({ data }) => {
 
   const wiki_url = "http://www.wikidata.org/wiki/"+data.wiki_id
@@ -36,6 +44,7 @@ const PersonalidadeInfo = ({ data }) => {
             columns={16}
             alignItems="center"
             justifyContent="center"
+            style={gridStyles}
         >
             
             {/* Foto + Nome + WikiData link */} 
@@ -70,7 +79,7 @@ const PersonalidadeInfo = ({ data }) => {
             </center>
             </Grid>
     
-            {/* Profissão/ões */} 
+            {/* Profissão(ões) */} 
             <Grid item xs={4}>      
             {(!data || !data.occupations) 
             ? (<p>Loading...</p>) 
@@ -89,6 +98,12 @@ const PersonalidadeInfo = ({ data }) => {
     
         </Grid>    
       </Box>
+
+    <Link href={"/personalidade_news/"+data.wiki_id}>
+      <center>
+        noticias
+      </center>
+    </Link>
 
     </div>
   );
@@ -122,9 +137,12 @@ const FetchPersonalidade = () => {
   if (isLoading) {
       return <div>Loading...</div>;
   }
+
+  notes.wiki_id = id;
+
   return (
       <div>
-      {notes && <PersonalidadeInfo data={notes} />}
+      {notes && <PersonalidadeInfo data={notes}/>}
       {isError && <div>Error fetching data.</div>}
       </div>
   );

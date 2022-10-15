@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Link from '@material-ui/core/Link';
 import { Typography } from '@mui/material';
-import { Button, CardMedia, CardActionArea, CardActions } from '@mui/material';
 
 const gridStyles = {
   backgroundColor: "white",
   marginTop: 1,
-  // marginLeft: "auto",
-  // marginRight: "auto",
+  marginLeft: "148",
+  marginRight: "158",
 };
 
 //paddingBottom: 10,
 //paddingRight: 10,
-//
 //maxWidth: 100
 
 
@@ -34,14 +30,14 @@ function ListPersonalidades(personalities) {
   
       return headlines.map((entry) => (
   
-        <Grid item width={250} align="center">
+        <Grid item key={entry.wiki_id} width={250} align="center" columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }}>
           <Link justify="center" href={`personalidade/${entry.wiki_id}`}>
             <Avatar alt={entry.focus_ent} src={entry.url_image} sx={{ width: 125, height: 125 }}/>{entry.label}
           </Link>               
           <Typography justify="center" fontSize={2}>{entry.nr_articles} notícias</Typography>
         </Grid>
       ))
-    }
+}
 
 const FetchPersonalidades = () => {
 
@@ -68,8 +64,15 @@ const FetchPersonalidades = () => {
       return <div>Loading...</div>;
   }
   return (
-      <Grid container direction="row" spacing={6} columns={{ xs: 12, sm: 12, md: 4 }} justifyContent="space-evenly"
-            style={gridStyles}>
+
+      // xs, sm, md, lg, xl
+      // xs - default
+      // sm - min width 600px
+      // md - min width 960px
+      // lg - min width 1280px
+      // xl - min width 1920px
+
+      <Grid container direction="row" spacing={6} justifyContent="space-evenly" style={gridStyles}>
         {data && <ListPersonalidades data={data} />}
         {isError && <div>Error fetching data.</div>}
       </Grid>

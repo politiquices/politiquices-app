@@ -44,9 +44,9 @@ function NewsTitles(props) {
         other_ent_url: raw_data.ent2.value.match(/Q\d+/g)[0]
       }))
 
-    return headlines.map((entry) => (
+    return headlines.map((entry, index) => (
 
-      <Grid item sx={{ paddingTop: 1.5}} width={450}>
+      <Grid item key={index} sx={{ paddingTop: 1.5}} width={450}>
         <Card variant="elevation" raised="true">
           <CardContent>        
            
