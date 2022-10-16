@@ -1,7 +1,6 @@
-import React from "react"
+import React, { useState } from "react";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { Grid } from "@mui/material";
 import politicians_objects from '../json/persons.json';
 
 // convert JSON objects to React objects
@@ -12,40 +11,41 @@ const politicians = politicians_objects.map(
     })
   )
 
-
 const Home = () => {
+
+  const [open, setOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  
+  // see: https://stackoverflow.com/questions/67124239/material-ui-how-to-show-autocomplete-dropdown-list-only-when-typing-something
+
     return (
-      <div>
-        <br></br>
-        <center>
-          <Grid container rowSpacing={123} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-            <Grid item xs={6}>
-              <Autocomplete        
-                id="combo-box-demo"
-                options={politicians}
-                sx={{ width: 300 }}
-                onChange={(event, value) => {
-                  //setSelectedPerson(value)
-                  //auxFun(value)
-                }} 
-                renderInput={(params) => <TextField {...params} label="Personalidade" />}
-              />          
-            </Grid>
-            <Grid item xs={6}>
-              <Autocomplete
-                  id="combo-box-demo"
-                  options={politicians}
-                  sx={{ width: 300 }}
-                  onChange={(event, value) => {
-                    //setSelectedPerson(value)
-                    //auxFun(value)
-                  }} 
-                  renderInput={(params) => <TextField {...params} label="Personalidade" />}
-                />
-          </Grid>
-        </Grid>
-        </center>        
+      <center>
+      <div style={{width:"15%", height:"10%", backgroundColor:"white"}}>
+        <br></br>      
+        <Autocomplete open={open} freeSolo="true" width="80%"
+          onOpen={() => {
+            // only open when in focus and inputValue is not empty
+            if (inputValue) {
+              setOpen(true);
+            }
+          }}
+          onClose={() => setOpen(false)}
+          inputValue={inputValue}
+          onInputChange={(e, value, reason) => {
+            setInputValue(value);
+
+            // only open when inputValue is not empty after the user typed something
+            if (!value) {
+              setOpen(false);
+            }
+          }}
+          options={politicians}
+          renderInput={(params) => (
+            <TextField {...params} variant="outlined" />
+          )}
+      />
       </div>
+      </center>
     );
   }
   

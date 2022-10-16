@@ -63,6 +63,14 @@ const Relacoes = () => {
       <Select class="centered" isMulti={true} options={politicians} onChange={handleChange}/>
   )
 
+  const handleChangeRelationships = (e) => {
+    console.log(`relationships:`, e.target.checked);
+  }
+
+  const handleChangePersons = (e) => {
+    console.log(`persons:`, e.target.checked);
+  }
+
   return (
     <React.Fragment>
         { /* personalities to select */}        
@@ -74,14 +82,23 @@ const Relacoes = () => {
         
         <Grid container>
           <Grid item xs={4}></Grid>
-          <Grid item xs={2}><center><RangeSlider/></center></Grid>
-          <Grid item xs={2}>Todas<Switch defaultChecked />Entre Seleccionados</Grid>
+          <Grid item xs={4}><center><RangeSlider/></center></Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={4}></Grid>
+          <Grid item xs={2}><Switch defaultChecked onChange={handleChangePersons}/>Apenas entre seleccionados</Grid>
+          <Grid item xs={2}><Switch defaultChecked onChange={handleChangeRelationships}/>Apenas apoio/oposição</Grid>
           <Grid item xs={4}></Grid>
         </Grid>        
 
         <Grid container>
           <Grid item xs={4}></Grid>
-          <Grid item xs={4} sx={{ paddingBottom: 2 }}><center><Button variant="contained" onClick={() => { handleClick(); }}> Actualizar </Button></center></Grid>
+          <Grid item xs={4} sx={{ paddingBottom: 2 }}>
+            <center>
+              <Button variant="contained" onClick={() => { handleClick(); }}>Actualizar</Button>
+            </center>
+          </Grid>
           <Grid item xs={4}></Grid>
         </Grid>
         
