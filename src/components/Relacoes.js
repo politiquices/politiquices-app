@@ -1,5 +1,5 @@
 import React from 'react'
-import Select from 'react-select'
+import Select from 'react-select'       // https://react-select.com/home
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
@@ -21,9 +21,13 @@ var state = {
     selectedOption: null,
 }
 
+var only_among_selected =  true
+var only_sentiment = true
+
 const Relacoes = () => {
 
   const [response, setResponse] = React.useState();
+  const [selectedOption, setSelectedOption] = React.useState();
     
   const handleClick = async () => {
 
@@ -36,7 +40,8 @@ const Relacoes = () => {
           params += '&q='+result[i]
         }
 
-        console.log(`/timeline/?${params}`)
+        params += '&selected='+only_among_selected
+        params += '&sentiment='+only_sentiment
         
         fetch(`http://127.0.0.1:8000/timeline/?${params}`, {
           method: "GET",
@@ -49,26 +54,35 @@ const Relacoes = () => {
           .catch(err => {
               console.log(err)
           });
+        
+        console.log("state: ", state)
+        setSelectedOption(state);
 
     };
    
   // handle onChange event of the dropdown
   const handleChange = (e) => {
-    //this.setState({options: e});
+    setSelectedOption(e);
     state = e
     console.log(`selected:`, e);
   }
     
   const MyComponent = () => (
-      <Select class="centered" isMulti={true} options={politicians} onChange={handleChange}/>
+      <Select 
+        class="centered" 
+        isMulti={true} 
+        value={selectedOption}
+        onChange={handleChange}
+        options={politicians}
+        />
   )
 
   const handleChangeRelationships = (e) => {
-    console.log(`relationships:`, e.target.checked);
+    only_sentiment = e.target.checked
   }
 
   const handleChangePersons = (e) => {
-    console.log(`persons:`, e.target.checked);
+    only_among_selected = e.target.checked
   }
 
   return (
