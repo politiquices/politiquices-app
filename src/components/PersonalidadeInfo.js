@@ -24,10 +24,11 @@ const PersonalidadeInfo = ({ data }) => {
 
   function FillIn(occupations) {
     if (occupations.length > 0) {
-      return occupations.map((member) => (
-        <Link href="#">
+      console.log(occupations)
+      return occupations.map((item) => (
+        <Link href={'/personalities/education/' + item.wiki_id.split("/").at(-1)}>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {member}
+            {item.label}
           </Typography>
         </Link>
       ))              
@@ -79,7 +80,7 @@ const PersonalidadeInfo = ({ data }) => {
             </center>
             </Grid>
     
-            {/* Profissão(ões) */} 
+            {/* Profissão(ões)
             <Grid item xs={4}>      
             {(!data || !data.occupations) 
             ? (<p>Loading...</p>) 
@@ -87,7 +88,7 @@ const PersonalidadeInfo = ({ data }) => {
             )}
             </Grid>
     
-            {/* Estudos */}         
+            {/* Estudos */}
             <Grid item xs={4}>
             <HiAcademicCap size={35}/>
             {(!data || !data.education)
@@ -95,6 +96,7 @@ const PersonalidadeInfo = ({ data }) => {
             : (FillIn(data.education)
             )}
             </Grid>
+
     
         </Grid>    
       </Box>
