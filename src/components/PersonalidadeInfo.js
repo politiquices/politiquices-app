@@ -22,11 +22,10 @@ const PersonalidadeInfo = ({ data }) => {
 
   const wiki_url = "http://www.wikidata.org/wiki/"+data.wiki_id
 
-  function FillIn(occupations) {
+  function FillIn(occupations, url) {
     if (occupations.length > 0) {
-      console.log(occupations)
-      return occupations.map((item) => (
-        <Link href={'/personalities/education/' + item.wiki_id.split("/").at(-1)}>
+      return occupations.map((item, index) => (
+        <Link key={index} href={'/personalities/' + url + '/' + item.wiki_id.split("/").at(-1)}>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {item.label}
           </Typography>
@@ -49,7 +48,7 @@ const PersonalidadeInfo = ({ data }) => {
         >
             
             {/* Foto + Nome + WikiData link */} 
-            <Grid item xs={4}>
+            <Grid item xs={1}>
             <center>
                 <Avatar alt={data.name} src={data.image_url} sx={{ width: 160, height: 160 }}/>
                 <Typography variant="h6" component="div">
@@ -62,7 +61,7 @@ const PersonalidadeInfo = ({ data }) => {
             </Grid>
     
             {/* Partido(s) Político(s) */} 
-            <Grid item xs={4}>
+            <Grid item xs={3}>
             <center>
                 {(!data || !data.parties) ? (
                 <p>Loading...</p>
@@ -80,20 +79,36 @@ const PersonalidadeInfo = ({ data }) => {
             </center>
             </Grid>
     
-            {/* Profissão(ões)
-            <Grid item xs={4}>      
+            {/* Profissão(ões) */}
+            <Grid item xs={3}>      
             {(!data || !data.occupations) 
             ? (<p>Loading...</p>) 
-            : (FillIn(data.occupations)                
+            : (FillIn(data.occupations, 'occupations')                
+            )}
+            </Grid>
+
+            {/* Cargos públicos */}
+            <Grid item xs={3}>      
+            {(!data || !data.positions) 
+            ? (<p>Loading...</p>) 
+            : (FillIn(data.positions, 'positions')                
+            )}
+            </Grid>
+
+            {/* Legislaturas */}
+            <Grid item xs={3}>      
+            {(!data || !data.legislatures) 
+            ? (<p>Loading...</p>) 
+            : (FillIn(data.legislatures, 'legislatures')                
             )}
             </Grid>
     
             {/* Estudos */}
-            <Grid item xs={4}>
+            <Grid item xs={3}>
             <HiAcademicCap size={35}/>
             {(!data || !data.education)
             ? (<p>Loading...</p>) 
-            : (FillIn(data.education)
+            : (FillIn(data.education, 'education')
             )}
             </Grid>
 
@@ -114,8 +129,6 @@ const PersonalidadeInfo = ({ data }) => {
 const FetchPersonalidade = () => {
 
   const { id } = useParams();
-  console.log(id);
-
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -123,8 +136,8 @@ const FetchPersonalidade = () => {
       fetch(`http://127.0.0.1:8000/personality/${id}`)
       .then((response) => response.json())
       .then((data) => {
-          setIsLoading(false);
           console.log(data)
+          setIsLoading(false);
           setNotes(data);
       })
       .catch((error) => {
