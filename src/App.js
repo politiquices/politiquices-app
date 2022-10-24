@@ -7,6 +7,7 @@ import Relacoes from './components/Relacoes';
 import Grafo from './components/Grafo';
 // import Partidos from './components/Partidos';
 import ListPersonalidades from './components/ListPersonalidades';
+import ListPersonalidadesFiltered from './components/ListPersonalidadesFiltered';
 import FetchPersonalidade from './components/PersonalidadeInfo';
 import FetchPersonalidadeHeadlines from './components/PersonalidadeHeadlines';
 import Estatistica from './components/Estatistica';
@@ -25,11 +26,16 @@ function App() {
               <Route path="/sobre" element={<Sobre />} />
               <Route path="/personalidade/:id" element={<FetchPersonalidade/>} />
               <Route path="/personalidade_news/:id" element={<FetchPersonalidadeHeadlines/>} />
+              <Route path="/education/:id" element={<ListPersonalidadesFiltered type='education'/>} />
+              <Route path="/occupation/:id" element={<ListPersonalidadesFiltered type='occupation'/>} />
+
+              <Route path="/public_office/:id" element={<ListPersonalidadesFiltered type='public_office'/>} />
+
+              <Route path="/legislature/:id" element={<ListPersonalidadesFiltered type='legislature'/>} />
+              <Route path="/party/:id" element={<ListPersonalidadesFiltered type='party'/>} />
           </Routes>
       </React.Fragment>
     );
   }
-
-
 
 export default App;

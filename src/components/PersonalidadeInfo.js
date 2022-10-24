@@ -22,10 +22,15 @@ const PersonalidadeInfo = ({ data }) => {
 
   const wiki_url = "http://www.wikidata.org/wiki/"+data.wiki_id
 
-  function FillIn(occupations, url) {
-    if (occupations.length > 0) {
-      return occupations.map((item, index) => (
-        <Link key={index} href={'/personalities/' + url + '/' + item.wiki_id.split("/").at(-1)}>
+  function FillIn(elements, url) {
+
+    // to remove the last part of the current URL
+    var full_url = window.location.href
+    var base_url = full_url.replace(window.location.pathname, '');
+
+    if (elements.length > 0) {
+      return elements.map((item, index) => (
+        <Link key={index} href={ base_url + '/' + url + '/' + item.wiki_id.split("/").at(-1)}>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {item.label}
           </Typography>
@@ -83,7 +88,7 @@ const PersonalidadeInfo = ({ data }) => {
             <Grid item xs={3}>      
             {(!data || !data.occupations) 
             ? (<p>Loading...</p>) 
-            : (FillIn(data.occupations, 'occupations')                
+            : (FillIn(data.occupations, 'occupation')                
             )}
             </Grid>
 
@@ -91,7 +96,7 @@ const PersonalidadeInfo = ({ data }) => {
             <Grid item xs={3}>      
             {(!data || !data.positions) 
             ? (<p>Loading...</p>) 
-            : (FillIn(data.positions, 'positions')                
+            : (FillIn(data.positions, 'public_office')                
             )}
             </Grid>
 
@@ -99,7 +104,7 @@ const PersonalidadeInfo = ({ data }) => {
             <Grid item xs={3}>      
             {(!data || !data.legislatures) 
             ? (<p>Loading...</p>) 
-            : (FillIn(data.legislatures, 'legislatures')                
+            : (FillIn(data.legislatures, 'legislature')                
             )}
             </Grid>
     
@@ -110,9 +115,7 @@ const PersonalidadeInfo = ({ data }) => {
             ? (<p>Loading...</p>) 
             : (FillIn(data.education, 'education')
             )}
-            </Grid>
-
-    
+            </Grid>    
         </Grid>    
       </Box>
 
