@@ -28,10 +28,9 @@ function App() {
               <Route path="/personalidade_news/:id" element={<FetchPersonalidadeHeadlines/>} />
               <Route path="/education/:id" element={<ListPersonalidadesFiltered type='education'/>} />
               <Route path="/occupation/:id" element={<ListPersonalidadesFiltered type='occupation'/>} />
-
               <Route path="/public_office/:id" element={<ListPersonalidadesFiltered type='public_office'/>} />
-
-              <Route path="/legislature/:id" element={<ListPersonalidadesFiltered type='legislature'/>} />
+              <Route path="/government/:id" element={<ListPersonalidadesFiltered type='government'/>} />
+              <Route path="/assembly/:id" element={<ListPersonalidadesFiltered type='assembly'/>} />
               <Route path="/party/:id" element={<ListPersonalidadesFiltered type='party'/>} />
           </Routes>
       </React.Fragment>

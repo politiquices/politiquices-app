@@ -40,20 +40,22 @@ const PersonalidadeInfo = ({ data }) => {
     return <Typography sx={{ mb: 1.5 }} color="text.secondary">-</Typography>
   }
 
+  var base_url = window.location.href.replace(window.location.pathname, '')
+  
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
         <Grid 
             container 
             spacing={1} 
-            columns={16}
+            columns={14}
             alignItems="center"
             justifyContent="center"
             style={gridStyles}
         >
             
             {/* Foto + Nome + WikiData link */} 
-            <Grid item xs={1}>
+            <Grid item xs={2}>
             <center>
                 <Avatar alt={data.name} src={data.image_url} sx={{ width: 160, height: 160 }}/>
                 <Typography variant="h6" component="div">
@@ -66,15 +68,15 @@ const PersonalidadeInfo = ({ data }) => {
             </Grid>
     
             {/* Partido(s) Político(s) */} 
-            <Grid item xs={3}>
+            <Grid item xs={2}>
             <center>
                 {(!data || !data.parties) ? (
                 <p>Loading...</p>
                 ) : (              
-                data.parties.map((member, i) => (
-                    <Link href="#">
+                data.parties.map((entry, index) => (
+                    <Link href= {base_url + '/party/' + entry.wiki_id}>
                     <div>
-                    <img key="{member.name}" width="68" src={member.image_url}></img>
+                    <img key="{index}" width="68" src={entry.image_url}></img>
                     <br/>
                     </div>
                     </Link>              
@@ -85,7 +87,7 @@ const PersonalidadeInfo = ({ data }) => {
             </Grid>
     
             {/* Profissão(ões) */}
-            <Grid item xs={3}>      
+            <Grid item xs={2}>      
             {(!data || !data.occupations) 
             ? (<p>Loading...</p>) 
             : (FillIn(data.occupations, 'occupation')                
@@ -93,23 +95,31 @@ const PersonalidadeInfo = ({ data }) => {
             </Grid>
 
             {/* Cargos públicos */}
-            <Grid item xs={3}>      
+            <Grid item xs={2}>      
             {(!data || !data.positions) 
             ? (<p>Loading...</p>) 
             : (FillIn(data.positions, 'public_office')                
             )}
             </Grid>
 
-            {/* Legislaturas */}
-            <Grid item xs={3}>      
-            {(!data || !data.legislatures) 
+            {/* Legislaturas - governos de que fez parte */}
+            <Grid item xs={2}>      
+            {(!data || !data.governments) 
             ? (<p>Loading...</p>) 
-            : (FillIn(data.legislatures, 'legislature')                
+            : (FillIn(data.governments, 'government')
+            )}
+            </Grid>
+
+            {/* Assembleias de deputados de que fez parte */}
+            <Grid item xs={2}>      
+            {(!data || !data.assemblies) 
+            ? (<p>Loading...</p>) 
+            : (FillIn(data.assemblies, 'assembly')
             )}
             </Grid>
     
             {/* Estudos */}
-            <Grid item xs={3}>
+            <Grid item xs={2}>
             <HiAcademicCap size={35}/>
             {(!data || !data.education)
             ? (<p>Loading...</p>) 
