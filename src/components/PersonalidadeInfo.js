@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
 import { SiWikidata } from "react-icons/si";
 import { HiAcademicCap } from "react-icons/hi";
+import StackBarChat from './utils/StackedBarChart'
 
 // https://blog.openreplay.com/data-fetching-techniques-with-react
 
@@ -43,7 +44,7 @@ const PersonalidadeInfo = ({ data }) => {
   var base_url = window.location.href.replace(window.location.pathname, '')
   
   return (
-    <div>
+    <React.Fragment>
       <Box sx={{ flexGrow: 1 }}>
         <Grid 
             container 
@@ -128,14 +129,13 @@ const PersonalidadeInfo = ({ data }) => {
             </Grid>    
         </Grid>    
       </Box>
-
     <Link href={"/personalidade_news/"+data.wiki_id}>
       <center>
         noticias
       </center>
     </Link>
-
-    </div>
+    <StackBarChat/>
+    </React.Fragment>
   );
 };
 
