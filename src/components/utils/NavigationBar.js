@@ -15,7 +15,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 
-const pages = ['Grafo', 'Relacoes', 'Personalidades', 'Estatistica', 'Sobre'];
+const pages = ['Grafo', 'Relacoes', 'Personalidades', 'Estatistica', 'Sobre', 'Demos'];
 
 
 const Search = styled('div')(({ theme }) => ({

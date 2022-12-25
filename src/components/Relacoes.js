@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select'       // https://react-select.com/home
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import NewsTitles from './utils/NewsTitles'
-import RangeSlider from './utils/DateSlider'
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
 import politicians_objects from '../json/persons.json';
 // see: https://dirask.com/posts/React-button-with-AJAX-request-1XokYj
 
@@ -23,12 +25,25 @@ var state = {
 
 var only_among_selected =  true
 var only_sentiment = true
+var min = 2014
+var max = 2022
+
+function CircularIndeterminate() {
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <CircularProgress/>
+    </Box>
+  );
+};
 
 const Relacoes = () => {
 
-  const [response, setResponse] = React.useState();
-  const [selectedOption, setSelectedOption] = React.useState();
-    
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState();
+  const [selectedOption, setSelectedOption] = useState();
+  const [value, setValue] = useState([2000, 2014]);
+  
+  
   const handleClick = async () => {
 
         // see: https://www.pluralsight.com/guides/how-to-send-data-via-ajax-in-react
@@ -42,24 +57,26 @@ const Relacoes = () => {
 
         params += '&selected='+only_among_selected
         params += '&sentiment='+only_sentiment
-        
+        params += '&start='+min
+        params += '&end='+max
+
+        setLoading(true);
+
         fetch(`http://127.0.0.1:8000/timeline/?${params}`, {
           method: "GET",
           headers: {'Content-Type': 'application/json'}})
           .then(res => res.json())
             .then(data => {
-              console.log(data)
               setResponse(data);
+              setLoading(false);
             })
           .catch(err => {
-              console.log(err)
+            setLoading(false);
+            console.log(err)
           });
-        
-        console.log("state: ", state)
         setSelectedOption(state);
-
     };
-   
+
   // handle onChange event of the dropdown
   const handleChange = (e) => {
     setSelectedOption(e);
@@ -67,64 +84,95 @@ const Relacoes = () => {
     console.log(`selected:`, e);
   }
     
-  const MyComponent = () => (
-      <Select 
-        class="centered" 
-        isMulti={true} 
-        value={selectedOption}
-        onChange={handleChange}
-        options={politicians}
-        />
-  )
-
   const handleChangeRelationships = (e) => {
     only_sentiment = e.target.checked
+    console.log(only_sentiment)
   }
 
   const handleChangePersons = (e) => {
     only_among_selected = e.target.checked
+    console.log(only_among_selected)
   }
+
+  const handleChangeYears = (event, newValue) => {
+    setValue(newValue);
+    min = newValue[0]
+    max = newValue[1]
+  }
+
+  const Politicians = () => (
+    <Select 
+      class="centered"
+      isMulti={true} 
+      value={selectedOption}
+      onChange={handleChange}
+      options={politicians}
+      />
+)
 
   return (
     <React.Fragment>
-        { /* personalities to select */}        
-        <Grid container>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4} sx={{ paddingTop: 2 }}><MyComponent/></Grid>
-          <Grid item xs={4}></Grid>
-        </Grid>        
-        
-        <Grid container>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4}><center><RangeSlider/></center></Grid>
-        </Grid>
-
-        <Grid container>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={2}><Switch defaultChecked onChange={handleChangePersons}/>Apenas entre seleccionados</Grid>
-          <Grid item xs={2}><Switch defaultChecked onChange={handleChangeRelationships}/>Apenas apoio/oposição</Grid>
-          <Grid item xs={4}></Grid>
-        </Grid>        
-
-        <Grid container>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4} sx={{ paddingBottom: 2 }}>
-            <center>
-              <Button variant="contained" onClick={() => { handleClick(); }}>Actualizar</Button>
-            </center>
+      {loading ? (
+          <CircularIndeterminate/>
+        ) : 
+        (
+          <React.Fragment>
+          
+          { /* select personality */}
+          <Grid container>
+            <Grid item xs={4}></Grid>
+            <Grid item xs={4} sx={{ paddingTop: 2 }}><Politicians/></Grid>
+            <Grid item xs={4}></Grid>
           </Grid>
-          <Grid item xs={4}></Grid>
-        </Grid>
-        
+          
+          { /* dates interval */}
+          <Grid container>
+            <Grid item xs={4}></Grid>
+            <Grid item xs={4}>
+              <center>
+              <Box sx={{ width: 300 }}>
+                <Slider
+                  getAriaLabel={() => 'Intervalo Datas'}
+                  value={value}
+                  onChange={handleChangeYears}
+                  valueLabelDisplay="auto"
+                  min={1994}
+                  max={2022}
+                />
+              </Box>
+              </center>
+            </Grid>
+          </Grid>
 
-      { /* news titles */}
-      <Grid container 
-      direction="row" spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="space-evenly">
-      {(!response) 
-        ? (<p></p>) 
-        : <NewsTitles data={response}/>
-      }
-      </Grid>
+          { /* switch buttons */}
+          <Grid container>
+            <Grid item xs={4}></Grid>
+            <Grid item xs={2}><Switch defaultChecked onChange={handleChangePersons}/>Apenas entre seleccionados</Grid>
+            <Grid item xs={2}><Switch defaultChecked onChange={handleChangeRelationships}/>Apenas apoio/oposição</Grid>
+            <Grid item xs={4}></Grid>
+          </Grid>
+
+          { /* updated button */}
+          <Grid container>
+            <Grid item xs={4}></Grid>
+            <Grid item xs={4} sx={{ paddingBottom: 2 }}>
+              <center>
+                <Button variant="contained" onClick={() => { handleClick(); }}>Actualizar</Button>
+              </center>
+            </Grid>
+            <Grid item xs={4}></Grid>
+          </Grid>
+          
+        { /* news titles */}
+        <Grid container direction="row" spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="space-evenly">
+        {(!response) 
+          ? (<p></p>) 
+          : <NewsTitles data={response}/>
+        }
+        </Grid>
+        </React.Fragment>
+      )
+    }
     </React.Fragment>
   )
 }
