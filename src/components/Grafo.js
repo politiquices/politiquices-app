@@ -1,12 +1,10 @@
-import React from "react"
+import Alert from '@mui/material/Alert'
 
 const Grafo = () => {
-    return (
-      <center>
-          <br></br>
-          Grafos
-      </center>
-    );
-  }
-  
-export default Grafo;
+  return (
+    // eslint-disable-next-line react/react-in-jsx-scope
+    <Alert>Grafos</Alert>
+  )
+}
+
+export default Grafo

@@ -1,26 +1,26 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom'
 import ResponsiveAppBar from './components/utils/NavigationBar'
 import Home from './components/Home'
-import Relacoes from './components/Relacoes';
-import Grafo from './components/Grafo';
-import ListPersonalidades from './components/ListPersonalidades';
-import ListPersonalidadesFiltered from './components/ListPersonalidadesFiltered';
-import FetchPersonalidade from './components/PersonalidadeInfo';
-import FetchPersonalidadeHeadlines from './components/PersonalidadeHeadlines';
-import Estatistica from './components/Estatistica';
-import Sobre from './components/Sobre';
-import Demo from './Demos/FetchWithLoader';
+import Relacoes from './components/Relacoes'
+import Grafo from './components/Grafo'
+import ListPersonalidades from './components/ListPersonalidades'
+import ListPersonalidadesFiltered from './components/ListPersonalidadesFiltered'
+import FetchPersonalidade from './components/PersonalidadeInfo'
+import FetchPersonalidadeHeadlines from './components/PersonalidadeHeadlines'
+import Estatistica from './components/Estatistica'
+import Sobre from './components/Sobre'
+import Demo from './Demos/FetchWithLoader'
 
-function App() {
-    return (
+function App () {
+  return (
       <React.Fragment>
         <ResponsiveAppBar/>
-          <Routes>                            
+          <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/relacoes" element={<Relacoes />} />
               <Route path="/grafo" element={<Grafo />} />
-              <Route path="/personalidades" element={<ListPersonalidades />} />              
+              <Route path="/personalidades" element={<ListPersonalidades />} />
               <Route path="/estatistica" element={<Estatistica/>} />
               <Route path="/sobre" element={<Sobre />} />
               <Route path="/demos" element={<Demo />} />
@@ -34,7 +34,7 @@ function App() {
               <Route path="/party/:id" element={<ListPersonalidadesFiltered type='party'/>} />
           </Routes>
       </React.Fragment>
-    );
-  }
+  )
+}
 
-export default App;
+export default App

@@ -1,13 +1,10 @@
-import React from "react"
+import Topography from '@mui/material/Alert'
 
-const Home = () => {
-    return (
-      <center>
-          <br></br>
-          Sobre
-      </center>
+const Sobre = () => {
+  return (
+    // eslint-disable-next-line react/react-in-jsx-scope
+    <Topography>Sobre</Topography>
+  )
+}
 
-    );
-  }
-  
-export default Home;
+export default Sobre
