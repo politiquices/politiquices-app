@@ -7,12 +7,8 @@ import NewsTitles from './utils/NewsTitles'
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-// see: https://dirask.com/posts/React-button-with-AJAX-request-1XokYj
     
-var state = {
-    selectedOption: null,
-}
-
+var state = {selectedOption: null,}
 var only_among_selected =  true
 var only_sentiment = true
 var min = 2014
@@ -45,7 +41,6 @@ const Relacoes = () => {
               .then(data => {
                 setPersonalities(data);
                 setLoading(false);
-                console.log(data);
               })
             .catch(err => {
               setLoading(false);
@@ -58,43 +53,45 @@ const Relacoes = () => {
   
   const handleClick = async () => {
 
-        // see: https://www.pluralsight.com/guides/how-to-send-data-via-ajax-in-react
-
-        let result = state.map(a => a.value);
-
-        let params = ''
-        for (let i=0; i< result.length; i++) {
-          params += '&q='+result[i]
+        if (selectedOption == null) {
+          console.log("empty")
         }
+        else {
+          let result = state.map(a => a.value);
 
-        params += '&selected='+only_among_selected
-        params += '&sentiment='+only_sentiment
-        params += '&start='+min
-        params += '&end='+max
+          let params = ''
+          for (let i=0; i< result.length; i++) {
+            params += '&q='+result[i]
+          }
 
-        setLoading(true);
+          params += '&selected='+only_among_selected
+          params += '&sentiment='+only_sentiment
+          params += '&start='+min
+          params += '&end='+max
 
-        fetch(`http://127.0.0.1:8000/timeline/?${params}`, {
-          method: "GET",
-          headers: {'Content-Type': 'application/json'}})
-          .then(res => res.json())
-            .then(data => {
-              setResponse(data);
+          setLoading(true);
+
+          fetch(`http://127.0.0.1:8000/timeline/?${params}`, {
+            method: "GET",
+            headers: {'Content-Type': 'application/json'}})
+            .then(res => res.json())
+              .then(data => {
+                setResponse(data);
+                setLoading(false);
+              })
+            .catch(err => {
               setLoading(false);
-              console.log(data);
-            })
-          .catch(err => {
-            setLoading(false);
-            console.log(err)
-          });
-        setSelectedOption(state);
+              console.log(err)
+            });
+          setSelectedOption(state);
+
+        }
     };
 
   // handle onChange event of the dropdown
   const handleChange = (e) => {
     setSelectedOption(e);
     state = e
-    console.log(`selected:`, e);
   }
     
   const handleChangeRelationships = (e) => {
@@ -178,10 +175,12 @@ const Relacoes = () => {
           
         { /* news titles */}
         <Grid container direction="row" spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="space-evenly">
+        
         {(!response) 
           ? (<p></p>) 
           : <NewsTitles data={response}/>
         }
+        
         </Grid>
         </React.Fragment>
       )

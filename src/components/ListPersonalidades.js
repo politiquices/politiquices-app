@@ -4,20 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Link from '@material-ui/core/Link';
 import { Typography } from '@mui/material';
 
-/*
-const gridStyles = {
-  backgroundColor: "white",
-  marginTop: 1,
-  marginLeft: "148",
-  marginRight: "158",
-};
-*/
-
-//paddingBottom: 10,
-//paddingRight: 10,
-//maxWidth: 100
-
-
 function ListPersonalidades(personalities) {
 
     const headlines = personalities.data.map(raw_data => (

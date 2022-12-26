@@ -2,9 +2,10 @@ import React from "react"
 
 const Grafo = () => {
     return (
-      <div>
-          Grafos React?
-      </div>
+      <center>
+          <br></br>
+          Grafos
+      </center>
     );
   }
   

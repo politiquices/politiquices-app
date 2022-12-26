@@ -1,6 +1,9 @@
+import * as React from 'react';
+
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import Link from '@material-ui/core/Link';
+import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
@@ -14,7 +17,17 @@ const Neutral = "assets/images/logos/conversation.png"
 // loads news titles
 function NewsTitles(props) {
 
-    let raw_data = props.data
+  let raw_data = props.data
+
+  if (raw_data.length === 0) {
+    return (
+      <Grid item sx={{ paddingTop: 1.5}}>
+        <Alert severity="info">Não foram encontrados resultados.</Alert>
+      </Grid>
+    )
+  }
+
+  else {
 
     function process_rel(rel_type){
       if (rel_type.includes('opposes')) {return Opposes} 
@@ -100,5 +113,6 @@ function NewsTitles(props) {
       </Grid>
     ))
   }
+}
 
 export default NewsTitles;

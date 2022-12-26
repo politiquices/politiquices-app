@@ -2,9 +2,10 @@ import React from "react"
 
 const Home = () => {
     return (
-      <div>
-          Estatistica goes here
-      </div>
+      <center>
+          <br></br>
+          Estatísticas
+      </center>
     );
   }
   

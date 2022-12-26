@@ -23,10 +23,8 @@ const logo = "/assets/images/logos/politiquices_logo.jpg"
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
+  backgroundColor: alpha(theme.palette.common.white, 0.15), 
+  '&:hover': { backgroundColor: alpha(theme.palette.common.white, 0.25)},
   marginLeft: 0,
   width: '100%',
   [theme.breakpoints.up('sm')]: {
@@ -121,7 +119,7 @@ const ResponsiveAppBar = () => {
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">
-                    <Link to={`/${page}`}>{page}</Link>
+                    <Link to={`/${page[1]}`}>{page[0]}</Link>
                   </Typography>
                 </MenuItem>
               ))}
