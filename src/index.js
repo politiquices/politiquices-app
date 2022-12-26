@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+//import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider, createTheme } from "@material-ui/core";
@@ -13,7 +13,7 @@ const customTheme = createTheme({
       dark: "#302c82"
     },
     background: {
-      default: "#FFFFFF"
+      default: "#000000"
     }
   }
 });

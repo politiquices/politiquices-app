@@ -29,15 +29,12 @@ function ListPersonalidades(personalities) {
           wiki_id: raw_data.wiki_id
 
         }))
-
-      console.log(headlines)
   
       return headlines.map((entry) => (
   
         <Grid item key={entry.wiki_id} width={250} align="center" columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }}>
           <Link justify="center" href={`personalidade/${entry.wiki_id}`}>
             <Avatar alt={entry.focus_ent} src={entry.local_image} sx={{ width: 125, height: 125 }}/>{entry.label}
-            { console.log(entry.local_image) }
           </Link>               
           <Typography justify="center" fontSize={2}>{entry.nr_articles} notícias</Typography>
         </Grid>

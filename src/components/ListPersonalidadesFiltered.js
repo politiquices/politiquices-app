@@ -86,7 +86,6 @@ const FetchPersonalidades = (type) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const fetchData = () => {
-      console.log("full url to fetch: ", full_url)
       fetch(full_url)
       .then((response) => response.json())
       .then((data) => {

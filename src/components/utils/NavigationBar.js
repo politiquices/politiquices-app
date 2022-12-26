@@ -18,8 +18,7 @@ const pages = [['Grafo', 'grafo'], ['Relações','relacoes'], ['Personalidades',
                ['Estatística','estatistica'], ['Sobre','sobre'], ['Demos','demos']
               ];
 
-const logo = "assets/images/politiquices_logo.jpg"
-
+const logo = "/assets/images/politiquices_logo.jpg"
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -84,7 +83,7 @@ const ResponsiveAppBar = () => {
         <Toolbar disableGutters sx={{mx: 'auto'}}>          
           <Link to="/">
             <Typography variant="title">
-              <img src={logo} alt="bug" height={80} />
+              <img src={logo} alt="politiquices.pt" height={80} />
             </Typography>
           </Link>
 

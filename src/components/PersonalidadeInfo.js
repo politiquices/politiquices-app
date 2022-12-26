@@ -11,13 +11,14 @@ import StackBarChat from './utils/StackedBarChart'
 
 // https://blog.openreplay.com/data-fetching-techniques-with-react
 
+/*
 const gridStyles = {
   backgroundColor: "white",
   marginTop: 1,
   marginLeft: "148",
   marginRight: "158",
 };
-
+*/
 
 const PersonalidadeInfo = ({ data }) => {
 
@@ -52,7 +53,7 @@ const PersonalidadeInfo = ({ data }) => {
             columns={14}
             alignItems="center"
             justifyContent="center"
-            style={gridStyles}
+            // style={gridStyles}
         >
             
             {/* Foto + Nome + WikiData link */} 
