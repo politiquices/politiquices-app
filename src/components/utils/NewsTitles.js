@@ -23,8 +23,8 @@ function NewsTitles(props) {
     }
 
     function process_article_link(rel_type){
-      if (rel_type.startsWith('https://publico.pt')) {return <img width="15" src={PublicoLogo}/>} 
-      return <img width="35" src={ArquivoLogo}/>
+      if (rel_type.startsWith('https://publico.pt')) {return <img width="15" src={PublicoLogo} alt="publico.pt"/>} 
+      return <img width="35" src={ArquivoLogo} alt="arquivo.pt"/>
     }
 
     const headlines = raw_data.map(raw_data => (

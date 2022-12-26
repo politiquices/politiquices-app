@@ -78,7 +78,7 @@ const ResponsiveAppBar = () => {
 
   return (
     <React.Fragment>
-    <AppBar position="sticky" style={{ background: '#043a40' }}>
+    <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{mx: 'auto'}}>          
           <Link to="/">
