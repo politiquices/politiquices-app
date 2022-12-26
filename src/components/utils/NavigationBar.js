@@ -10,14 +10,15 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom'
-import logo from "../../images/politiquices_logo.jpg"
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 
-const pages = [['Grafo', 'Grafo'], ['Relações','Relacoes'], ['Personalidades','Personalidades'], 
-               ['Estatística','Estatistica'], ['Sobre','Sobre'], ['Demos','Demos']
+const pages = [['Grafo', 'grafo'], ['Relações','relacoes'], ['Personalidades','personalidades'], 
+               ['Estatística','estatistica'], ['Sobre','sobre'], ['Demos','demos']
               ];
+
+const logo = "assets/images/politiquices_logo.jpg"
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -78,7 +79,7 @@ const ResponsiveAppBar = () => {
 
   return (
     <React.Fragment>
-    <AppBar position="sticky" style={{ background: '#343a40' }}>
+    <AppBar position="sticky" style={{ background: '#043a40' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{mx: 'auto'}}>          
           <Link to="/">

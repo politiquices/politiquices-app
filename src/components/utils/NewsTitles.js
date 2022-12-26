@@ -4,11 +4,11 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Link from '@material-ui/core/Link';
 import CardContent from '@mui/material/CardContent';
-import PublicoLogo from "../../images/publico_logo.png"
-import ArquivoLogo from "../../images/arquivo_logo.png"
-import Supports from "../../images/handshake.png"
-import Opposes from "../../images/discrimination.png"
-import Neutral from "../../images/conversation.png"
+// import PublicoLogo from "../../../assets/images/publico_logo.png"
+// import ArquivoLogo from "../../../assets/images/arquivo_logo.png"
+// import Supports from "../../../assets/images/handshake.png"
+// import Opposes from "../../../assets/images/discrimination.png"
+// import Neutral from "../../../assets/images/conversation.png"
 
 // loads news titles
 function NewsTitles(props) {
@@ -16,14 +16,14 @@ function NewsTitles(props) {
     let raw_data = props.data
 
     function process_rel(rel_type){
-      if (rel_type.includes('opposes')) {return Opposes} 
-      else if (rel_type.includes('supports')) {return Supports}
-      return Neutral
+      if (rel_type.includes('opposes')) {return "assets/images/discrimination.png"} 
+      else if (rel_type.includes('supports')) {return "assets/images/discrimination.png"}
+      return "assets/images/conversation.png"
     }
 
     function process_article_link(rel_type){
-      if (rel_type.startsWith('https://publico.pt')) {return <img width="15" src={PublicoLogo}/>} 
-      return <img width="35" src={ArquivoLogo}/>
+      if (rel_type.startsWith('https://publico.pt')) {return <img width="15" src={"assets/images/publico_logo.png"}/>} 
+      return <img width="35" src={"assets/images/arquivo_logo.png"}/>
     }
 
     const headlines = raw_data.map(raw_data => (

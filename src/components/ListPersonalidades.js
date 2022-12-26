@@ -4,12 +4,14 @@ import Avatar from '@mui/material/Avatar';
 import Link from '@material-ui/core/Link';
 import { Typography } from '@mui/material';
 
+/*
 const gridStyles = {
   backgroundColor: "white",
   marginTop: 1,
   marginLeft: "148",
   marginRight: "158",
 };
+*/
 
 //paddingBottom: 10,
 //paddingRight: 10,
@@ -23,7 +25,7 @@ function ListPersonalidades(personalities) {
           label: raw_data.name,
           nr_articles: raw_data.nr_articles,
           url_image: raw_data.image_url,
-          wikidata_url: raw_data.wikidata_url,
+          local_image: raw_data.local_image,
           wiki_id: raw_data.wiki_id
 
         }))
@@ -34,7 +36,8 @@ function ListPersonalidades(personalities) {
   
         <Grid item key={entry.wiki_id} width={250} align="center" columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }}>
           <Link justify="center" href={`personalidade/${entry.wiki_id}`}>
-            <Avatar alt={entry.focus_ent} src={entry.url_image} sx={{ width: 125, height: 125 }}/>{entry.label}
+            <Avatar alt={entry.focus_ent} src={entry.local_image} sx={{ width: 125, height: 125 }}/>{entry.label}
+            { console.log(entry.local_image) }
           </Link>               
           <Typography justify="center" fontSize={2}>{entry.nr_articles} notícias</Typography>
         </Grid>
@@ -74,7 +77,7 @@ const FetchPersonalidades = () => {
       // lg - min width 1280px
       // xl - min width 1920px
 
-      <Grid container direction="row" spacing={6} justifyContent="space-evenly" style={gridStyles}>
+      <Grid container direction="row" spacing={6} justifyContent="space-evenly">  {/* style={gridStyles}> */}
         {data && <ListPersonalidades data={data} />}
         {isError && <div>Error fetching data.</div>}
       </Grid>
