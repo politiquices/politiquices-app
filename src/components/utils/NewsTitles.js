@@ -5,11 +5,11 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 
-const PublicoLogo = "assets/images/publico_logo.png"
-const ArquivoLogo = "assets/images/arquivo_logo.png"
-const Supports = "assets/images/handshake.png"
-const Opposes = "assets/images/discrimination.png"
-const Neutral = "assets/images/conversation.png"
+const PublicoLogo = "assets/images/logos/publico_logo.png"
+const ArquivoLogo = "assets/images/logos/arquivo_logo.png"
+const Supports = "assets/images/logos/handshake.png"
+const Opposes = "assets/images/logos/discrimination.png"
+const Neutral = "assets/images/logos/conversation.png"
 
 // loads news titles
 function NewsTitles(props) {

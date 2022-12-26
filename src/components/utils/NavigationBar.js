@@ -18,7 +18,7 @@ const pages = [['Grafo', 'grafo'], ['Relações','relacoes'], ['Personalidades',
                ['Estatística','estatistica'], ['Sobre','sobre'], ['Demos','demos']
               ];
 
-const logo = "/assets/images/politiquices_logo.jpg"
+const logo = "/assets/images/logos/politiquices_logo.jpg"
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
