@@ -1,11 +1,9 @@
 import React from 'react'
-// import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import ResponsiveAppBar from './components/utils/NavigationBar'
 import Home from './components/Home'
 import Relacoes from './components/Relacoes';
 import Grafo from './components/Grafo';
-// import Partidos from './components/Partidos';
 import ListPersonalidades from './components/ListPersonalidades';
 import ListPersonalidadesFiltered from './components/ListPersonalidadesFiltered';
 import FetchPersonalidade from './components/PersonalidadeInfo';

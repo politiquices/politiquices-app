@@ -15,7 +15,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 
-const pages = ['Grafo', 'Relacoes', 'Personalidades', 'Estatistica', 'Sobre', 'Demos'];
+const pages = [['Grafo', 'Grafo'], ['Relações','Relacoes'], ['Personalidades','Personalidades'], 
+               ['Estatística','Estatistica'], ['Sobre','Sobre'], ['Demos','Demos']
+              ];
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -72,9 +74,11 @@ const ResponsiveAppBar = () => {
     setAnchorElNav(null);
   };
 
+  
+
   return (
     <React.Fragment>
-    <AppBar position="sticky">
+    <AppBar position="sticky" style={{ background: '#343a40' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{mx: 'auto'}}>          
           <Link to="/">
@@ -87,7 +91,6 @@ const ResponsiveAppBar = () => {
 
             <IconButton
               size="large"
-
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -119,7 +122,7 @@ const ResponsiveAppBar = () => {
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">
                     <Link to={`/${page}`}>{page}</Link>
-                    </Typography>
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -128,17 +131,21 @@ const ResponsiveAppBar = () => {
           {/* Buttons text is here */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex'} }}>
             {pages.map((page) => (
-              <Link to={`/${page}`}>
-                <Button key={page}
+              <Link style={{ textDecoration: "none"}} to={`/${page[1]}`}>
+                <Button key={page[0]}
                   onClick={handleCloseNavMenu}
-                  sx={{ border: 1, gap: 4, margin: 2, my: 2, color: 'black', display: 'block' }}>
-                  <Typography style={{ fontWeight: 800 }}>
-                    {page}
+                  variant="text"
+                  sx={{ border: 0, gap: 4, margin: 2, my: 3, color: 'black', display: 'block' }}
+                  style={{textTransform: 'none'}}>
+                  <Typography style={{ fontWeight: 1800, fontSize: 20}}>
+                    {page[0]}
                   </Typography>
                 </Button>
               </Link>
             ))}
           </Box>
+          
+          {/* Search Box at the end */}
           <Search>
             <SearchIconWrapper>
               <SearchIcon />

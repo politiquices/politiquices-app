@@ -27,6 +27,8 @@ function ListPersonalidades(personalities) {
           wiki_id: raw_data.wiki_id
 
         }))
+
+      console.log(headlines)
   
       return headlines.map((entry) => (
   

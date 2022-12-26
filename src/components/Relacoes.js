@@ -7,18 +7,8 @@ import NewsTitles from './utils/NewsTitles'
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import politicians_objects from '../json/persons.json';
 // see: https://dirask.com/posts/React-button-with-AJAX-request-1XokYj
-
-// convert JSON objects to React objects
-const politicians = politicians_objects.map(
-  politicians_objects => (
-    {
-      label: politicians_objects.name, 
-      value: politicians_objects.wiki_id
-    })
-  )
-
+    
 var state = {
     selectedOption: null,
 }
@@ -36,13 +26,35 @@ function CircularIndeterminate() {
   );
 };
 
+
 const Relacoes = () => {
 
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState();
   const [selectedOption, setSelectedOption] = useState();
   const [value, setValue] = useState([2000, 2014]);
-  
+  const [personalities, setPersonalities] = useState();
+
+  // read the persons.json to fill the select
+  function loadPersonalities() {
+    setLoading(true);
+    fetch(`http://127.0.0.1:8000/persons/`, {
+            method: "GET",
+            headers: {'Content-Type': 'application/json'}})
+            .then(res => res.json())
+              .then(data => {
+                setPersonalities(data);
+                setLoading(false);
+                console.log(data);
+              })
+            .catch(err => {
+              setLoading(false);
+              console.log(err)
+            });
+  }
+  useEffect(()=>{
+    loadPersonalities();
+  },[])
   
   const handleClick = async () => {
 
@@ -69,6 +81,7 @@ const Relacoes = () => {
             .then(data => {
               setResponse(data);
               setLoading(false);
+              console.log(data);
             })
           .catch(err => {
             setLoading(false);
@@ -106,7 +119,7 @@ const Relacoes = () => {
       isMulti={true} 
       value={selectedOption}
       onChange={handleChange}
-      options={politicians}
+      options={personalities}
       />
 )
 
