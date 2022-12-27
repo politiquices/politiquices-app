@@ -1,12 +1,10 @@
-import React from 'react'
+import Alert from '@mui/material/Alert'
 
-const Home = () => {
+const Stats = () => {
   return (
-      <center>
-          <br></br>
-          Estatísticas
-      </center>
+    // eslint-disable-next-line react/react-in-jsx-scope
+    <Alert>Stats</Alert>
   )
 }
 
-export default Home
+export default Stats

@@ -17,7 +17,7 @@ function Partido (parties) {
     }))
 
   return partidos.map((entry) => (
-        <Grid item width={150}>
+        <Grid key="{index}" item width={150}>
         <Link>
         <CardActionArea>
             <Card sx={{ maxWidth: 180 }} className="card">

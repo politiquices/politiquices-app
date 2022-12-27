@@ -14,7 +14,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import { styled, alpha } from '@mui/material/styles'
 import InputBase from '@mui/material/InputBase'
 
-const pages = [['Grafo', 'grafo'], ['Relações', 'relacoes'], ['Personalidades', 'personalidades'], ['Estatística', 'estatistica'], ['Sobre', 'sobre'], ['Demos', 'demos']]
+const pages = [['Grafo', 'grafo'], ['Relações', 'relacoes'], ['Personalidades', 'personalidades'], ['Estatística', 'estatistica'], ['Sobre', 'sobre']]
 
 const logo = '/assets/images/logos/politiquices_logo.jpg'
 

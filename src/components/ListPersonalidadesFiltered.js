@@ -5,36 +5,23 @@ import Avatar from '@mui/material/Avatar'
 import Link from '@material-ui/core/Link'
 import { Typography } from '@mui/material'
 
-/*
-const gridStyles = {
-  backgroundColor: "white",
-  marginTop: 1,
-  marginLeft: "148",
-  marginRight: "158",
-};
-*/
-
-// paddingBottom: 10,
-// paddingRight: 10,
-// maxWidth: 100
-
 function ListPersonalidadesFiltered (personalities) {
-  const headlines = personalities.data.map(raw_data => (
+  const headlines = personalities.data.map(rawData => (
     {
-      wiki_id: raw_data.ent1.value.split('/').at(-1),
-      label: raw_data.ent1_name.value,
-      url_image: raw_data.image_url.value,
+      wiki_id: rawData.ent1.value.split('/').at(-1),
+      label: rawData.ent1_name.value,
+      url_image: rawData.image_url.value,
       nr_articles: 0
     }))
 
   // to remove the last part of the current URL
-  const full_url = window.location.href
-  const base_url = full_url.replace(window.location.pathname, '')
+  const fullURL = window.location.href
+  const baseURL = fullURL.replace(window.location.pathname, '')
 
   return headlines.map((entry) => (
 
       <Grid item key={entry.wiki_id} width={250} align="center" columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }}>
-        <Link justify="center" href={base_url + '/personalidade/' + entry.wiki_id}>
+        <Link justify="center" href={baseURL + '/personalidade/' + entry.wiki_id}>
           <Avatar alt={'test'} src={entry.url_image} sx={{ width: 125, height: 125 }}/>{entry.label}
         </Link>
         <Typography justify="center" fontSize={2}>{entry.nr_articles} notícias</Typography>
@@ -43,35 +30,35 @@ function ListPersonalidadesFiltered (personalities) {
 }
 
 const FetchPersonalidades = (type) => {
-  const base_url = 'http://127.0.0.1:8000'
+  const Base = 'http://127.0.0.1:8000'
   const { id } = useParams()
-  let full_url = ''
+  let Full = ''
 
   console.log(type.type)
 
   switch (type.type) {
     case 'education':
-      full_url = base_url + '/personalities/educated_at/' + id
+      Full = Base + '/personalities/educated_at/' + id
       break
 
     case 'occupation':
-      full_url = base_url + '/personalities/occupation/' + id
+      Full = Base + '/personalities/occupation/' + id
       break
 
     case 'government':
-      full_url = base_url + '/personalities/government/' + id
+      Full = Base + '/personalities/government/' + id
       break
 
     case 'assembly':
-      full_url = base_url + '/personalities/assembly/' + id
+      Full = Base + '/personalities/assembly/' + id
       break
 
     case 'public_office':
-      full_url = base_url + '/personalities/public_office/' + id
+      Full = Base + '/personalities/public_office/' + id
       break
 
     case 'party':
-      full_url = base_url + '/personalities/party/' + id
+      Full = Base + '/personalities/party/' + id
       break
 
     default:
@@ -82,7 +69,7 @@ const FetchPersonalidades = (type) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const fetchData = () => {
-    fetch(full_url)
+    fetch(Full)
       .then((response) => response.json())
       .then((data) => {
         setIsLoading(false)

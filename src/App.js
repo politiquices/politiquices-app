@@ -10,7 +10,6 @@ import FetchPersonalidade from './components/PersonalidadeInfo'
 import FetchPersonalidadeHeadlines from './components/PersonalidadeHeadlines'
 import Estatistica from './components/Estatistica'
 import Sobre from './components/Sobre'
-import Demo from './Demos/FetchWithLoader'
 
 function App () {
   return (
@@ -23,7 +22,6 @@ function App () {
               <Route path="/personalidades" element={<ListPersonalidades />} />
               <Route path="/estatistica" element={<Estatistica/>} />
               <Route path="/sobre" element={<Sobre />} />
-              <Route path="/demos" element={<Demo />} />
               <Route path="/personalidade/:id" element={<FetchPersonalidade/>} />
               <Route path="/personalidade_news/:id" element={<FetchPersonalidadeHeadlines/>} />
               <Route path="/education/:id" element={<ListPersonalidadesFiltered type='education'/>} />

@@ -21,16 +21,16 @@ const gridStyles = {
 */
 
 const PersonalidadeInfo = ({ data }) => {
-  const wiki_url = 'http://www.wikidata.org/wiki/' + data.wiki_id
+  const wikiURL = 'http://www.wikidata.org/wiki/' + data.wiki_id
 
   function FillIn (elements, url) {
     // to remove the last part of the current URL
-    const full_url = window.location.href
-    const base_url = full_url.replace(window.location.pathname, '')
+    const completeURL = window.location.href
+    const baseURL = completeURL.replace(window.location.pathname, '')
 
     if (elements.length > 0) {
       return elements.map((item, index) => (
-        <Link key={index} href={ base_url + '/' + url + '/' + item.wiki_id.split('/').at(-1)}>
+        <Link key={index} href={ baseURL + '/' + url + '/' + item.wiki_id.split('/').at(-1)}>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {item.label}
           </Typography>
@@ -40,7 +40,7 @@ const PersonalidadeInfo = ({ data }) => {
     return <Typography sx={{ mb: 1.5 }} color="text.secondary">-</Typography>
   }
 
-  const base_url = window.location.href.replace(window.location.pathname, '')
+  const baseURL = window.location.href.replace(window.location.pathname, '')
 
   return (
     <React.Fragment>
@@ -61,7 +61,7 @@ const PersonalidadeInfo = ({ data }) => {
                 <Typography variant="h6" component="div">
                 <b>{data.name}</b>
                 </Typography>
-                <Link href={wiki_url} target="_blank" >
+                <Link href={wikiURL} target="_blank" >
                 <SiWikidata size={35}/>
                 </Link>
             </center>
@@ -76,7 +76,7 @@ const PersonalidadeInfo = ({ data }) => {
                     )
                   : (
                       data.parties.map((entry, index) => (
-                    <Link href= {base_url + '/party/' + entry.wiki_id}>
+                    <Link key="{index}" href= {baseURL + '/party/' + entry.wiki_id}>
                     <div>
                     <img key="{index}" width="68" src={entry.image_url}></img>
                     <br/>

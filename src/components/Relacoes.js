@@ -9,8 +9,8 @@ import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 
 let state = { selectedOption: null }
-let only_among_selected = true
-let only_sentiment = true
+let onlyAmongSelected = true
+let onlySentiment = true
 let min = 2014
 let max = 2022
 
@@ -61,8 +61,8 @@ const Relacoes = () => {
         params += '&q=' + result[i]
       }
 
-      params += '&selected=' + only_among_selected
-      params += '&sentiment=' + only_sentiment
+      params += '&selected=' + onlyAmongSelected
+      params += '&sentiment=' + onlySentiment
       params += '&start=' + min
       params += '&end=' + max
 
@@ -92,13 +92,13 @@ const Relacoes = () => {
   }
 
   const handleChangeRelationships = (e) => {
-    only_sentiment = e.target.checked
-    console.log(only_sentiment)
+    onlySentiment = e.target.checked
+    console.log(onlySentiment)
   }
 
   const handleChangePersons = (e) => {
-    only_among_selected = e.target.checked
-    console.log(only_among_selected)
+    onlyAmongSelected = e.target.checked
+    console.log(onlyAmongSelected)
   }
 
   const handleChangeYears = (event, newValue) => {
@@ -119,12 +119,10 @@ const Relacoes = () => {
 
   return (
     <React.Fragment>
-      {loading ? (
-          <CircularIndeterminate/>
-      )
+      {loading
+        ? (<CircularIndeterminate/>)
         : (
           <React.Fragment>
-
           { /* select personality */}
           <Grid container>
             <Grid item xs={4}></Grid>
