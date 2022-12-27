@@ -4,23 +4,15 @@ import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Switch from '@mui/material/Switch'
 import NewsTitles from './utils/NewsTitles'
-import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
+import CircularIndeterminate from './utils/Circular'
 
 let state = { selectedOption: null }
 let onlyAmongSelected = true
 let onlySentiment = true
 let min = 2014
 let max = 2022
-
-function CircularIndeterminate () {
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <CircularProgress/>
-    </Box>
-  )
-};
 
 const Relacoes = () => {
   const [loading, setLoading] = useState(false)
@@ -152,8 +144,8 @@ const Relacoes = () => {
           { /* switch buttons */}
           <Grid container>
             <Grid item xs={4}></Grid>
-            <Grid item xs={2}><Switch defaultChecked onChange={handleChangePersons}/>Apenas entre seleccionados</Grid>
-            <Grid item xs={2}><Switch defaultChecked onChange={handleChangeRelationships}/>Apenas apoio/oposição</Grid>
+            <Grid item xs={2}><Switch defaultChecked={onlyAmongSelected} onChange={handleChangePersons}/>Apenas entre seleccionados</Grid>
+            <Grid item xs={2}><Switch defaultChecked={onlySentiment} onChange={handleChangeRelationships}/>Apenas apoio/oposição</Grid>
             <Grid item xs={4}></Grid>
           </Grid>
 

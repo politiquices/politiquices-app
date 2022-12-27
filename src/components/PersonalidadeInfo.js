@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
 import { SiWikidata } from 'react-icons/si'
 import { HiAcademicCap } from 'react-icons/hi'
-import StackBarChat from './utils/StackedBarChart'
+// import StackBarChat from './utils/StackedBarChart'
 
 // https://blog.openreplay.com/data-fetching-techniques-with-react
 
@@ -135,7 +135,7 @@ const PersonalidadeInfo = ({ data }) => {
         noticias
       </center>
     </Link>
-    <StackBarChat/>
+    {/* <StackBarChat/> */}
     </React.Fragment>
   )
 }
