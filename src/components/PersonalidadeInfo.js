@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Link from '@material-ui/core/Link'
 import Typography from '@mui/material/Typography'
@@ -8,37 +8,38 @@ import Avatar from '@mui/material/Avatar'
 import { SiWikidata } from 'react-icons/si'
 import { HiAcademicCap } from 'react-icons/hi'
 
+function FillIn(elements, url) {
+  // to remove the last part of the current URL
+  const completeURL = window.location.href
+  const baseURL = completeURL.replace(window.location.pathname, '')
+
+  const { length } = elements
+  if (length > 0) {
+    // eslint-disable-next-line react/destructuring-assignment
+    return elements.map((item) => (
+      <Link
+        key={item.wiki_id.split('/').at(-1)}
+        href={`${baseURL}/${url}/${item.wiki_id.split('/').at(-1)}`}
+      >
+        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          {item.label}
+        </Typography>
+      </Link>
+    ))
+  }
+  return (
+    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+      -
+    </Typography>
+  )
+}
+
 function PersonalidadeInfo({ data }) {
   const wikiURL = `http://www.wikidata.org/wiki/${data.wiki_id}`
-
-  function FillIn(elements, url) {
-    // to remove the last part of the current URL
-    const completeURL = window.location.href
-    const baseURL = completeURL.replace(window.location.pathname, '')
-
-    if (elements.length > 0) {
-      return elements.map((item, index) => (
-        <Link
-          key={index}
-          href={baseURL + '/' + url + '/' + item.wiki_id.split('/').at(-1)}
-        >
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {item.label}
-          </Typography>
-        </Link>
-      ))
-    }
-    return (
-      <Typography sx={{ mb: 1.5 }} color="text.secondary">
-        -
-      </Typography>
-    )
-  }
-
   const baseURL = window.location.href.replace(window.location.pathname, '')
 
   return (
-    <React.Fragment>
+    <>
       <Box sx={{ flexGrow: 1 }}>
         <Grid
           container
@@ -71,13 +72,18 @@ function PersonalidadeInfo({ data }) {
               {!data || !data.parties ? (
                 <p>Loading...</p>
               ) : (
-                data.parties.map((entry, index) => (
+                data.parties.map((entry) => (
                   <Link
-                    key="{index}"
-                    href={baseURL + '/party/' + entry.wiki_id}
+                    key={entry.wiki_id}
+                    href={`${baseURL}/party/${entry.wiki_id}`}
                   >
                     <div>
-                      <img key="{index}" width="68" src={entry.image_url}></img>
+                      <img
+                        key="{index}"
+                        width="68"
+                        src={entry.image_url}
+                        alt={entry.name}
+                      />
                       <br />
                     </div>
                   </Link>
@@ -133,15 +139,15 @@ function PersonalidadeInfo({ data }) {
           </Grid>
         </Grid>
       </Box>
-      <Link href={'/personalidade_news/' + data.wiki_id}>
+      <Link href={`/personalidade_news/${data.wiki_id}`}>
         <center>noticias</center>
       </Link>
       {/* <StackBarChat/> */}
-    </React.Fragment>
+    </>
   )
 }
 
-const FetchPersonalidade = () => {
+function FetchPersonalidade() {
   const { id } = useParams()
   const [notes, setNotes] = useState([])
   const [isLoading, setIsLoading] = useState(false)

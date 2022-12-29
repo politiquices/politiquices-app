@@ -1,3 +1,7 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable react/jsx-fragments */
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react/jsx-no-useless-fragment */
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select' // https://react-select.com/home
 import Grid from '@mui/material/Grid'
@@ -11,14 +15,14 @@ import CircularIndeterminate from './utils/Circular'
 let state = { selectedOption: null }
 let onlyAmongSelected = true
 let onlySentiment = true
-let min = 2014
-let max = 2022
+const minYear = 1994
+const maxYear = 2022
 
 function Relacoes() {
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState()
   const [selectedOption, setSelectedOption] = useState()
-  const [value, setValue] = useState([2000, 2014])
+  const [Yearsvalues, setValue] = useState([2000, 2014])
   const [personalities, setPersonalities] = useState()
 
   // read the persons.json to fill the select
@@ -45,38 +49,36 @@ function Relacoes() {
   }, [])
 
   const handleClick = async () => {
-    if (selectedOption == null) {
-      console.log('empty')
-    } else {
-      const result = state.map((a) => a.value)
+    const result = state.map((a) => a.value)
 
-      let params = ''
-      for (let i = 0; i < result.length; i += 1) {
-        params += `&q=${result[i]}`
-      }
-
-      params += `&selected=${onlyAmongSelected}`
-      params += `&sentiment=${onlySentiment}`
-      params += `&start=${min}`
-      params += `&end=${max}`
-
-      setLoading(true)
-
-      fetch(`http://127.0.0.1:8000/timeline/?${params}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setResponse(data)
-          setLoading(false)
-        })
-        .catch((err) => {
-          setLoading(false)
-          console.log(err)
-        })
-      setSelectedOption(state)
+    let params = ''
+    for (let i = 0; i < result.length; i += 1) {
+      params += `&q=${result[i]}`
     }
+
+    const [min, max] = Yearsvalues
+
+    params += `&selected=${onlyAmongSelected}`
+    params += `&sentiment=${onlySentiment}`
+    params += `&start=${min}`
+    params += `&end=${max}`
+
+    setLoading(true)
+
+    fetch(`http://127.0.0.1:8000/timeline/?${params}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setResponse(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        setLoading(false)
+        console.log(err)
+      })
+    setSelectedOption(state)
   }
 
   // handle onChange event of the dropdown
@@ -97,16 +99,13 @@ function Relacoes() {
 
   const handleChangeYears = (event, yearsValues) => {
     setValue(yearsValues)
-    // let [min, max] = yearsValues
-    min = yearsValues[0]
-    max = yearsValues[1]
   }
 
   function Politicians() {
     return (
       <Select
         class="centered"
-        isMulti={true}
+        isMulti
         value={selectedOption}
         onChange={handleChange}
         options={personalities}
@@ -122,26 +121,26 @@ function Relacoes() {
         <React.Fragment>
           {/* select personality */}
           <Grid container>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4} />
             <Grid item xs={4} sx={{ paddingTop: 2 }}>
               <Politicians />
             </Grid>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4} />
           </Grid>
 
           {/* dates interval */}
           <Grid container>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4} />
             <Grid item xs={4}>
               <center>
                 <Box sx={{ width: 300 }}>
                   <Slider
                     getAriaLabel={() => 'Intervalo Datas'}
-                    value={value}
+                    value={Yearsvalues}
                     onChange={handleChangeYears}
                     valueLabelDisplay="auto"
-                    min={1994}
-                    max={2022}
+                    min={minYear}
+                    max={maxYear}
                   />
                 </Box>
               </center>
@@ -150,7 +149,7 @@ function Relacoes() {
 
           {/* switch buttons */}
           <Grid container>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4} />
             <Grid item xs={2}>
               <Switch
                 defaultChecked={onlyAmongSelected}
@@ -165,12 +164,12 @@ function Relacoes() {
               />
               Apenas apoio/oposição
             </Grid>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4} />
           </Grid>
 
           {/* update button */}
           <Grid container>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4} />
             <Grid item xs={4} sx={{ paddingBottom: 2 }}>
               <center>
                 <Button
@@ -183,7 +182,7 @@ function Relacoes() {
                 </Button>
               </center>
             </Grid>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4} />
           </Grid>
 
           {/* news titles */}
@@ -194,7 +193,7 @@ function Relacoes() {
             columns={{ xs: 4, sm: 8, md: 12 }}
             justifyContent="space-evenly"
           >
-            {!response ? <p></p> : <NewsTitles data={response} />}
+            {!response ? <p /> : <NewsTitles data={response} />}
           </Grid>
         </React.Fragment>
       )}
