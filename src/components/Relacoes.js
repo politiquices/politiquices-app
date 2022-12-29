@@ -1,6 +1,4 @@
-/* eslint-disable prefer-destructuring */
 /* eslint-disable react/jsx-fragments */
-/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select' // https://react-select.com/home
@@ -101,18 +99,6 @@ function Relacoes() {
     setValue(yearsValues)
   }
 
-  function Politicians() {
-    return (
-      <Select
-        class="centered"
-        isMulti
-        value={selectedOption}
-        onChange={handleChange}
-        options={personalities}
-      />
-    )
-  }
-
   return (
     <React.Fragment>
       {loading ? (
@@ -123,7 +109,13 @@ function Relacoes() {
           <Grid container>
             <Grid item xs={4} />
             <Grid item xs={4} sx={{ paddingTop: 2 }}>
-              <Politicians />
+              <Select
+                class="centered"
+                isMulti
+                value={selectedOption}
+                onChange={handleChange}
+                options={personalities}
+              />
             </Grid>
             <Grid item xs={4} />
           </Grid>
