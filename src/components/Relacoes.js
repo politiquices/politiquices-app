@@ -47,13 +47,14 @@ function Relacoes() {
   }, [])
 
   const handleClick = async () => {
+    // get selected persons
     const result = state.map((a) => a.value)
-
     let params = ''
     for (let i = 0; i < result.length; i += 1) {
       params += `&q=${result[i]}`
     }
 
+    // get years range
     const [min, max] = Yearsvalues
 
     params += `&selected=${onlyAmongSelected}`
