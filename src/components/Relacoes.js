@@ -110,13 +110,7 @@ function Relacoes() {
           <Grid container>
             <Grid item xs={4} />
             <Grid item xs={4} sx={{ paddingTop: 2 }}>
-              <Select
-                class="centered"
-                isMulti
-                value={selectedOption}
-                onChange={handleChange}
-                options={personalities}
-              />
+              <Select class="centered" isMulti value={selectedOption} onChange={handleChange} options={personalities} />
             </Grid>
             <Grid item xs={4} />
           </Grid>
@@ -144,17 +138,11 @@ function Relacoes() {
           <Grid container>
             <Grid item xs={4} />
             <Grid item xs={2}>
-              <Switch
-                defaultChecked={onlyAmongSelected}
-                onChange={handleChangePersons}
-              />
+              <Switch defaultChecked={onlyAmongSelected} onChange={handleChangePersons} />
               Apenas entre seleccionados
             </Grid>
             <Grid item xs={2}>
-              <Switch
-                defaultChecked={onlySentiment}
-                onChange={handleChangeRelationships}
-              />
+              <Switch defaultChecked={onlySentiment} onChange={handleChangeRelationships} />
               Apenas apoio/oposição
             </Grid>
             <Grid item xs={4} />
@@ -179,13 +167,7 @@ function Relacoes() {
           </Grid>
 
           {/* news titles */}
-          <Grid
-            container
-            direction="row"
-            spacing={2}
-            columns={{ xs: 4, sm: 8, md: 12 }}
-            justifyContent="space-evenly"
-          >
+          <Grid container direction="row" spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="space-evenly">
             {!response ? <p /> : <NewsTitles data={response} />}
           </Grid>
         </React.Fragment>

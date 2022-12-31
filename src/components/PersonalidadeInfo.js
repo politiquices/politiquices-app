@@ -17,10 +17,7 @@ function FillIn(elements, url) {
   if (length > 0) {
     // eslint-disable-next-line react/destructuring-assignment
     return elements.map((item) => (
-      <Link
-        key={item.wiki_id.split('/').at(-1)}
-        href={`${baseURL}/${url}/${item.wiki_id.split('/').at(-1)}`}
-      >
+      <Link key={item.wiki_id.split('/').at(-1)} href={`${baseURL}/${url}/${item.wiki_id.split('/').at(-1)}`}>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {item.label}
         </Typography>
@@ -52,11 +49,7 @@ function PersonalidadeInfo({ data }) {
           {/* Foto + Nome + WikiData link */}
           <Grid item xs={2}>
             <center>
-              <Avatar
-                alt={data.name}
-                src={data.image_url}
-                sx={{ width: 160, height: 160 }}
-              />
+              <Avatar alt={data.name} src={data.image_url} sx={{ width: 160, height: 160 }} />
               <Typography variant="h6" component="div">
                 <b>{data.name}</b>
               </Typography>
@@ -73,17 +66,9 @@ function PersonalidadeInfo({ data }) {
                 <p>Loading...</p>
               ) : (
                 data.parties.map((entry) => (
-                  <Link
-                    key={entry.wiki_id}
-                    href={`${baseURL}/party/${entry.wiki_id}`}
-                  >
+                  <Link key={entry.wiki_id} href={`${baseURL}/party/${entry.wiki_id}`}>
                     <div>
-                      <img
-                        key="{index}"
-                        width="68"
-                        src={entry.image_url}
-                        alt={entry.name}
-                      />
+                      <img key="{index}" width="68" src={entry.image_url} alt={entry.name} />
                       <br />
                     </div>
                   </Link>
@@ -94,48 +79,28 @@ function PersonalidadeInfo({ data }) {
 
           {/* Profissão(ões) */}
           <Grid item xs={2}>
-            {!data || !data.occupations ? (
-              <p>Loading...</p>
-            ) : (
-              FillIn(data.occupations, 'occupation')
-            )}
+            {!data || !data.occupations ? <p>Loading...</p> : FillIn(data.occupations, 'occupation')}
           </Grid>
 
           {/* Cargos públicos */}
           <Grid item xs={2}>
-            {!data || !data.positions ? (
-              <p>Loading...</p>
-            ) : (
-              FillIn(data.positions, 'public_office')
-            )}
+            {!data || !data.positions ? <p>Loading...</p> : FillIn(data.positions, 'public_office')}
           </Grid>
 
           {/* Legislaturas - governos de que fez parte */}
           <Grid item xs={2}>
-            {!data || !data.governments ? (
-              <p>Loading...</p>
-            ) : (
-              FillIn(data.governments, 'government')
-            )}
+            {!data || !data.governments ? <p>Loading...</p> : FillIn(data.governments, 'government')}
           </Grid>
 
           {/* Assembleias de deputados de que fez parte */}
           <Grid item xs={2}>
-            {!data || !data.assemblies ? (
-              <p>Loading...</p>
-            ) : (
-              FillIn(data.assemblies, 'assembly')
-            )}
+            {!data || !data.assemblies ? <p>Loading...</p> : FillIn(data.assemblies, 'assembly')}
           </Grid>
 
           {/* Estudos */}
           <Grid item xs={2}>
             <HiAcademicCap size={35} />
-            {!data || !data.education ? (
-              <p>Loading...</p>
-            ) : (
-              FillIn(data.education, 'education')
-            )}
+            {!data || !data.education ? <p>Loading...</p> : FillIn(data.education, 'education')}
           </Grid>
         </Grid>
       </Box>

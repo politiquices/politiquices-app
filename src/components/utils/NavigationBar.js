@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-unused-vars */
 import * as React from 'react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -14,15 +16,59 @@ import SearchIcon from '@mui/icons-material/Search'
 import { styled, alpha } from '@mui/material/styles'
 import InputBase from '@mui/material/InputBase'
 
+import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+
+import { Dropdown, DropdownMenuItem } from './Dropdown'
+import PositionedMenu from './Menu'
+
 const pages = [
   ['Grafo', 'grafo'],
   ['Relações', 'relacoes'],
   ['Personalidades', 'personalidades'],
+  ['Topicos', 'topicos'],
   ['Estatística', 'estatistica'],
   ['Sobre', 'sobre'],
 ]
 
-const logo = '/assets/images/logos/politiquices_logo.jpg'
+/*
+SELECT ?governo ?name 
+(CONCAT(STR(YEAR(?inception)),".", STR(MONTH(?inception)), ".", STR(DAY(?inception))) as ?inceptionDisplayDate)
+(CONCAT(STR(YEAR(?abolished)),".", STR(MONTH(?abolished)), ".", STR(DAY(?abolished))) as ?abolishedDisplayDate)
+WHERE {
+    ?governo wdt:P31 wd:Q16850120 .
+    ?governo wdt:P17 wd:Q45 .
+    ?governo rdfs:label ?name FILTER(LANG(?name) = "pt")
+    ?governo wdt:P571 ?inception . FILTER(LANG(?name) = "pt")
+OPTIONAL {
+  ?governo wdt:P576 ?abolished . FILTER(LANG(?name) = "pt")
+  }  
+  FILTER (?inception >= "1991-10-31T00:00:00Z"^^xsd:dateTime)
+}
+ORDER BY (?inception)
+*/
+
+const handleGovernment = (government) => {
+  console.log(government)
+}
+
+const governos = [
+  <DropdownMenuItem onClick={handleGovernment('Q3570375')}>XII Governo (1991 - 1995)</DropdownMenuItem>,
+  <DropdownMenuItem onClick={handleGovernment('Q1719936')}>XIII Governo (1995 - 1999)</DropdownMenuItem>,
+  <DropdownMenuItem onClick={handleGovernment('Q684129')}>XIV Governo (1999 - 2002)</DropdownMenuItem>,
+  <DropdownMenuItem onClick={handleGovernment('Q1719859')}>XV Governo (2002 - 2004)</DropdownMenuItem>,
+  <DropdownMenuItem onClick={handleGovernment('Q1146060')}>XVI Governo (2004 - 2005)</DropdownMenuItem>,
+  <DropdownMenuItem onClick={handleGovernment('Q239352')}>XVII Governo (2005 - 2009)</DropdownMenuItem>,
+  <DropdownMenuItem onClick={handleGovernment('Q1568610')}>XVIII Governo (2009 - 2011)</DropdownMenuItem>,
+  <DropdownMenuItem onClick={handleGovernment('Q1626916')}>XIX Governo (2011 - 2015)</DropdownMenuItem>,
+  <DropdownMenuItem onClick={handleGovernment('Q21554845')}>XX Governo (2015 - 2015)</DropdownMenuItem>,
+  <DropdownMenuItem onClick={handleGovernment('Q21224349')}>XXI Governo (2015 - 2019)</DropdownMenuItem>,
+  <DropdownMenuItem onClick={handleGovernment('Q71014092')}>XXII Governo (2019 - 2022)</DropdownMenuItem>,
+  <DropdownMenuItem onClick={handleGovernment('Q110819776')}>XXIII Governo (2022 - )</DropdownMenuItem>,
+]
+
+// const logo = '/assets/images/logos/politiquices_logo.jpg'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -79,11 +125,24 @@ function ResponsiveAppBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ mx: 'auto' }}>
           <Link to="/">
-            <Typography variant="title">
-              <img src={logo} alt="politiquices.pt" height={80} />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="/"
+              sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              X
             </Typography>
           </Link>
-
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -123,15 +182,10 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-
           {/* Buttons text is here */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Link
-                key={page}
-                style={{ textDecoration: 'none' }}
-                to={`/${page[1]}`}
-              >
+              <Link key={page} style={{ textDecoration: 'none' }} to={`/${page[1]}`}>
                 <Button
                   key={page[0]}
                   onClick={handleCloseNavMenu}
@@ -146,23 +200,17 @@ function ResponsiveAppBar() {
                   }}
                   style={{ textTransform: 'none' }}
                 >
-                  <Typography style={{ fontWeight: 1800, fontSize: 20 }}>
-                    {page[0]}
-                  </Typography>
+                  <Typography style={{ fontWeight: 1800, fontSize: 20 }}>{page[0]}</Typography>
                 </Button>
               </Link>
             ))}
           </Box>
-
           {/* Search Box at the end */}
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
+            <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
           </Search>
         </Toolbar>
       </Container>
