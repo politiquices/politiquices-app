@@ -16,7 +16,7 @@ let onlySentiment = true
 const minYear = 1994
 const maxYear = 2022
 
-function Relacoes() {
+function Queries() {
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState()
   const [selectedOption, setSelectedOption] = useState()
@@ -176,4 +176,4 @@ function Relacoes() {
   )
 }
 
-export default Relacoes
+export default Queries

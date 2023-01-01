@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-vars */
 import * as React from 'react'
 import AppBar from '@mui/material/AppBar'
@@ -11,25 +10,55 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
+import AdbIcon from '@mui/icons-material/Adb'
 import { Link } from 'react-router-dom'
-import SearchIcon from '@mui/icons-material/Search'
 import { styled, alpha } from '@mui/material/styles'
 import InputBase from '@mui/material/InputBase'
-
-import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-
-import { Dropdown, DropdownMenuItem } from './Dropdown'
-import PositionedMenu from './PositionedMenu'
+import SearchIcon from '@mui/icons-material/Search'
 
 const pages = [
-  ['Grafo', 'grafo'],
-  ['Relações', 'relacoes'],
-  ['Personalidades', 'personalidades'],
-  ['Topicos', 'topicos'],
   ['Estatística', 'estatistica'],
+  ['Grafo', 'grafo'],
+  ['Pesquisa', 'pesquisa'],
+  ['Personalidades', 'personalidades'],
+  ['Queries', 'queries'],
+  ['Relações', 'relacoes'],
+  ['Topicos', 'topicos'],
   ['Sobre', 'sobre'],
+]
+
+/*
+SELECT ?assembly ?name
+(CONCAT(STR(YEAR(?inception)),".", STR(MONTH(?inception))) as ?inceptionDisplayDate)
+(CONCAT(STR(YEAR(?abolished)),".", STR(MONTH(?abolished))) as ?abolishedDisplayDate)
+(CONCAT(STR(YEAR(?end_time)),".", STR(MONTH(?end_time))) as ?end_timeDisplayDate)
+WHERE {
+    ?assembly wdt:P31 wd:Q15238777 .
+    ?assembly wdt:P17 wd:Q45 .
+    ?assembly rdfs:label ?name FILTER(LANG(?name) = "pt")
+    ?assembly wdt:P571 ?inception .
+
+    OPTIONAL {
+      ?assembly wdt:P576 ?abolished .    
+    }
+      OPTIONAL {
+  ?assembly wdt:P582 ?end_time .
+    }
+  FILTER (?inception >= "1991-10-31T00:00:00Z"^^xsd:dateTime)
+}
+ORDER BY (?inception)
+*/
+const assembleias = [
+  ['Q28846999', 'VI Legislatura (1991 - 1995)'],
+  ['Q28846985', 'VII Legislatura (1995 - 1999)'],
+  ['Q28846952', 'VIII Legislatura (1999 -	2002)'],
+  ['Q25438238', 'IX Legislatura (2002 - 2005)'],
+  ['Q25431190', 'X Legislatura (2005 - 2009)'],
+  ['Q25431189', 'XI Legislatura (2009 - 2011)'],
+  ['Q3570377', 'XII Legislatura (2011 - 2015)'],
+  ['Q25379987', 'XIII Legislatura (2015 - 2019)'],
+  ['Q72073997', 'XIV Legislatura (2019 - 2022'],
+  ['Q110768513', 'XV Legislatura (2022 -	)'],
 ]
 
 /*
@@ -48,33 +77,28 @@ OPTIONAL {
 }
 ORDER BY (?inception)
 */
-
-const handleGovernment = (government) => {
-  console.log(government)
-}
-
-const governos = [
-  <DropdownMenuItem onClick={handleGovernment('Q3570375')}>XII Governo (1991 - 1995)</DropdownMenuItem>,
-  <DropdownMenuItem onClick={handleGovernment('Q1719936')}>XIII Governo (1995 - 1999)</DropdownMenuItem>,
-  <DropdownMenuItem onClick={handleGovernment('Q684129')}>XIV Governo (1999 - 2002)</DropdownMenuItem>,
-  <DropdownMenuItem onClick={handleGovernment('Q1719859')}>XV Governo (2002 - 2004)</DropdownMenuItem>,
-  <DropdownMenuItem onClick={handleGovernment('Q1146060')}>XVI Governo (2004 - 2005)</DropdownMenuItem>,
-  <DropdownMenuItem onClick={handleGovernment('Q239352')}>XVII Governo (2005 - 2009)</DropdownMenuItem>,
-  <DropdownMenuItem onClick={handleGovernment('Q1568610')}>XVIII Governo (2009 - 2011)</DropdownMenuItem>,
-  <DropdownMenuItem onClick={handleGovernment('Q1626916')}>XIX Governo (2011 - 2015)</DropdownMenuItem>,
-  <DropdownMenuItem onClick={handleGovernment('Q21554845')}>XX Governo (2015 - 2015)</DropdownMenuItem>,
-  <DropdownMenuItem onClick={handleGovernment('Q21224349')}>XXI Governo (2015 - 2019)</DropdownMenuItem>,
-  <DropdownMenuItem onClick={handleGovernment('Q71014092')}>XXII Governo (2019 - 2022)</DropdownMenuItem>,
-  <DropdownMenuItem onClick={handleGovernment('Q110819776')}>XXIII Governo (2022 - )</DropdownMenuItem>,
+const governments = [
+  ['Q3570375', 'XII Governo (1991 - 1995)'],
+  ['Q1719936', 'XIII Governo (1995 - 1999)'],
+  ['Q684129', 'XIV Governo (1999 - 2002)'],
+  ['Q1719859', 'XV Governo (2002 - 2004)'],
+  ['Q1146060', 'XVI Governo (2004 - 2005)'],
+  ['Q239352', 'XVII Governo (2005 - 2009)'],
+  ['Q1568610', 'XVIII Governo (2009 - 2011)'],
+  ['Q1626916', 'XIX Governo (2011 - 2015)'],
+  ['Q21554845', 'XX Governo (2015 - 2015)'],
+  ['Q21224349', 'XXI Governo (2015 - 2019)'],
+  ['Q71014092', 'XXII Governo (2019 - 2022)'],
+  ['Q110819776', 'XXIII Governo (2022 - )'],
 ]
-
-// const logo = '/assets/images/logos/politiquices_logo.jpg'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': { backgroundColor: alpha(theme.palette.common.white, 0.25) },
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
   marginLeft: 0,
   width: '100%',
   [theme.breakpoints.up('sm')]: {
@@ -110,43 +134,75 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }))
 
-function ResponsiveAppBar() {
+function SearchAppBar() {
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton size="large" edge="start" color="inherit" aria-label="open drawer" sx={{ mr: 2 }}>
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
+            MUI
+          </Typography>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
+          </Search>
+        </Toolbar>
+      </AppBar>
+    </Box>
+  )
+}
+
+function NewResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
+  const [anchorElUser, setAnchorElUser] = React.useState(null)
+  const [anchorElUserAss, setAnchorElUserAss] = React.useState(null)
+
+  // Governos
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget)
   }
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null)
   }
+  const handleOpenUserMenuGov = (event) => {
+    setAnchorElUser(event.currentTarget)
+  }
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null)
+    setAnchorElUserAss(null)
+  }
+  const handleNavClick = (value) => {
+    // navigate(`/${pageName}`)
+    window.open(`/government/${value}`, '_self')
+    setAnchorElUser(null)
+  }
+
+  // Assembleias
+  const handleOpenUserMenuAss = (event) => {
+    setAnchorElUserAss(event.currentTarget)
+  }
+
+  const handleNavClickAss = (value) => {
+    // navigate(`/${pageName}`)
+    window.open(`/government/${value}`, '_self')
+    setAnchorElUserAss(null)
+  }
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="static">
       <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ mx: 'auto' }}>
-          <Link to="/">
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
-            >
-              X
-            </Typography>
-          </Link>
+        <Toolbar disableGutters>
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
+              aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -154,19 +210,17 @@ function ResponsiveAppBar() {
             >
               <MenuIcon />
             </IconButton>
-
-            {/* When buttons appear as menu */}
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: 'bottom',
-                horizontal: 'center',
+                horizontal: 'left',
               }}
               keepMounted
               transformOrigin={{
                 vertical: 'top',
-                horizontal: 'center',
+                horizontal: 'left',
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
@@ -175,51 +229,80 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    <Link to={`/${page[1]}`}>{page[0]}</Link>
-                  </Typography>
+                <MenuItem key={page[0]} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page[0]}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
 
-          {/* Buttons text is here */}
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Link key={page} style={{ textDecoration: 'none' }} to={`/${page[1]}`}>
-                <Button
-                  key={page[0]}
-                  onClick={handleCloseNavMenu}
-                  variant="text"
-                  sx={{
-                    border: 0,
-                    gap: 4,
-                    margin: 2,
-                    my: 3,
-                    color: 'black',
-                    display: 'block',
-                  }}
-                  style={{ textTransform: 'none' }}
-                >
-                  <Typography style={{ fontWeight: 1800, fontSize: 20 }}>{page[0]}</Typography>
+                <Button key={page[0]} onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
+                  {page[0]}
                 </Button>
               </Link>
             ))}
           </Box>
 
-          {/* Governments */}
-          <Dropdown
-            style={{ fontWeight: 1800, fontSize: 20 }}
-            keepOpen
-            open={open}
-            trigger={<Button>Dropdown</Button>}
-            placeholder="test"
-            menu={governos}
-            text="test"
-          />
+          {/* Governos */}
+          <Button onClick={handleOpenUserMenuGov} sx={{ my: 2, color: 'white', display: 'block' }}>
+            Governos
+          </Button>
+          <Menu
+            sx={{ mt: '45px' }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            {governments.map((government) => (
+              <MenuItem key={government[0]} onClick={() => handleNavClick(government[0])}>
+                <Typography textAlign="center">{government[1]}</Typography>
+              </MenuItem>
+            ))}
+          </Menu>
 
-          {/* Search Box at the end */}
+          {/* Assembleias */}
+          <Button onClick={handleOpenUserMenuAss} sx={{ my: 2, color: 'white', display: 'block' }}>
+            Assembleias
+          </Button>
+          <Menu
+            sx={{ mt: '45px' }}
+            id="menu-appbar"
+            anchorEl={anchorElUserAss}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorElUserAss)}
+            onClose={handleCloseUserMenu}
+          >
+            {assembleias.map((assembleia) => (
+              <MenuItem key={assembleia[0]} onClick={() => handleNavClickAss(assembleia[0])}>
+                <Typography textAlign="center">{assembleia[1]}</Typography>
+              </MenuItem>
+            ))}
+          </Menu>
+
+          {/* Pesquisa */}
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -231,5 +314,4 @@ function ResponsiveAppBar() {
     </AppBar>
   )
 }
-
-export default ResponsiveAppBar
+export default NewResponsiveAppBar
