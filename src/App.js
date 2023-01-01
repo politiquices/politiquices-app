@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom'
-// import ResponsiveAppBar from './components/utils/NavigationBar'
 import NewResponsiveAppBar from './components/utils/NewNavBar'
 import Home from './components/Home'
 import Relacoes from './components/Relacoes'

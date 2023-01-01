@@ -21,7 +21,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 import { Dropdown, DropdownMenuItem } from './Dropdown'
-import PositionedMenu from './Menu'
+import PositionedMenu from './PositionedMenu'
 
 const pages = [
   ['Grafo', 'grafo'],
@@ -143,6 +143,7 @@ function ResponsiveAppBar() {
               X
             </Typography>
           </Link>
+
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -182,6 +183,7 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
+
           {/* Buttons text is here */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -205,6 +207,18 @@ function ResponsiveAppBar() {
               </Link>
             ))}
           </Box>
+
+          {/* Governments */}
+          <Dropdown
+            style={{ fontWeight: 1800, fontSize: 20 }}
+            keepOpen
+            open={open}
+            trigger={<Button>Dropdown</Button>}
+            placeholder="test"
+            menu={governos}
+            text="test"
+          />
+
           {/* Search Box at the end */}
           <Search>
             <SearchIconWrapper>
