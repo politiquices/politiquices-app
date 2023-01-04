@@ -14,19 +14,9 @@ function ListPersonalidades(personalities) {
   }))
 
   return headlines.map((entry) => (
-    <Grid
-      item
-      key={entry.wiki_id}
-      width={250}
-      align="center"
-      columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }}
-    >
+    <Grid item key={entry.wiki_id} width={250} align="center" columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }}>
       <Link justify="center" href={`personalidade/${entry.wiki_id}`}>
-        <Avatar
-          alt={entry.focus_ent}
-          src={entry.local_image}
-          sx={{ width: 125, height: 125 }}
-        />
+        <Avatar alt={entry.focus_ent} src={entry.local_image} sx={{ width: 125, height: 125 }} />
         {entry.label}
       </Link>
       <Typography justify="center" fontSize={2}>
@@ -64,7 +54,7 @@ function FetchPersonalidades() {
     return <CircularIndeterminate />
   }
   return (
-    <Grid container direction="row" spacing={6} justifyContent="space-evenly">
+    <Grid container direction="row" spacing={6} justifyContent="space-evenly" sx={{ paddingTop: 2 }}>
       {data && <ListPersonalidades data={data} />}
       {isError && <div>Error fetching data.</div>}
     </Grid>

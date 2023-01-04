@@ -62,6 +62,8 @@ function Queries() {
     params += `&start=${min}`
     params += `&end=${max}`
 
+    console.log(params)
+
     setLoading(true)
 
     fetch(`http://127.0.0.1:8000/timeline/?${params}`, {

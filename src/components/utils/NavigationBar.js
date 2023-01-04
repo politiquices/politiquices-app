@@ -189,7 +189,7 @@ function NewResponsiveAppBar() {
 
   const handleNavClickAss = (value) => {
     // navigate(`/${pageName}`)
-    window.open(`/government/${value}`, '_self')
+    window.open(`/assembly/${value}`, '_self')
     setAnchorElUserAss(null)
   }
 
