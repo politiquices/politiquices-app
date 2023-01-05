@@ -45,8 +45,6 @@ const ExpandMore = styled((props) => {
 function PersonalidadeHeadlines(titles) {
   console.log(titles)
 
-  // const theme = useTheme()
-
   const [expanded, setExpanded] = React.useState(false)
 
   const handleExpandClick = () => {

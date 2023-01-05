@@ -1,5 +1,7 @@
+/* eslint-disable react/jsx-no-bind */
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-unused-vars */
-import * as React from 'react'
+import React, { useState, useEffect } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -15,6 +17,8 @@ import { Link } from 'react-router-dom'
 import { styled, alpha } from '@mui/material/styles'
 import InputBase from '@mui/material/InputBase'
 import SearchIcon from '@mui/icons-material/Search'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
 
 const pages = [
   ['Estatística', 'estatistica'],
@@ -92,7 +96,7 @@ const governments = [
   ['Q110819776', 'XXIII Governo (2022 - )'],
 ]
 
-const Search = styled('div')(({ theme }) => ({
+/* const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -132,35 +136,52 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       },
     },
   },
-}))
-
-function SearchAppBar() {
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton size="large" edge="start" color="inherit" aria-label="open drawer" sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
-            MUI
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
-          </Search>
-        </Toolbar>
-      </AppBar>
-    </Box>
-  )
-}
+})) */
 
 function NewResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [anchorElUserAss, setAnchorElUserAss] = React.useState(null)
+  const [personalities, setPersonalities] = React.useState(null)
+
+  // read the persons.json to fill the select
+  function loadPersonalities() {
+    fetch('http://127.0.0.1:8000/persons_and_parties/', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPersonalities(data)
+        console.log('loaded')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  useEffect(() => {
+    loadPersonalities()
+  }, [])
+
+  function handleChange(e, selected) {
+    window.open(`/personalidade/${selected.value}`, '_self')
+  }
+
+  function ComboBox() {
+    return (
+      <Autocomplete
+        disablePortal
+        id="combo-box-demo"
+        // onChange={(e) => handleChange(e, value)}
+        onChange={handleChange}
+        options={personalities}
+        sx={{ width: 300 }}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        renderInput={(params) => <TextField {...params} label="Personalidade.." />}
+      />
+    )
+  }
 
   // Governos
   const handleOpenNavMenu = (event) => {
@@ -198,7 +219,6 @@ function NewResponsiveAppBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -235,9 +255,7 @@ function NewResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Link key={page} style={{ textDecoration: 'none' }} to={`/${page[1]}`}>
@@ -247,7 +265,6 @@ function NewResponsiveAppBar() {
               </Link>
             ))}
           </Box>
-
           {/* Governos */}
           <Button onClick={handleOpenUserMenuGov} sx={{ my: 2, color: 'white', display: 'block' }}>
             Governos
@@ -274,7 +291,6 @@ function NewResponsiveAppBar() {
               </MenuItem>
             ))}
           </Menu>
-
           {/* Assembleias */}
           <Button onClick={handleOpenUserMenuAss} sx={{ my: 2, color: 'white', display: 'block' }}>
             Assembleias
@@ -301,14 +317,8 @@ function NewResponsiveAppBar() {
               </MenuItem>
             ))}
           </Menu>
-
           {/* Pesquisa */}
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
-          </Search>
+          <ComboBox />
         </Toolbar>
       </Container>
     </AppBar>
