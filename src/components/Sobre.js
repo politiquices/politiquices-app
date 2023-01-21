@@ -1,7 +1,7 @@
-import Topography from '@mui/material/Alert'
+import Alert from '@mui/material/Alert'
 
 function Sobre() {
-  return <Topography>Sobre</Topography>
+  return <Alert>Sobre</Alert>
 }
 
 export default Sobre

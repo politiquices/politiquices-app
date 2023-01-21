@@ -153,7 +153,6 @@ function NewResponsiveAppBar() {
       .then((res) => res.json())
       .then((data) => {
         setPersonalities(data)
-        console.log('loaded')
       })
       .catch((err) => {
         console.log(err)
@@ -173,12 +172,18 @@ function NewResponsiveAppBar() {
       <Autocomplete
         disablePortal
         id="combo-box-demo"
-        // onChange={(e) => handleChange(e, value)}
         onChange={handleChange}
         options={personalities}
         sx={{ width: 300 }}
         // eslint-disable-next-line react/jsx-props-no-spreading
-        renderInput={(params) => <TextField {...params} label="Personalidade.." />}
+        renderInput={(params) => (
+          <TextField
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...params}
+            InputLabelProps={{ style: { color: 'white', fontSize: 15 } }}
+            label="Personalidade.."
+          />
+        )}
       />
     )
   }
@@ -265,6 +270,8 @@ function NewResponsiveAppBar() {
               </Link>
             ))}
           </Box>
+          {/* Pesquisa */}
+          <ComboBox />
           {/* Governos */}
           <Button onClick={handleOpenUserMenuGov} sx={{ my: 2, color: 'white', display: 'block' }}>
             Governos
@@ -317,8 +324,6 @@ function NewResponsiveAppBar() {
               </MenuItem>
             ))}
           </Menu>
-          {/* Pesquisa */}
-          <ComboBox />
         </Toolbar>
       </Container>
     </AppBar>

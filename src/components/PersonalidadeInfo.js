@@ -37,7 +37,7 @@ function PersonalidadeInfo({ data }) {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1, paddingTop: 2 }}>
         <Grid
           container
           spacing={1}
