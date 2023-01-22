@@ -6,56 +6,16 @@
 /* eslint-disable react/function-component-definition */
 import { useState, useEffect } from 'react'
 import { ResponsiveBar } from '@nivo/bar'
+import Typography from '@mui/material/Typography'
 import CircularIndeterminate from './utils/Circular'
 
-const chartData = [
-  {
-    year: '1994',
-    oposição: 168,
-    apoio: 23,
-  },
-  {
-    year: '1995',
-    oposição: 16,
-    apoio: 13,
-  },
-  {
-    year: '1996',
-    oposição: 2168,
-    apoio: 223,
-  },
-  {
-    year: '1997',
-    oposição: 268,
-    apoio: 2,
-  },
-  {
-    year: '1998',
-    oposição: 1128,
-    apoio: 3,
-  },
-  {
-    year: '1999',
-    oposição: 1168,
-    apoio: 232,
-  },
-  {
-    year: '2000',
-    oposição: 2268,
-    apoio: 5523,
-  },
-]
-
-function MyResponsiveBar(data) {
-  console.log('inside:')
-  console.log(data)
-  console.log(data.data.year_values)
+function ArticlesYearBar(data) {
   return (
     <ResponsiveBar
       data={data.data.year_values}
-      keys={['opposes', 'supports']}
+      keys={['oposição', 'apoio']}
       indexBy="year"
-      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+      margin={{ top: 50, right: 150, bottom: 50, left: 150 }}
       padding={0.3}
       valueScale={{ type: 'linear' }}
       indexScale={{ type: 'band', round: true }}
@@ -155,6 +115,109 @@ function MyResponsiveBar(data) {
   )
 }
 
+function PersonalityArticlesYearBar(data) {
+  console.log(data.data.personality_freq)
+  const reversed = data.data.personality_freq.reverse()
+  console.log(reversed)
+  return (
+    <ResponsiveBar
+      data={reversed}
+      keys={['freq']}
+      indexBy="person"
+      margin={{ top: 0, right: 250, bottom: 0, left: 300 }}
+      padding={0.1}
+      layout="horizontal"
+      valueScale={{ type: 'linear' }}
+      indexScale={{ type: 'band', round: true }}
+      colors={{ scheme: 'nivo' }}
+      defs={[
+        {
+          id: 'dots',
+          type: 'patternDots',
+          background: 'inherit',
+          color: '#38bcb2',
+          size: 4,
+          padding: 1,
+          stagger: true,
+        },
+        {
+          id: 'lines',
+          type: 'patternLines',
+          background: 'inherit',
+          color: '#eed312',
+          rotation: -45,
+          lineWidth: 6,
+          spacing: 10,
+        },
+      ]}
+      fill={[
+        {
+          match: {
+            id: 'fries',
+          },
+          id: 'dots',
+        },
+        {
+          match: {
+            id: 'sandwich',
+          },
+          id: 'lines',
+        },
+      ]}
+      borderColor={{
+        from: 'color',
+        modifiers: [['darker', 1.6]],
+      }}
+      axisTop={null}
+      axisRight={null}
+      axisBottom={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+        legend: 'número notícias',
+        legendPosition: 'middle',
+        legendOffset: 32,
+      }}
+      axisLeft={{
+        tickSize: 1,
+        tickPadding: 10,
+        tickRotation: 0,
+        legend: '',
+        legendPosition: 'middle',
+        legendOffset: -140,
+      }}
+      labelSkipWidth={1}
+      labelSkipHeight={12}
+      labelTextColor={{
+        from: 'color',
+        modifiers: [['darker', 1.6]],
+      }}
+      legends={[]}
+      role="application"
+      ariaLabel="Nivo bar chart demo"
+      barAriaLabel={function (e) {
+        return e.id + ': ' + e.formattedValue + ' in country: ' + e.indexValue
+      }}
+    />
+  )
+}
+
+function GeneralStats(data) {
+  return (
+    <>
+      <Typography gutterBottom variant="h6" component="h1">
+        {data.data.nr_parties} partidos políticos
+      </Typography>
+      <Typography gutterBottom variant="h6" component="h1">
+        {data.data.nr_persons} personalidades
+      </Typography>
+      <Typography gutterBottom variant="h6" component="h1">
+        {data.data.nr_all_no_other_articles} artigos
+      </Typography>
+    </>
+  )
+}
+
 function Stats() {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -181,9 +244,15 @@ function Stats() {
     return <CircularIndeterminate />
   }
   return (
-    <div style={{ height: 500 }}>
-      <MyResponsiveBar data={data} />
-    </div>
+    <>
+      <GeneralStats data={data} />
+      <div style={{ height: 500 }}>
+        <ArticlesYearBar data={data} />
+      </div>
+      <div style={{ height: 5500 }}>
+        <PersonalityArticlesYearBar data={data} />
+      </div>
+    </>
   )
 }
 
