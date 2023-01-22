@@ -212,7 +212,10 @@ function GeneralStats(data) {
         {data.data.nr_persons} personalidades
       </Typography>
       <Typography gutterBottom variant="h6" component="h1">
-        {data.data.nr_all_no_other_articles} artigos
+        {data.data.nr_all_articles_sentiment} artigos c/ sentimento de suporte com oposição
+      </Typography>
+      <Typography gutterBottom variant="h6" component="h1">
+        {data.data.nr_all_articles} total de artigos
       </Typography>
     </>
   )
