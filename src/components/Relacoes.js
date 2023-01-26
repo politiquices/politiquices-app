@@ -72,6 +72,7 @@ function Queries() {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         setResponse(data)
         setLoading(false)
       })
@@ -169,7 +170,15 @@ function Queries() {
           </Grid>
 
           {/* news titles */}
-          <Grid container direction="row" spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="space-evenly">
+          <Grid
+            container
+            spacing={1}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            style={{ minHeight: '100vh' }}
+            sx={{ paddingTop: 2 }}
+          >
             {!response ? <p /> : <NewsTitles data={response} />}
           </Grid>
         </React.Fragment>
