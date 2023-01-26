@@ -38,9 +38,9 @@ const ExpandMore = styled((props) => {
   }),
 }))
 
-function ProcessArticleLink(relType) {
+function ProcessArticleLink(url) {
   // eslint-disable-next-line react/destructuring-assignment
-  if (relType.startsWith('https://publico.pt')) {
+  if (url.startsWith('https://publico.pt')) {
     return <img width="15" src={PublicoLogo} alt="publico.pt" />
   }
   return <img width="35" src={ArquivoLogo} alt="arquivo.pt" />
@@ -73,6 +73,7 @@ function NewsTitles(props) {
     return Neutral
   }
 
+  console.log('inside news title')
   console.log(data)
 
   const headlines = data.map((RawData) => ({
@@ -80,8 +81,8 @@ function NewsTitles(props) {
     url: RawData.arquivo_doc,
     date: RawData.date,
     rel_type: RawData.rel_type,
-    url_image: ProcessArticleLink(RawData.arquivo_doc),
-    rel_image: ProcessRelationship(RawData.rel_type),
+    // url_image: ProcessArticleLink(RawData.arquivo_doc),
+    // rel_image: ProcessRelationship(RawData.rel_type),
 
     main_ent_image: RawData.ent1_img,
     main_ent_name: RawData.ent1_str,
