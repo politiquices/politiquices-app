@@ -110,7 +110,7 @@ function Queries() {
       ) : (
         <React.Fragment>
           {/* select personality */}
-          <Grid container>
+          <Grid container sx={{ paddingTop: 10 }}>
             <Grid item xs={4} />
             <Grid item xs={4} sx={{ paddingTop: 2 }}>
               <Select class="centered" isMulti value={selectedOption} onChange={handleChange} options={personalities} />
@@ -177,7 +177,7 @@ function Queries() {
             alignItems="center"
             justify="center"
             style={{ minHeight: '100vh' }}
-            sx={{ paddingTop: 2 }}
+            sx={{ paddingTop: 10 }}
           >
             {!response ? <p /> : <NewsTitles data={response} />}
           </Grid>

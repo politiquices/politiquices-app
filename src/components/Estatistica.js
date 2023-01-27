@@ -205,17 +205,17 @@ function PersonalityArticlesYearBar(data) {
 function GeneralStats(data) {
   return (
     <>
-      <Typography align="center" gutterBottom variant="h6" component="h1" sx={{ paddingTop: 2 }}>
+      <Typography align="center" gutterBottom variant="h6" component="h1" sx={{ paddingTop: 10 }}>
         {data.data.nr_parties} partidos políticos
       </Typography>
       <Typography align="center" gutterBottom variant="h6" component="h1">
         {data.data.nr_persons} personalidades
       </Typography>
       <Typography align="center" gutterBottom variant="h6" component="h1">
-        {data.data.nr_all_articles} artigos mencionada personalidades
+        {data.data.nr_all_articles} artigos mencionando personalidades políticas
       </Typography>
       <Typography align="center" gutterBottom variant="h6" component="h1">
-        {data.data.nr_all_articles_sentiment} artigos c/ sentimento de suporte/oposição
+        {data.data.nr_all_articles_sentiment} artigos c/ sentimento de apoio ou oposição
       </Typography>
     </>
   )

@@ -54,7 +54,7 @@ function FetchPersonalidades() {
     return <CircularIndeterminate />
   }
   return (
-    <Grid container direction="row" spacing={6} justifyContent="space-evenly" sx={{ paddingTop: 2 }}>
+    <Grid container direction="row" spacing={6} justifyContent="space-evenly" sx={{ paddingTop: 10 }}>
       {data && <ListPersonalidades data={data} />}
       {isError && <div>Error fetching data.</div>}
     </Grid>

@@ -6,11 +6,11 @@ import Grafo from './components/Grafo'
 import ListPersonalidades from './components/ListPersonalidades'
 import ListPersonalidadesFiltered from './components/ListPersonalidadesFiltered'
 import FetchPersonalidade from './components/PersonalidadeInfo'
-import FetchPersonalidadeHeadlines from './components/PersonalidadeHeadlines'
 import Estatistica from './components/Estatistica'
 import Sobre from './components/Sobre'
 import Topicos from './components/Topicos'
 import Queries from './components/Queries'
+import Pesquisa from './components/Pesquisa'
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/relacoes" element={<Relacoes />} />
+        <Route path="/pesquisa" element={<Pesquisa />} />
         <Route path="/queries" element={<Queries />} />
         <Route path="/grafo" element={<Grafo />} />
         <Route path="/personalidades" element={<ListPersonalidades />} />
@@ -26,7 +27,6 @@ function App() {
         <Route path="/topicos" element={<Topicos />} />
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/personalidade/:id" element={<FetchPersonalidade />} />
-        <Route path="/personalidade_news/:id" element={<FetchPersonalidadeHeadlines />} />
         <Route path="/education/:id" element={<ListPersonalidadesFiltered type="education" />} />
         <Route path="/occupation/:id" element={<ListPersonalidadesFiltered type="occupation" />} />
         <Route path="/public_office/:id" element={<ListPersonalidadesFiltered type="public_office" />} />

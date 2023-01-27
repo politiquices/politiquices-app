@@ -18,19 +18,9 @@ function ListPersonalidadesFiltered(personalities) {
   const baseURL = fullURL.replace(window.location.pathname, '')
 
   return headlines.map((entry) => (
-    <Grid
-      item
-      key={entry.wiki_id}
-      width={250}
-      align="center"
-      columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }}
-    >
+    <Grid item key={entry.wiki_id} width={250} align="center" columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }}>
       <Link justify="center" href={`${baseURL}/personalidade/${entry.wiki_id}`}>
-        <Avatar
-          alt={entry.label}
-          src={entry.url_image}
-          sx={{ width: 125, height: 125 }}
-        />
+        <Avatar alt={entry.label} src={entry.url_image} sx={{ width: 125, height: 125 }} />
         {entry.label}{' '}
       </Link>
       <Typography justify="center" fontSize={2}>
@@ -106,9 +96,7 @@ function FetchPersonalidades(requestType) {
     // lg - min width 1280px
     // xl - min width 1920px
 
-    <Grid container direction="row" spacing={6} justifyContent="space-evenly">
-      {' '}
-      {/* style={gridStyles}> */}
+    <Grid container direction="row" spacing={6} justifyContent="space-evenly" sx={{ paddingTop: 10 }}>
       {data && <ListPersonalidadesFiltered data={data} />}
       {isError && <div>Error fetching data.</div>}
     </Grid>
