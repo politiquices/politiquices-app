@@ -36,7 +36,6 @@ function FetchPersonalidades() {
       .then((response) => response.json())
       .then((personalities) => {
         setIsLoading(false)
-        console.log(personalities)
         setNotes(personalities)
       })
       .catch((error) => {

@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/no-array-index-key */
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
@@ -23,12 +22,17 @@ import { styled } from '@mui/material/styles'
 const PublicoLogo = '../assets/images/logos/publico_logo.png'
 const ArquivoLogo = '../assets/images/logos/arquivo_logo.png'
 
-const Supports = 'assets/images/logos/handshake.png'
-const Opposes = 'assets/images/logos/discrimination.png'
-const Neutral = 'assets/images/logos/conversation.png'
+// const Supports = 'assets/images/logos/handshake.png'
+// const Opposes = 'assets/images/logos/discrimination.png'
+// const Neutral = 'assets/images/logos/conversation.png'
+
+const regexOriginalUrl = 'https://arquivo.pt/wayback/[0-9]+/(.*)'
 
 const ExpandMore = styled((props) => {
-  const { expand, ...other } = props
+  // const expand = props['aria-expanded']
+  // console.log('props: ', props)
+  // console.log('expanded: ', expand)
+  const { ...other } = props
   return <IconButton {...other} />
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
@@ -37,6 +41,14 @@ const ExpandMore = styled((props) => {
     duration: theme.transitions.duration.shortest,
   }),
 }))
+
+function getFirstGroup(regexp, str) {
+  if (str.startsWith('https://publico.pt')) {
+    return str
+  }
+  const array = [...str.matchAll(regexp)]
+  return array.map((m) => m[1])
+}
 
 function ProcessArticleLink(url) {
   // eslint-disable-next-line react/destructuring-assignment
@@ -48,10 +60,15 @@ function ProcessArticleLink(url) {
 
 // loads news titles
 function NewsTitles(props) {
-  const [expanded, setExpanded] = React.useState(false)
+  const [isOpenCollapse, setIsOpenCollapse] = React.useState(null)
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded)
+  const handleOpen = (clickedIndex) => {
+    console.log('clickedIndex: ', clickedIndex)
+    if (isOpenCollapse === clickedIndex) {
+      setIsOpenCollapse(null)
+    } else {
+      setIsOpenCollapse(clickedIndex)
+    }
   }
 
   const { data } = props
@@ -63,7 +80,9 @@ function NewsTitles(props) {
       </Grid>
     )
   }
-  function ProcessRelationship(RelType) {
+
+  /*
+function ProcessRelationship(RelType) {
     if (RelType.includes('opposes')) {
       return Opposes
     }
@@ -72,17 +91,16 @@ function NewsTitles(props) {
     }
     return Neutral
   }
-
-  console.log('inside news title')
-  console.log(data)
+  */
 
   const headlines = data.map((RawData) => ({
     title: RawData.title,
     url: RawData.arquivo_doc,
     date: RawData.date,
     rel_type: RawData.rel_type,
-    // url_image: ProcessArticleLink(RawData.arquivo_doc),
+    url_image: ProcessArticleLink(RawData.arquivo_doc),
     // rel_image: ProcessRelationship(RawData.rel_type),
+    original_url: getFirstGroup(regexOriginalUrl, RawData.arquivo_doc)[0],
 
     main_ent_image: RawData.ent1_img,
     main_ent_name: RawData.ent1_str,
@@ -92,9 +110,6 @@ function NewsTitles(props) {
     other_ent_name: RawData.ent2_str,
     other_ent_url: RawData.ent2_id,
   }))
-
-  console.log('headlines')
-  console.log(headlines)
 
   const titlesRendered = headlines.map((entry, index) => (
     <Grid item key={index} align="center">
@@ -119,14 +134,14 @@ function NewsTitles(props) {
               {entry.date}
             </Typography>
           }
-          subheader=""
+          subheader={entry.rel_type}
         />
         <CardContent>
           <Typography variant="h6" color="text.secondary">
             {entry.title}
           </Typography>
         </CardContent>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse in={isOpenCollapse === index} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph align="left">
               "Poucos meses depois de terminar o meu mandato, ganhei a convicção de que o primeiro-ministro, com a
@@ -146,11 +161,11 @@ function NewsTitles(props) {
                 maxHeight: { xs: 233, md: 167 },
                 maxWidth: { xs: 350, md: 250 },
               }}
-              alt="The house from the offer."
+              alt="Link Arquivo.PT"
               src={ArquivoLogo}
             />
           </Link>
-          <Link sx={{ m: 0.5 }} href={entry.url} target="_blank">
+          <Link sx={{ m: 0.5 }} href={entry.original_url} target="_blank">
             <Box
               component="img"
               sx={{
@@ -158,14 +173,14 @@ function NewsTitles(props) {
                 maxHeight: { xs: 233, md: 167 },
                 maxWidth: { xs: 350, md: 250 },
               }}
-              alt="The house from the offer."
+              alt="Link original"
               src={PublicoLogo}
             />
           </Link>
           <IconButton aria-label="share">
             <ShareIcon />
           </IconButton>
-          <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
+          <ExpandMore onClick={() => handleOpen(index)} aria-expanded={isOpenCollapse === index} aria-label="show more">
             <ExpandMoreIcon />
           </ExpandMore>
         </CardActions>

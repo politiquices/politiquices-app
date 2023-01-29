@@ -6,6 +6,7 @@ import Grafo from './components/Grafo'
 import ListPersonalidades from './components/ListPersonalidades'
 import ListPersonalidadesFiltered from './components/ListPersonalidadesFiltered'
 import FetchPersonalidade from './components/PersonalidadeInfo'
+import EntityVersusEntity from './components/EntityVersusEntity'
 import Estatistica from './components/Estatistica'
 import Sobre from './components/Sobre'
 import Topicos from './components/Topicos'
@@ -26,6 +27,7 @@ function App() {
         <Route path="/estatistica" element={<Estatistica />} />
         <Route path="/topicos" element={<Topicos />} />
         <Route path="/sobre" element={<Sobre />} />
+        <Route path="/versus/:ent1/:relType/:ent2" element={<EntityVersusEntity />} />
         <Route path="/personalidade/:id" element={<FetchPersonalidade />} />
         <Route path="/education/:id" element={<ListPersonalidadesFiltered type="education" />} />
         <Route path="/occupation/:id" element={<ListPersonalidadesFiltered type="occupation" />} />
