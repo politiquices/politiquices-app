@@ -36,21 +36,24 @@ function Pesquisa() {
         <CircularIndeterminate />
       ) : (
         <React.Fragment>
-          <Grid container sx={{ paddingTop: 20 }}>
-            <Grid item xs={4} />
+          <Grid justifyContent="center" container sx={{ paddingTop: 20 }}>
+            <Grid item xs={12} />
             <Typography align="center" sx={{ fontSize: 18 }} color="text.primary" gutterBottom>
               Indique uma pergunta a fazer à colecção de documentos
             </Typography>
           </Grid>
 
-          <Grid container sx={{ paddingTop: 10 }} alignItems="center">
-            <Grid item xs={4}>
+          <Grid justifyContent="center" container sx={{ paddingTop: 10 }} alignItems="center">
+            <Grid item xs={12}>
               <center>
                 <TextField
                   sx={{
                     width: { sm: 800, md: 1200 },
                     '& .MuiInputBase-root': {
-                      height: 60,
+                      height: 50,
+                    },
+                    '& fieldset': {
+                      borderRadius: '25px',
                     },
                   }}
                   id="filled-basic"

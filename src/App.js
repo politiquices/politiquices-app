@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import AppBar from './components/utils/NavigationBar'
 import Home from './components/Home'
 import Relacoes from './components/Relacoes'
-import Grafo from './components/Grafo'
+import VisNetwork from './components/Grafo'
 import ListPersonalidades from './components/ListPersonalidades'
 import ListPersonalidadesFiltered from './components/ListPersonalidadesFiltered'
 import FetchPersonalidade from './components/PersonalidadeInfo'
@@ -22,7 +22,7 @@ function App() {
         <Route path="/relacoes" element={<Relacoes />} />
         <Route path="/pesquisa" element={<Pesquisa />} />
         <Route path="/queries" element={<Queries />} />
-        <Route path="/grafo" element={<Grafo />} />
+        <Route path="/grafo" element={<VisNetwork />} />
         <Route path="/personalidades" element={<ListPersonalidades />} />
         <Route path="/estatistica" element={<Estatistica />} />
         <Route path="/topicos" element={<Topicos />} />

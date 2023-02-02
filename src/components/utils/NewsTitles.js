@@ -113,21 +113,25 @@ function ProcessRelationship(RelType) {
 
   const titlesRendered = headlines.map((entry, index) => (
     <Grid item key={index} align="center">
-      <Card sx={{ maxWidth: 545, minWidth: 345, margin: '1rem', border: '1px solid red' }}>
+      <Card sx={{ maxWidth: 545, minWidth: 345, margin: '1rem' }}>
         <CardHeader
           avatar={
-            <Avatar
-              sx={{ bgcolor: red[500], width: 66, height: 66 }}
-              aria-label={entry.main_ent_name}
-              src={entry.main_ent_image}
-            />
+            <Link href={`${entry.main_ent_url}`}>
+              <Avatar
+                sx={{ bgcolor: red[500], width: 66, height: 66 }}
+                aria-label={entry.main_ent_name}
+                src={entry.main_ent_image}
+              />
+            </Link>
           }
           action={
-            <Avatar
-              sx={{ bgcolor: red[500], width: 66, height: 66 }}
-              aria-label={entry.other_ent_name}
-              src={entry.other_ent_image}
-            />
+            <Link href={`${entry.other_ent_url}`}>
+              <Avatar
+                sx={{ bgcolor: red[500], width: 66, height: 66 }}
+                aria-label={entry.other_ent_name}
+                src={entry.other_ent_image}
+              />
+            </Link>
           }
           title={
             <Typography gutterBottom variant="h6" component="h1">
