@@ -206,16 +206,16 @@ function GeneralStats(data) {
   return (
     <>
       <Typography align="center" gutterBottom variant="h6" component="h1" sx={{ paddingTop: 10 }}>
-        {data.data.nr_parties} partidos políticos
+        {data.data.nr_parties} Partidos Políticos
       </Typography>
       <Typography align="center" gutterBottom variant="h6" component="h1">
-        {data.data.nr_persons} personalidades
+        {data.data.nr_persons} Personalidades
       </Typography>
       <Typography align="center" gutterBottom variant="h6" component="h1">
-        {data.data.nr_all_articles} artigos mencionando personalidades políticas
+        {data.data.nr_all_articles} artigos referindo personalidades
       </Typography>
       <Typography align="center" gutterBottom variant="h6" component="h1">
-        {data.data.nr_all_articles_sentiment} artigos c/ sentimento de apoio ou oposição
+        {data.data.nr_all_articles_sentiment} artigos referindo personalidades c/ sentimento de apoio ou oposição
       </Typography>
     </>
   )

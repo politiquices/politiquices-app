@@ -17,13 +17,13 @@ import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 
 const pages = [
-  ['Estatística', 'estatistica'],
   ['Grafo', 'grafo'],
-  ['Pesquisa', 'pesquisa'],
   ['Personalidades', 'personalidades'],
   ['Queries', 'queries'],
   ['Relações', 'relacoes'],
+  ['Pesquisa', 'pesquisa'],
   ['Topicos', 'topicos'],
+  ['Estatística', 'estatistica'],
   ['Sobre', 'sobre'],
 ]
 

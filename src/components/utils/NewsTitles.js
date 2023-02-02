@@ -19,8 +19,8 @@ import { red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
 import { styled } from '@mui/material/styles'
 
-const PublicoLogo = '../assets/images/logos/publico_logo.png'
-const ArquivoLogo = '../assets/images/logos/arquivo_logo.png'
+const PublicoLogo = '/assets/images/logos/publico_logo.png'
+const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
 
 // const Supports = 'assets/images/logos/handshake.png'
 // const Opposes = 'assets/images/logos/discrimination.png'
