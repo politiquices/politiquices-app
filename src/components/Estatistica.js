@@ -7,6 +7,7 @@
 import { useState, useEffect } from 'react'
 import { ResponsiveBar } from '@nivo/bar'
 import Typography from '@mui/material/Typography'
+import { Link } from '@mui/material'
 import CircularIndeterminate from './utils/Circular'
 
 function ArticlesYearBar(data) {
@@ -252,6 +253,9 @@ function Stats() {
       <div style={{ height: 500 }}>
         <ArticlesYearBar data={data} />
       </div>
+      <Typography align="center" color="text.secondary" sx={{ paddingTop: 2, fontSize: 11 }}>
+        Recolha feita com a API do Arquivo.PT entre 2023-01-02 e 2023-01-03
+      </Typography>
       <div style={{ height: 5500 }}>
         <PersonalityArticlesYearBar data={data} />
       </div>

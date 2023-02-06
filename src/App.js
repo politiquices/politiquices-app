@@ -25,7 +25,7 @@ function App() {
         <Route path="/grafo" element={<VisNetwork />} />
         <Route path="/personalidades" element={<ListPersonalidades />} />
         <Route path="/estatistica" element={<Estatistica />} />
-        <Route path="/topicos" element={<Topicos />} />
+        <Route path="/topicos/:url" element={<Topicos />} />
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/versus/:ent1/:relType/:ent2" element={<EntityVersusEntity />} />
         <Route path="/personalidade/:id" element={<FetchPersonalidade />} />
