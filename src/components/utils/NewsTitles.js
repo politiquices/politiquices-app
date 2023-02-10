@@ -18,6 +18,7 @@ import Collapse from '@mui/material/Collapse'
 import { red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
 import { styled } from '@mui/material/styles'
+import { Stack } from '@mui/material'
 
 const PublicoLogo = '/assets/images/logos/publico_logo.png'
 const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
@@ -113,7 +114,7 @@ function ProcessRelationship(RelType) {
 
   const titlesRendered = headlines.map((entry, index) => (
     <Grid item key={index} align="center">
-      <Card sx={{ maxWidth: 545, minWidth: 345, margin: '1rem' }}>
+      <Card sx={{ maxWidth: 700, minWidth: 345, margin: '1rem' }}>
         <CardHeader
           avatar={
             <Link href={`${entry.main_ent_url}`}>
@@ -156,6 +157,30 @@ function ProcessRelationship(RelType) {
             </Typography>
           </CardContent>
         </Collapse>
+        <Box display="flex" justifyContent="center" alignItems="center" sx={{ width: '100%' }}>
+          <Typography variant="h6" color="info.main">
+            <Stack direction="row" spacing={2} align="center">
+              <Link href="/topicos" underline="hover" color="inherit">
+                Europa
+              </Link>
+              <Link href="/topicos" underline="hover" color="inherit">
+                Eleições
+              </Link>
+              <Link href="/topicos" underline="hover" color="inherit">
+                PS
+              </Link>
+              <Link href="/topicos" underline="hover" color="inherit">
+                Congresso
+              </Link>
+              <Link href="/topicos" underline="hover" color="inherit">
+                Processo
+              </Link>
+              <Link href="/topicos" underline="hover" color="inherit">
+                Bloco
+              </Link>
+            </Stack>
+          </Typography>
+        </Box>
         <CardActions disableSpacing>
           <Link sx={{ m: 0.5 }} href={entry.url} target="_blank">
             <Box

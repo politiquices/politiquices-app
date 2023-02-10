@@ -4,9 +4,7 @@ import { useParams } from 'react-router-dom'
 import Plot from 'react-plotly.js'
 
 function ShowTopic({ data }) {
-  console.log(data)
   if (data.figure) {
-    // console.log(data)
     console.log(data.figure.layout)
     console.log(data.figure.data)
     return <Plot data={data.figure.data} layout={data.figure.layout} />
@@ -21,6 +19,8 @@ function Topicos() {
   // const [isError, setIsError] = useState(false)
 
   console.log(url)
+  const base64URL = window.btoa(url)
+  console.log(base64URL)
 
   const fetchData = () => {
     fetch(`http://127.0.0.1:8000/topics/${url}`)
