@@ -7,7 +7,6 @@
 import { useState, useEffect } from 'react'
 import { ResponsiveBar } from '@nivo/bar'
 import Typography from '@mui/material/Typography'
-import { Link } from '@mui/material'
 import CircularIndeterminate from './utils/Circular'
 
 function ArticlesYearBar(data) {
