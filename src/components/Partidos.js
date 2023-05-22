@@ -29,12 +29,7 @@ function Partido(parties) {
               alt={entry.label}
             />
             <CardContent>
-              <Typography
-                gutterBottom
-                variant="body2"
-                color="text.secondary"
-                align="center"
-              >
+              <Typography gutterBottom variant="body2" color="text.secondary" align="center">
                 {entry.label}
               </Typography>
               <Typography variant="body2" color="text.secondary" align="center">
@@ -52,7 +47,7 @@ function Partidos() {
   const [data, setData] = useState([])
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/parties/')
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/parties/`)
       .then((response) => response.json())
       .then((parties) => {
         setData(parties)
@@ -63,13 +58,7 @@ function Partidos() {
     return <div className="row">Nothing loaded</div>
   }
   return (
-    <Grid
-      container
-      direction="row"
-      spacing={2}
-      columns={{ xs: 2, sm: 3, md: 4, lg: 8 }}
-      justifyContent="space-evenly"
-    >
+    <Grid container direction="row" spacing={2} columns={{ xs: 2, sm: 3, md: 4, lg: 8 }} justifyContent="space-evenly">
       {!data ? <p /> : <Partido data={data} />}
     </Grid>
   )

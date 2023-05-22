@@ -31,7 +31,7 @@ function ListPersonalidadesFiltered(personalities) {
 }
 
 function FetchPersonalidades(requestType) {
-  const Base = 'http://127.0.0.1:8000'
+  const Base = process.env.REACT_APP_POLITIQUICES_API
   let Full = ''
   // use object's key name to create variables and assign them with the value from the object for the same key
   const { type } = requestType

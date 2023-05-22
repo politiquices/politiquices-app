@@ -32,7 +32,7 @@ function FetchPersonalidades() {
   const [isError, setIsError] = useState(false)
 
   const fetchData = () => {
-    fetch('http://127.0.0.1:8000/personalities/')
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/personalities/`)
       .then((response) => response.json())
       .then((personalities) => {
         setIsLoading(false)

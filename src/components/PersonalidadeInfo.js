@@ -334,7 +334,7 @@ function FetchPersonalidade() {
   const [isError, setIsError] = useState(false)
 
   const fetchData = () => {
-    fetch(`http://127.0.0.1:8000/personality/${id}`)
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/personality/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setIsLoading(false)
@@ -348,7 +348,7 @@ function FetchPersonalidade() {
   }
 
   const fetchDataHeadlines = () => {
-    fetch(`http://localhost:8000/personality/relationships/${id}`)
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/personality/relationships/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setIsLoading(false)
@@ -362,7 +362,7 @@ function FetchPersonalidade() {
   }
 
   const fetchTopRelated = () => {
-    fetch(`http://localhost:8000/personality/top_related_personalities/${id}`)
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/personality/top_related_personalities/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setIsLoading(false)

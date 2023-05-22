@@ -23,7 +23,7 @@ function Topicos() {
   console.log(base64URL)
 
   const fetchData = () => {
-    fetch(`http://127.0.0.1:8000/topics/${url}`)
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/topics/${url}`)
       .then((response) => response.json())
       .then((data) => {
         // setIsLoading(false)

@@ -11,7 +11,7 @@ function EntityVersusEntity() {
   const [isError, setIsError] = useState(false)
 
   const fetchData = () => {
-    fetch(`http://127.0.0.1:8000/relationships/${ent1}/${relType}/${ent2}`)
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/relationships/${ent1}/${relType}/${ent2}`)
       .then((response) => response.json())
       .then((data) => {
         setIsLoading(false)

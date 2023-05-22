@@ -21,7 +21,7 @@ const pages = [
   ['Personalidades', 'personalidades'],
   ['Queries', 'queries'],
   ['Relações', 'relacoes'],
-  ['Pesquisa', 'pesquisa'],
+  // ['Pesquisa', 'pesquisa'],
   ['Topicos', 'topicos'],
   ['Estatística', 'estatistica'],
   ['Sobre', 'sobre'],
@@ -100,7 +100,7 @@ function NewResponsiveAppBar() {
 
   // read the persons.json to fill the select
   function loadPersonalities() {
-    fetch('http://127.0.0.1:8000/persons_and_parties/', {
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/persons_and_parties/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })

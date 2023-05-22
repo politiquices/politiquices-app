@@ -43,7 +43,7 @@ function Relacoes() {
   // read the persons.json to fill the select
   function loadPersonalities() {
     setLoading(true)
-    fetch('http://127.0.0.1:8000/persons_and_parties/', {
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/persons_and_parties/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })

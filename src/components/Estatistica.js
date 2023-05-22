@@ -227,7 +227,7 @@ function Stats() {
   const [isError, setIsError] = useState(false)
 
   const fetchData = () => {
-    fetch('http://127.0.0.1:8000/stats/')
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/stats/`)
       .then((response) => response.json())
       .then((stats) => {
         setIsLoading(false)

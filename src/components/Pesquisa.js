@@ -14,7 +14,7 @@ function Pesquisa() {
 
   const handleClick = async () => {
     setIsLoading(true)
-    fetch(`http://127.0.0.1:8000/qa/${question}`)
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/qa/${question}`)
       .then((response) => response.json())
       .then((answers) => {
         setIsLoading(false)
