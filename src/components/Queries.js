@@ -74,7 +74,7 @@ function Relacoes() {
 
     setLoading(true)
 
-    fetch(`http://127.0.0.1:8000/queries/?${params}`, {
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/queries/?${params}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })

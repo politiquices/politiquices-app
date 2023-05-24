@@ -32,6 +32,10 @@ function FetchPersonalidades() {
   const [isError, setIsError] = useState(false)
 
   const fetchData = () => {
+
+    console.log('fetching data')
+    console.log(process.env.REACT_APP_POLITIQUICES_API)
+
     fetch(`${process.env.REACT_APP_POLITIQUICES_API}/personalities/`)
       .then((response) => response.json())
       .then((personalities) => {
