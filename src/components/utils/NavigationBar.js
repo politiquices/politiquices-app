@@ -177,7 +177,9 @@ function NewResponsiveAppBar() {
     <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* Logotipo */}
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -214,7 +216,9 @@ function NewResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          
+          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
+          
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Link key={page} style={{ textDecoration: 'none' }} to={`/${page[1]}`}>
@@ -224,8 +228,10 @@ function NewResponsiveAppBar() {
               </Link>
             ))}
           </Box>
+          
           {/* Pesquisa */}
           <ComboBox />
+         
           {/* Governos */}
           <Button onClick={handleOpenUserMenuGov} sx={{ my: 2, color: 'white', display: 'block' }}>
             Governos
@@ -252,6 +258,7 @@ function NewResponsiveAppBar() {
               </MenuItem>
             ))}
           </Menu>
+          
           {/* Assembleias */}
           <Button onClick={handleOpenUserMenuAss} sx={{ my: 2, color: 'white', display: 'block' }}>
             Assembleias

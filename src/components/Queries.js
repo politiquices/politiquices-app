@@ -6,6 +6,10 @@ import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
+import Typography from '@mui/material/Typography';
+import ListItem from '@mui/material/ListItem';
+import List from '@mui/material/List';
+
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
 
@@ -82,6 +86,8 @@ function Relacoes() {
       .then((data) => {
         setResponse(data)
         setLoading(false)
+        console.log("read response")
+        console.log(data)
       })
       .catch((err) => {
         setLoading(false)
@@ -108,6 +114,20 @@ function Relacoes() {
 
   return (
     <React.Fragment>
+          <Typography component="div" sx={{ paddingTop: 10 }}>
+      <Box sx={{ textAlign: 'center', m: 1 }}>
+      O politiquices.pt permite pesquisar relações de apoio ou oposição entre personalidades e partidos 
+      políticos expressas em títulos de notícias.
+      <List sx={{ listStyleType: 'disc'}}>
+        <ListItem >Que acusações fez Passos Coelho a José Sócrates?</ListItem>
+        <ListItem>Quem do PS se opôs/apoiou a José Sócrates?</ListItem>
+        <ListItem>Que personalidades do BE se opuseram a Jerónimo de Sousa?</ListItem>
+        <ListItem>Que personalidades afiliadas ao BE se opuseram a personalidades do PCP?</ListItem>
+        <ListItem>Que personalidades do PS apoiaram/se opuseram a outras personalidades do PS?</ListItem>
+      </List>
+      </Box>
+    </Typography>
+
       {loading ? (
         <CircularIndeterminate />
       ) : (
@@ -186,8 +206,18 @@ function Relacoes() {
             <Grid item xs={4} />
           </Grid>
 
+          {console.log("response")}
+
           {/* news titles */}
-          <Grid container direction="row" spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="space-evenly">
+          <Grid
+            container
+            spacing={1}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            style={{ minHeight: '100vh' }}
+            sx={{ paddingTop: 10 }}
+          >
             {!response ? <p /> : <NewsTitles data={response} />}
           </Grid>
         </React.Fragment>
