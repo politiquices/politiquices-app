@@ -227,7 +227,7 @@ function Stats() {
   const [isError, setIsError] = useState(false)
 
   const fetchData = () => {
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/stats/`)
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/stats`)
       .then((response) => response.json())
       .then((stats) => {
         setIsLoading(false)
