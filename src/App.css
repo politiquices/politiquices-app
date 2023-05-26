@@ -1,3 +1,5 @@
+/* is this being used at all? - delete it? */
+
 .root {
   text-align: center;
 }
@@ -38,7 +40,7 @@ html, body{
 .container {
   height: 10%;
   width: 10%;
-  color: white;
+  color: rgb(111, 93, 93);
   display: flex;
   align-items: center;
   justify-content: center;
