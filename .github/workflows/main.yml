@@ -32,10 +32,8 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
 
-      # ToDo: replace with rsync
-      - name: SCP "build" to remote server
-        # run: scp -r build/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR }}
-        run: cd build; rsync -avzh . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR }}
+      - name: rsync "build" to remote server
+        run: cd build; rsync --delete -avzh . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR }}
       
       - name: cleanup
         run: rm -rf ~/.ssh
