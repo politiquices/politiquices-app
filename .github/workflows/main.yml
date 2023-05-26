@@ -24,7 +24,7 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       
-      - name: install ssh keys
+      - name: Install SSH keys
       # check this thread to understand why its needed:
       # https://stackoverflow.com/a/70447517
         run: |
@@ -32,9 +32,10 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
 
-      - name: scp build to server
-        # run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && exit"
-        run: scp -vr build/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR }}
+      # ToDo: replace with rsync
+      - name: SCP "build" to remote server
+        # run: scp -r build/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR }}
+        run: cd build; rsync -avzh . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR }}
       
       - name: cleanup
         run: rm -rf ~/.ssh
