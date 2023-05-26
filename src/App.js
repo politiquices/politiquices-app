@@ -10,7 +10,6 @@ import EntityVersusEntity from './components/EntityVersusEntity'
 import Estatistica from './components/Estatistica'
 import Sobre from './components/Sobre'
 import Topicos from './components/Topicos'
-import Queries from './components/Queries'
 import Pesquisa from './components/Pesquisa'
 
 function App() {
@@ -19,9 +18,9 @@ function App() {
       <AppBar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/relacoes" element={<Relacoes />} />
         <Route path="/pesquisa" element={<Pesquisa />} />
-        <Route path="/queries" element={<Queries />} />
         <Route path="/grafo" element={<VisNetwork />} />
         <Route path="/personalidades" element={<ListPersonalidades />} />
         <Route path="/estatistica" element={<Estatistica />} />
