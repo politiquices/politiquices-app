@@ -9,8 +9,9 @@ import FetchPersonalidade from './components/PersonalidadeInfo'
 import EntityVersusEntity from './components/EntityVersusEntity'
 import Estatistica from './components/Estatistica'
 import Sobre from './components/Sobre'
-import Topicos from './components/Topicos'
+// import Topicos from './components/Topicos'
 import Pesquisa from './components/Pesquisa'
+import './App.css';
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
         <Route path="/grafo" element={<VisNetwork />} />
         <Route path="/personalidades" element={<ListPersonalidades />} />
         <Route path="/estatistica" element={<Estatistica />} />
-        <Route path="/topicos/:url" element={<Topicos />} />
+        {/* <Route path="/topicos/:url" element={<Topicos />} /> */}
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/versus/:ent1/:relType/:ent2" element={<EntityVersusEntity />} />
         <Route path="/personalidade/:id" element={<FetchPersonalidade />} />

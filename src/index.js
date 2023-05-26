@@ -16,18 +16,16 @@ const customTheme = createTheme({
       'Helvetica Neue',
     ].join(','),
   },
-
   palette: {
-    primary: {
-      light: '#8885c7',
-      main: '#000',
-      dark: '#302c82',
+    text: {
+      primary: "#ffffff"
     },
     background: {
-      default: '#000000',
-    },
+      default: "#222222"
+    }
   },
 })
+
 
 ReactDOM.render(
   <React.StrictMode>
