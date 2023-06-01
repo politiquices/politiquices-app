@@ -38,7 +38,7 @@ function Relacoes() {
   const [response, setResponse] = useState()
   const [selectedOptionLeft, setSelectedOptionLeft] = useState()
   const [selectedOptionRight, setSelectedOptionRight] = useState()
-  const [selectedRelType, setselectedRelType] = useState()
+  const [selectedRelType, setSelectedRelType] = useState()
   const [Yearsvalues, setValue] = useState([2000, 2014])
   const [personalities, setPersonalities] = useState()
 
@@ -102,7 +102,7 @@ function Relacoes() {
       setSelectedOptionRight(e)
     }
     if (box === 'rel_type') {
-      setselectedRelType(e)
+      setSelectedRelType(e)
     }
   }
 
