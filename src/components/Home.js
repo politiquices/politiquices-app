@@ -76,7 +76,7 @@ function Relacoes() {
 
     setLoading(true)
 
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/queries/?${params}`, {
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/queries?${params}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
