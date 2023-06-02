@@ -46,7 +46,7 @@ function ArticlesYearBar(data) {
       data={data.data}
       keys={['opposes', 'supports', 'opposed_by', 'supported_by']}
       indexBy="year"
-      margin={{ top: 50, right: 150, bottom: 150, left: 150 }}
+      margin={{ top: 150, right: 150, bottom: 150, left: 150 }}
       padding={0.3}
       groupMode="grouped"
       valueScale={{ type: 'linear' }}

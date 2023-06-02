@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
 import Link from '@material-ui/core/Link'
-import { Typography } from '@mui/material'
 import CircularIndeterminate from './utils/Circular'
 
 function ListPersonalidades(personalities) {
@@ -18,10 +17,7 @@ function ListPersonalidades(personalities) {
       <Link justify="center" href={`personalidade/${entry.wiki_id}`}>
         <Avatar alt={entry.focus_ent} src={entry.local_image} sx={{ width: 125, height: 125 }} />
         {entry.label}
-      </Link>
-      <Typography justify="center" fontSize={2}>
-        {entry.nr_articles} notícias
-      </Typography>
+      </Link>      
     </Grid>
   ))
 }

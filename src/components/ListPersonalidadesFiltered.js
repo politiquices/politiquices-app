@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
 import Link from '@material-ui/core/Link'
-import { Typography } from '@mui/material'
 
 function ListPersonalidadesFiltered(personalities) {
   const headlines = personalities.data.map((rawData) => ({
@@ -23,9 +22,6 @@ function ListPersonalidadesFiltered(personalities) {
         <Avatar alt={entry.label} src={entry.url_image} sx={{ width: 125, height: 125 }} />
         {entry.label}{' '}
       </Link>
-      <Typography justify="center" fontSize={2}>
-        {entry.nr_articles} notícias
-      </Typography>
     </Grid>
   ))
 }

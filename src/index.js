@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { ThemeProvider, createTheme } from '@material-ui/core'
+import { Container, ThemeProvider, createTheme } from '@material-ui/core'
 import App from './App'
 
 const customTheme = createTheme({
@@ -44,12 +44,14 @@ const customTheme = createTheme({
 
 ReactDOM.render(
   <React.StrictMode>
+    <Container maxWidth="lg">
     <ThemeProvider theme={customTheme}>
     <CssBaseline />
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </ThemeProvider>
+    </Container>
   </React.StrictMode>,
   document.getElementById('root')
 )
