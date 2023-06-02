@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: echo 'REACT_APP_POLITIQUICES_API=0.0.0.0:8000' > .env
+      - run: echo 'REACT_APP_POLITIQUICES_API=politiquices.pt:8000' > .env
       - run: npm ci
       - run: npm run build --if-present
       
