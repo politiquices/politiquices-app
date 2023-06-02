@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: IP=`docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' politiquices-api` && echo REACT_APP_POLITIQUICES_API=$IP > .env
+      - run: echo 'REACT_APP_POLITIQUICES_API=172.17.0.3' > .env
       - run: npm ci
       - run: npm run build --if-present
       
