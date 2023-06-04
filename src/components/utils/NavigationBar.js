@@ -108,7 +108,6 @@ function NewResponsiveAppBar() {
         setPersonalities(data)
       })
       .catch((err) => {
-        console.log('Error reading data', process.env.REACT_APP_POLITIQUICES_API)
         console.log(err)
       })
   }
