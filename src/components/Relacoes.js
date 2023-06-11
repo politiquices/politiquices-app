@@ -73,7 +73,7 @@ function Queries() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        setResponse(data)
+        setResponse(data.news)
         setLoading(false)
       })
       .catch((err) => {
