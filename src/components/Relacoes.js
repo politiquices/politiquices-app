@@ -7,8 +7,10 @@ import Button from '@mui/material/Button'
 import Switch from '@mui/material/Switch'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
+import Typography from '@mui/material/Typography'
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
+
 
 let state = { selectedOption: null }
 let onlyAmongSelected = true
@@ -105,12 +107,17 @@ function Queries() {
 
   return (
     <React.Fragment>
+      <Typography component="div" sx={{ paddingTop: 15 }}>
+        <Box sx={{ textAlign: 'center', m: 1 }}>
+        Escolha uma ou mais personalidades e um intervalo de anos para ver as notícias que as envolvem.
+      </Box>
+    </Typography>
       {loading ? (
         <CircularIndeterminate />
       ) : (
         <React.Fragment>
           {/* select personality */}
-          <Grid container sx={{ paddingTop: 10 }}>
+          <Grid container sx={{ paddingTop: 2 }}>
             <Grid item xs={4} />
             <Grid item xs={4} sx={{ paddingTop: 2 }}>
               <Select class="centered" isMulti value={selectedOption} onChange={handleChange} options={personalities} />

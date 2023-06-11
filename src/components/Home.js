@@ -112,9 +112,6 @@ function Relacoes() {
 
   return (
     <React.Fragment>
-      <Typography justify="center" fontSize={0.5}>
-          notícias
-          </Typography>
       <Typography component="div" sx={{ paddingTop: 10 }}>
         <Box sx={{ textAlign: 'left', m: 1 }}>
         O politiquices.pt permite pesquisar relações de apoio ou oposição entre personalidades e partidos políticos 
