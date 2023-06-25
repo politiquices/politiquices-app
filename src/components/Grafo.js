@@ -11,124 +11,36 @@ import Switch from '@mui/material/Switch'
 import Slider from '@mui/material/Slider'
 import NewsTitles from './utils/NewsTitles'
 
-
-
-const nodesTmp = [
-  { id: 1, label: 'Node 1' },
-  { id: 2, label: 'Node 2' },
-  { id: 3, label: 'Node 3' },
-  { id: 4, label: 'Node 4' },
-  { id: 5, label: 'Node 5' },
-]
-
-const edgesTmp = [
-  { from: 1, to: 3 },
-  { from: 1, to: 2 },
-  { from: 2, to: 4 },
-  { from: 2, to: 5 },
-  { from: 3, to: 3 },
-]
-
 let state = { selectedOption: null }
 let onlyAmongSelected = true
 let onlySentiment = true
 const minYear = 1994
 const maxYear = 2022
 
-function Queries() {
-  const [loading, setLoading] = useState(false)
-  const [response, setResponse] = useState()
-  const [selectedOption, setSelectedOption] = useState()
-  const [Yearsvalues, setValue] = useState([2000, 2014])
-  const [personalities, setPersonalities] = useState()
 
-  // read the persons.json to fill the select
-  function loadPersonalities() {
-    setLoading(true)
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/persons/`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setPersonalities(data)
-        setLoading(false)
-        console.log('loaded')
-      })
-      .catch((err) => {
-        setLoading(false)
-        console.log(err)
-      })
-  }
-
-  const handleClick = async () => {
-    // get selected persons
-    const result = state.map((a) => a.value)
-    let params = ''
-    for (let i = 0; i < result.length; i += 1) {
-      params += `&q=${result[i]}`
-    }
-
-    // get years range
-    const [min, max] = Yearsvalues
-
-    params += `&selected=${onlyAmongSelected}`
-    params += `&sentiment=${onlySentiment}`
-    params += `&start=${min}`
-    params += `&end=${max}`
-
-    console.log(params)
-
-    setLoading(true)
-
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/timeline/?${params}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        setResponse(data)
-        setLoading(false)
-      })
-      .catch((err) => {
-        setLoading(false)
-        console.log(err)
-      })
-    setSelectedOption(state)
-  }
-
-  // handle onChange event of the dropdown
-  const handleChange = (e) => {
-    setSelectedOption(e)
-    state = e
-  }
-
-  const handleChangeRelationships = (e) => {
-    onlySentiment = e.target.checked
-    console.log(onlySentiment)
-  }
-
-  const handleChangePersons = (e) => {
-    onlyAmongSelected = e.target.checked
-    console.log(onlyAmongSelected)
-  }
-
-  const handleChangeYears = (event, yearsValues) => {
-    setValue(yearsValues)
-  }
-}
-
-
-function VisNetwork(nodes, edges) {
+function VisNetwork() {
   const container = useRef(null)
   const options = {}
 
-  nodes = nodesTmp
-  edges = edgesTmp
+  const initNodes = [
+    { id: 1, label: 'Node 1' },
+    { id: 2, label: 'Node 2' },
+    { id: 3, label: 'Node 3' },
+    { id: 4, label: 'Node 4' },
+    { id: 5, label: 'Node 5' },
+  ]
+
+  const initEdges = [
+    { from: 1, to: 3 },
+    { from: 1, to: 2 },
+    { from: 2, to: 4 },
+    { from: 2, to: 5 },
+  ]
 
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState()
+  const [nodes, setNodes] = useState([])
+  const [edges, setEdges] = useState([])
   const [selectedOption, setSelectedOption] = useState()
   const [Yearsvalues, setValue] = useState([2000, 2014])
   const [personalities, setPersonalities] = useState()
@@ -144,7 +56,6 @@ function VisNetwork(nodes, edges) {
       .then((data) => {
         setPersonalities(data)
         setLoading(false)
-        console.log('loaded')
       })
       .catch((err) => {
         setLoading(false)
@@ -153,9 +64,11 @@ function VisNetwork(nodes, edges) {
   }
 
   useEffect(() => {
+    console.log("calling useEffect 1")
     loadPersonalities()
   }, [])
 
+  // handle 'Actualizar' button click
   const handleClick = async () => {
     
     // get selected persons
@@ -183,9 +96,12 @@ function VisNetwork(nodes, edges) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setResponse(data.news)
+        setNodes(data.nodes)
+        setEdges(data.edges)
         setLoading(false)
+        console.log("nodes: ", nodes)
+        console.log("edges: ", edges)
       })
       .catch((err) => {
         setLoading(false)
@@ -215,9 +131,11 @@ function VisNetwork(nodes, edges) {
   }
 
   useEffect(() => {
+    console.log("calling useEffect 2")
+  	// Use `network` here to configure events, etc.
     const network = container.current && new Network(container.current, { nodes, edges }, options)
   }, [container, nodes, edges])
-
+  
   return (
     <>
     <Box alignItems="center">
@@ -301,7 +219,7 @@ function VisNetwork(nodes, edges) {
       justify="center"
       style={{ minHeight: '100vh' }}
       sx={{ paddingTop: 10 }}
-    >
+    >      
       {!response ? <p /> : <NewsTitles data={response} />}
     </Grid>
   </>
