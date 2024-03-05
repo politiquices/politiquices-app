@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
@@ -29,6 +30,7 @@ const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
 const regexOriginalUrl = 'https://arquivo.pt/wayback/[0-9]+/(.*)'
 
 const ExpandMore = styled((props) => {
+  
   // const expand = props['aria-expanded']
   // console.log('props: ', props)
   // console.log('expanded: ', expand)
@@ -58,7 +60,6 @@ function dateConverter({ dateString }) {
     return `${day} ${monthName} de ${year}`;
   
 }
-
 
 function getFirstGroup(regexp, str) {
   if (str.startsWith('https://publico.pt')) {
@@ -99,17 +100,32 @@ function NewsTitles(props) {
     )
   }
 
-  /*
-function ProcessRelationship(RelType) {
-    if (RelType.includes('opposes')) {
-      return Opposes
-    }
-    if (RelType.includes('supports')) {
-      return Supports
-    }
-    return Neutral
+const translateRelType = (rel_type) => {
+  let translatedText;
+  let color;
+
+  console.log('rel_type: ', rel_type.rel_type)
+
+  // Translate rel_type and assign color
+  switch (rel_type.rel_type) {
+    case 'opposes':
+      translatedText = 'opõe-se';
+      color = 'red';
+      break;
+    case 'supports':
+      translatedText = 'apoia';
+      color = 'green';
+      break;
+    default:
+      // For any other rel_type, return null
+      return null;
   }
-  */
+
+  // Return JSX element with translated text and color
+  return (
+    <span style={{ color }}>{translatedText}</span>
+  );
+};
 
   const headlines = data.map((RawData) => ({
     title: RawData.title,
@@ -156,13 +172,25 @@ function ProcessRelationship(RelType) {
               {dateConverter({ dateString: entry.date })}      
             </Typography>
           }
-          subheader={entry.rel_type}
+          subheader={
+            <Typography variant="h6" color="text.primary" style={{fontWeight: "bold"}}>
+              {translateRelType({ rel_type: entry.rel_type })}
+            </Typography>}
         />
         <CardContent>
-          <Typography variant="h6" color="text.secondary">
+          <Typography variant="h6" color="text.secondary" 
+          style={{ 
+            color: "black", 
+            // fontFamily: "Times New Roman, Times, serif" 
+            // fontFamily: "Lobster, serif"
+            // fontFamily: "Playfair Display, serif"
+            // fontFamily: "Pacifico, serif"
+            // fontFamily: "Merriweather, serif"
+            }}>
             {entry.title}
           </Typography>
         </CardContent>
+
         <Collapse in={isOpenCollapse === index} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph align="left">
