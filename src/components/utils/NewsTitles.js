@@ -42,6 +42,24 @@ const ExpandMore = styled((props) => {
   }),
 }))
 
+function dateConverter({ dateString }) {
+  
+    const months = [
+      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+
+    const dateObj = new Date(dateString);
+    const year = dateObj.getFullYear();
+    const monthIndex = dateObj.getMonth();
+    const monthName = months[monthIndex];
+    const day = dateObj.getDate();
+
+    return `${day} ${monthName} de ${year}`;
+  
+}
+
+
 function getFirstGroup(regexp, str) {
   if (str.startsWith('https://publico.pt')) {
     return str
@@ -135,7 +153,7 @@ function ProcessRelationship(RelType) {
           }
           title={
             <Typography gutterBottom variant="h6" component="h1">
-              {entry.date}
+              {dateConverter({ dateString: entry.date })}      
             </Typography>
           }
           subheader={entry.rel_type}
