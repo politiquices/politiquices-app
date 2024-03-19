@@ -16,13 +16,13 @@ let state = { selectedOption: null }
 let onlyAmongSelected = true
 let onlySentiment = true
 const minYear = 1994
-const maxYear = 2022
+const maxYear = 2024
 
 function Queries() {
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState()
   const [selectedOption, setSelectedOption] = useState()
-  const [Yearsvalues, setValue] = useState([2000, 2014])
+  const [Yearsvalues, setValue] = useState([2000, 2016])
   const [personalities, setPersonalities] = useState()
 
   // read the persons.json to fill the select

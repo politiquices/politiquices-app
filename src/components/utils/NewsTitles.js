@@ -108,10 +108,12 @@ const translateRelType = (rel_type) => {
 
   // Translate rel_type and assign color
   switch (rel_type.rel_type) {
+    case 'ent1_opposes_ent2':
     case 'opposes':
       translatedText = 'opõe-se';
       color = 'red';
       break;
+    case 'ent1_supports_ent2':
     case 'supports':
       translatedText = 'apoia';
       color = 'green';
