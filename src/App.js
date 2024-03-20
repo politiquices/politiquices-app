@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
-import AppBar from './components/utils/NavigationBar'
+import NavigationBar from './components/utils/NavigationBar'
+import Footer from './components/utils/Footer'
 import Home from './components/Home'
 import Relacoes from './components/Relacoes'
 import VisNetwork from './components/Grafo'
@@ -16,7 +17,7 @@ import './App.css';
 function App() {
   return (
     <>
-      <AppBar />
+      <NavigationBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
@@ -36,6 +37,7 @@ function App() {
         <Route path="/assembly/:id" element={<ListPersonalidadesFiltered type="assembly" />} />
         <Route path="/party/:id" element={<ListPersonalidadesFiltered type="party" />} />
       </Routes>
+      <Footer/>
     </>
   )
 }
