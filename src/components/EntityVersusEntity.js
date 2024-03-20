@@ -28,10 +28,9 @@ function EntityVersusEntity() {
   }, [])
 
   if (isLoading || !headlines) {
-    console.log('loading')
     return <CircularIndeterminate />
   }
-  console.log('headlines', headlines)
+  
   return (
     <Grid
       container

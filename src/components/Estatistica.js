@@ -116,9 +116,9 @@ function ArticlesYearBar(data) {
 }
 
 function PersonalityArticlesYearBar(data) {
-  console.log(data.data.personality_freq)
+  
   const reversed = data.data.personality_freq.reverse()
-  console.log(reversed)
+  
   return (
     <ResponsiveBar
       data={reversed}

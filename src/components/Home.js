@@ -84,8 +84,6 @@ function Relacoes() {
       .then((data) => {
         setResponse(data)
         setLoading(false)
-        console.log("read response")
-        console.log(data)
       })
       .catch((err) => {
         setLoading(false)
@@ -207,8 +205,6 @@ function Relacoes() {
             </Grid>
             <Grid item xs={4} />
           </Grid>
-
-          {console.log("response")}
 
           {/* news titles */}
           <Grid

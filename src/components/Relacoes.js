@@ -64,8 +64,6 @@ function Queries() {
     params += `&start=${min}`
     params += `&end=${max}`
 
-    console.log(params)
-
     setLoading(true)
 
     fetch(`${process.env.REACT_APP_POLITIQUICES_API}/timeline/?${params}`, {
@@ -74,7 +72,6 @@ function Queries() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setResponse(data.news)
         setLoading(false)
       })
@@ -93,12 +90,10 @@ function Queries() {
 
   const handleChangeRelationships = (e) => {
     onlySentiment = e.target.checked
-    console.log(onlySentiment)
   }
 
   const handleChangePersons = (e) => {
     onlyAmongSelected = e.target.checked
-    console.log(onlyAmongSelected)
   }
 
   const handleChangeYears = (event, yearsValues) => {

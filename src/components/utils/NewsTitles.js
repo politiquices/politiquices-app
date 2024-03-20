@@ -82,7 +82,6 @@ function NewsTitles(props) {
   const [isOpenCollapse, setIsOpenCollapse] = React.useState(null)
 
   const handleOpen = (clickedIndex) => {
-    console.log('clickedIndex: ', clickedIndex)
     if (isOpenCollapse === clickedIndex) {
       setIsOpenCollapse(null)
     } else {
@@ -103,8 +102,6 @@ function NewsTitles(props) {
 const translateRelType = (rel_type) => {
   let translatedText;
   let color;
-
-  console.log('rel_type: ', rel_type.rel_type)
 
   // Translate rel_type and assign color
   switch (rel_type.rel_type) {

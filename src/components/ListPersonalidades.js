@@ -49,7 +49,6 @@ function FetchPersonalidades() {
   }, [])
 
   if (isLoading || !data) {
-    console.log('loading')
     return <CircularIndeterminate />
   }
   return (
