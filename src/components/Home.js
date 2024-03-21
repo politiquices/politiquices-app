@@ -12,7 +12,7 @@ import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
 
 const minYear = 1994
-const maxYear = 2022
+const maxYear = 2024
 
 const relations = [
   {
@@ -39,7 +39,7 @@ function Relacoes() {
   const [selectedOptionLeft, setSelectedOptionLeft] = useState()
   const [selectedOptionRight, setSelectedOptionRight] = useState()
   const [selectedRelType, setSelectedRelType] = useState()
-  const [Yearsvalues, setValue] = useState([2000, 2014])
+  const [Yearsvalues, setValue] = useState([2000, 2024])
   const [personalities, setPersonalities] = useState()
 
   // read the persons.json to fill the select
@@ -93,6 +93,7 @@ function Relacoes() {
 
   // handle onChange event of any of the selects
   const handleChange = (e, box) => {
+
     if (box === 'left') {
       setSelectedOptionLeft(e)
     }

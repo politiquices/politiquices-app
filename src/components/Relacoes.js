@@ -22,7 +22,7 @@ function Queries() {
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState()
   const [selectedOption, setSelectedOption] = useState()
-  const [Yearsvalues, setValue] = useState([2000, 2016])
+  const [Yearsvalues, setValue] = useState([2000, 2024])
   const [personalities, setPersonalities] = useState()
 
   // read the persons.json to fill the select

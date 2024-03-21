@@ -103,6 +103,7 @@ const translateRelType = (rel_type) => {
   let translatedText;
   let color;
 
+
   // Translate rel_type and assign color
   switch (rel_type.rel_type) {
     case 'ent1_opposes_ent2':
@@ -149,7 +150,7 @@ const translateRelType = (rel_type) => {
       <Card sx={{ width: 750, margin: '1rem' }}>
         <CardHeader
           avatar={
-            <Link href={`${entry.main_ent_url}`}>
+            <Link href={`/personalidade/${entry.main_ent_url}`}>
               <Avatar
                 sx={{ bgcolor: red[500], width: 66, height: 66 }}
                 aria-label={entry.main_ent_name}
@@ -158,7 +159,7 @@ const translateRelType = (rel_type) => {
             </Link>
           }
           action={
-            <Link href={`${entry.other_ent_url}`}>
+            <Link href={`/personalidade/${entry.other_ent_url}`}>
               <Avatar
                 sx={{ bgcolor: red[500], width: 66, height: 66 }}
                 aria-label={entry.other_ent_name}

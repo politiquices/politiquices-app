@@ -15,7 +15,7 @@ let state = { selectedOption: null }
 let onlyAmongSelected = true
 let onlySentiment = true
 const minYear = 1994
-const maxYear = 2022
+const maxYear = 2024
 
 
 function VisNetwork() {
@@ -42,7 +42,7 @@ function VisNetwork() {
   const [nodes, setNodes] = useState([])
   const [edges, setEdges] = useState([])
   const [selectedOption, setSelectedOption] = useState()
-  const [Yearsvalues, setValue] = useState([2000, 2014])
+  const [Yearsvalues, setValue] = useState([2000, 2024])
   const [personalities, setPersonalities] = useState()
 
   // read the persons.json to fill the select

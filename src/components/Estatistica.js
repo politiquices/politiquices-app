@@ -253,11 +253,13 @@ function Stats() {
         <ArticlesYearBar data={data} />
       </div>
       <Typography align="center" color="text.secondary" sx={{ paddingTop: 2, fontSize: 11 }}>
-        Recolha feita com a API do Arquivo.PT entre 2023-01-02 e 2023-01-03
+        Recolha feita com a API do Arquivo.PT a 2024-03-08
       </Typography>
+      {/* 
       <div style={{ height: 5500 }}>
         <PersonalityArticlesYearBar data={data} />
       </div>
+    */}
     </>
   )
 }
