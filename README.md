@@ -32,3 +32,7 @@
   remote: 
       cd build
       sudo cp -rv * /var/www/html/politiquices_beta/
+
+  npm run build && scp -r build politiquices.pt:. && ssh politiquices.pt 'cd build && sudo cp -rv * /var/www/html/politiquices_beta/'
+  npm run build && rsync -avz --delete build/ politiquices.pt:/var/www/html/politiquices_beta/
+
