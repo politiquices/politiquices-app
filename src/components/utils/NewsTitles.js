@@ -129,6 +129,7 @@ const translateRelType = (rel_type) => {
 
   const headlines = data.map((RawData) => ({
     title: RawData.title,
+    paragraph: RawData.paragraph,
     url: RawData.arquivo_doc,
     date: RawData.date,
     rel_type: RawData.rel_type,
@@ -194,11 +195,7 @@ const translateRelType = (rel_type) => {
         <Collapse in={isOpenCollapse === index} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph align="left">
-              "Poucos meses depois de terminar o meu mandato, ganhei a convicção de que o primeiro-ministro, com a
-              cumplicidade do PCP e do BE, era mestre em gerir a conjuntura política, em capitalizar a aparência de 'paz
-              social' e em empurrar para a frente os problemas de fundo da economia portuguesa: a não ser que algo de
-              muito extraordinário acontecesse, o seu Governo completaria a legislatura", escreve Cavaco Silva no
-              segundo volume do livro "Quintas-feiras e outros dias".
+              {entry.paragraph}
             </Typography>
           </CardContent>
         </Collapse>
