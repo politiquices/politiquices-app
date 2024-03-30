@@ -1,3 +1,5 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -21,13 +23,20 @@ import { styled } from '@mui/material/styles'
 // import { Stack } from '@mui/material'
 
 const PublicoLogo = '/assets/images/logos/publico_logo.png'
+
 const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
+const DN = '/assets/images/jornais/diario_noticias.jpg'
+const DiarioDigital = '/assets/images/jornais/diariodigital.gif'
+const Expresso = '/assets/images/jornais/expresso.png'
+const Ionline = '/assets/images/jornais/i_online.png'
+const JN = '/assets/images/jornais/jornal_noticias.jpg'
+const Observador = '/assets/images/jornais/observador.png'
+const RTP = '/assets/images/jornais/rtp.svg.png'
+const TSF = '/assets/images/jornais/tsf.png'
 
 // const Supports = 'assets/images/logos/handshake.png'
 // const Opposes = 'assets/images/logos/discrimination.png'
 // const Neutral = 'assets/images/logos/conversation.png'
-
-const regexOriginalUrl = 'https://arquivo.pt/wayback/[0-9]+/(.*)'
 
 const ExpandMore = styled((props) => {
   
@@ -61,21 +70,90 @@ function dateConverter({ dateString }) {
   
 }
 
-function getFirstGroup(regexp, str) {
-  if (str.startsWith('https://publico.pt')) {
-    return str
+function ProcessArticleLink(domain) {
+  // eslint-disable-next-line react/destructuring-assignment
+
+  /*
+  dc:creator "PUBLICO-CHAVE"^^xsd:string
+  dc:creator "acorianooriental.pt"^^xsd:string
+  dc:creator "aeiou.pt"^^xsd:string
+  dc:creator "aeiou.visao.pt"^^xsd:string
+  dc:creator "anoticia.pt"^^xsd:string
+  dc:creator "asbeiras.pt"^^xsd:string
+  dc:creator "avozdetrasosmontes.pt"^^xsd:string
+  dc:creator "cmpt"^^xsd:string
+  dc:creator "correioalentejo.com"^^xsd:string
+  dc:creator "correiodominho.com"^^xsd:string
+  dc:creator "destak.pt"^^xsd:string
+  dc:creator "diarioaveiro.pt"^^xsd:string
+  dc:creator "diariocoimbra.pt"^^xsd:string
+  dc:creator "diariodetrasosmontes.com"^^xsd:string
+  dc:creator "diariodigitalcastelobranco.pt"^^xsd:string
+  dc:creator "diariodominho.pt"^^xsd:string
+  dc:creator "diariodosacores.pt"^^xsd:string
+  dc:creator "diariodosul.com.pt"^^xsd:string
+  dc:creator "diarioleiria.pt"^^xsd:string
+  dc:creator "diarioviseu.pt"^^xsd:string
+  dc:creator "dinheirodigital.sapo.pt"^^xsd:string
+  dc:creator "dinheirovivo.pt"^^xsd:string
+  dc:creator "eco.sapo.pt"^^xsd:string
+  dc:creator "economico.sapo.pt"^^xsd:string
+  dc:creator "guimaraesdigital.com"^^xsd:string
+  dc:creator "imediato.pt"^^xsd:string
+  dc:creator "iol.pt"^^xsd:string
+  dc:creator "ionline.sapo.pt"^^xsd:string
+  dc:creator "jm-madeira.pt"^^xsd:string
+  dc:creator "jornaldamadeira.pt"^^xsd:string
+  dc:creator "jornaldenegocios.pt"^^xsd:string
+  dc:creator "jornaldiabo.com"^^xsd:string
+  dc:creator "jornaldoalgarve.pt"^^xsd:string
+  dc:creator "jornaldofundao.pt"^^xsd:string
+  dc:creator "jornaleconomico.sapo.pt"^^xsd:string
+  dc:creator "linhasdeelvas.pt"^^xsd:string
+  dc:creator "noticias.sapo.pt"^^xsd:string
+  dc:creator "ointerior.pt"^^xsd:string
+  dc:creator "omirante.pt"^^xsd:string
+  dc:creator "online.expresso.pt"^^xsd:string
+  dc:creator "osetubalense.com"^^xsd:string
+  dc:creator "postal.pt"^^xsd:string
+  dc:creator "publico.clix.pt"^^xsd:string
+  dc:creator "publico.pt"^^xsd:string
+  dc:creator "regiao-sul.pt"^^xsd:string
+  dc:creator "regiaodeleiria.pt"^^xsd:string
+  dc:creator "rr.pt"^^xsd:string
+  dc:creator "sabado.pt"^^xsd:string
+  dc:creator "sapo.pt"^^xsd:string
+  dc:creator "sicnoticias.pt"^^xsd:string
+  dc:creator "sicnoticias.sapo.pt"^^xsd:string
+  dc:creator "sol.sapo.pt"^^xsd:string
+  dc:creator "terrasdabeira.gmpress.pt"^^xsd:string
+  dc:creator "tvi24.iol.pt"^^xsd:string
+  dc:creator "visao.sapo.pt"^^xsd:string
+  dc:creator "zap.aeiou.pt"^^xsd:string
+  */
+
+  const mappings = {};
+  
+  mappings['dn.pt'] = DN;
+  mappings['dn.sapo.pt'] = DN;
+  mappings['dnoticias.pt'] = DN;
+  mappings['diariodigital.sapo.pt'] = DiarioDigital;  
+  mappings['expresso.pt'] = Expresso;
+  mappings['expresso.sapo.pt'] = Expresso;
+  mappings['ionline.sapo.pt'] = Ionline;
+  mappings['ionline.pt'] = Ionline;
+  mappings['jn.pt'] = JN;
+  mappings['jn.sapo.pt'] = JN;
+  mappings['observador.pt'] = Observador;
+  mappings['rtp.pt'] = RTP;
+  mappings['tsf.pt'] = TSF;
+
+  if (domain in mappings) {
+    return mappings[domain];
   }
-  const array = [...str.matchAll(regexp)]
-  return array.map((m) => m[1])
+  return PublicoLogo;
 }
 
-function ProcessArticleLink(url) {
-  // eslint-disable-next-line react/destructuring-assignment
-  if (url.startsWith('https://publico.pt')) {
-    return <img width="15" src={PublicoLogo} alt="publico.pt" />
-  }
-  return <img width="35" src={ArquivoLogo} alt="arquivo.pt" />
-}
 
 // loads news titles
 function NewsTitles(props) {
@@ -133,9 +211,11 @@ const translateRelType = (rel_type) => {
     url: RawData.arquivo_doc,
     date: RawData.date,
     rel_type: RawData.rel_type,
-    url_image: ProcessArticleLink(RawData.arquivo_doc),
+    
     // rel_image: ProcessRelationship(RawData.rel_type),
-    original_url: getFirstGroup(regexOriginalUrl, RawData.arquivo_doc)[0],
+    
+    original_url: RawData.original_url,
+    original_url_image: ProcessArticleLink(RawData.domain),
 
     main_ent_image: RawData.ent1_img,
     main_ent_name: RawData.ent1_str,
@@ -221,7 +301,7 @@ const translateRelType = (rel_type) => {
                 maxWidth: { xs: 350, md: 250 },
               }}
               alt="Link Original"
-              src={PublicoLogo}
+              src={entry.original_url_image}
             />
           </Link>
           <IconButton>
