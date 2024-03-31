@@ -22,15 +22,17 @@ import IconButton from '@mui/material/IconButton'
 import { styled } from '@mui/material/styles'
 // import { Stack } from '@mui/material'
 
-const PublicoLogo = '/assets/images/logos/publico_logo.png'
-
 const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
+const AEIOU = '/assets/images/jornais/logotipo-aeiou-2010-240.png'
 const DN = '/assets/images/jornais/diario_noticias.jpg'
 const DiarioDigital = '/assets/images/jornais/diariodigital.gif'
 const Expresso = '/assets/images/jornais/expresso.png'
 const Ionline = '/assets/images/jornais/i_online.png'
+const JornalEconomico = '/assets/images/jornais/JE_logo.png'
 const JN = '/assets/images/jornais/jornal_noticias.jpg'
+const JornalNegocios = '/assets/images/jornais/jornal_negocios.png'
 const Observador = '/assets/images/jornais/observador.png'
+const PublicoLogo = '/assets/images/logos/publico_logo.png'
 const RTP = '/assets/images/jornais/rtp.svg.png'
 const TSF = '/assets/images/jornais/tsf.png'
 
@@ -76,8 +78,6 @@ function ProcessArticleLink(domain) {
   /*
   dc:creator "PUBLICO-CHAVE"^^xsd:string
   dc:creator "acorianooriental.pt"^^xsd:string
-  dc:creator "aeiou.pt"^^xsd:string
-  dc:creator "aeiou.visao.pt"^^xsd:string
   dc:creator "anoticia.pt"^^xsd:string
   dc:creator "asbeiras.pt"^^xsd:string
   dc:creator "avozdetrasosmontes.pt"^^xsd:string
@@ -101,14 +101,11 @@ function ProcessArticleLink(domain) {
   dc:creator "guimaraesdigital.com"^^xsd:string
   dc:creator "imediato.pt"^^xsd:string
   dc:creator "iol.pt"^^xsd:string
-  dc:creator "ionline.sapo.pt"^^xsd:string
   dc:creator "jm-madeira.pt"^^xsd:string
   dc:creator "jornaldamadeira.pt"^^xsd:string
-  dc:creator "jornaldenegocios.pt"^^xsd:string
   dc:creator "jornaldiabo.com"^^xsd:string
   dc:creator "jornaldoalgarve.pt"^^xsd:string
   dc:creator "jornaldofundao.pt"^^xsd:string
-  dc:creator "jornaleconomico.sapo.pt"^^xsd:string
   dc:creator "linhasdeelvas.pt"^^xsd:string
   dc:creator "noticias.sapo.pt"^^xsd:string
   dc:creator "ointerior.pt"^^xsd:string
@@ -116,8 +113,6 @@ function ProcessArticleLink(domain) {
   dc:creator "online.expresso.pt"^^xsd:string
   dc:creator "osetubalense.com"^^xsd:string
   dc:creator "postal.pt"^^xsd:string
-  dc:creator "publico.clix.pt"^^xsd:string
-  dc:creator "publico.pt"^^xsd:string
   dc:creator "regiao-sul.pt"^^xsd:string
   dc:creator "regiaodeleiria.pt"^^xsd:string
   dc:creator "rr.pt"^^xsd:string
@@ -134,6 +129,9 @@ function ProcessArticleLink(domain) {
 
   const mappings = {};
   
+  mappings['aeiou.pt'] = AEIOU;
+  mappings['aeiou.visao.pt'] = AEIOU;
+  mappings['zap.aeiou.pt'] = AEIOU;
   mappings['dn.pt'] = DN;
   mappings['dn.sapo.pt'] = DN;
   mappings['dnoticias.pt'] = DN;
@@ -144,6 +142,11 @@ function ProcessArticleLink(domain) {
   mappings['ionline.pt'] = Ionline;
   mappings['jn.pt'] = JN;
   mappings['jn.sapo.pt'] = JN;
+  mappings['jn.sapo.pt'] = JN;
+  mappings['jornaldenegocios.pt'] = JornalNegocios;
+  mappings['jornaleconomico.sapo.pt'] = JornalEconomico;
+  mappings['publico.pt'] = PublicoLogo;
+  mappings['publico.clix.pt'] = PublicoLogo;
   mappings['observador.pt'] = Observador;
   mappings['rtp.pt'] = RTP;
   mappings['tsf.pt'] = TSF;
