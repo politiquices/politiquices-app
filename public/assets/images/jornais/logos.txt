@@ -1,0 +1,36 @@
+8494 dn.pt
+8054 observador.pt
+4444 publico.pt
+4180 ionline.pt
+3910 jn.pt
+3792 rtp.pt
+3718 diariodigital.sapo.pt
+3415 tsf.pt
+3132 sol.sapo.pt
+2869 dnoticias.pt
+2815 aeiou.pt
+2324 jornaleconomico.sapo.pt
+2323 tvi24.iol.pt
+2094 expresso.sapo.pt
+2012 jornaldenegocios.pt
+2003 ionline.sapo.pt
+1979 sabado.pt  <-----
+1650 noticias.sapo.pt
+1215 dn.sapo.pt
+1203 economico.sapo.pt
+1128 sicnoticias.pt
+1125 zap.aeiou.pt
+ 729 dinheirovivo.pt
+ 713 jn.sapo.pt
+ 599 visao.sapo.pt
+ 589 jornaldamadeira.pt
+ 462 aeiou.visao.pt
+ 460 sicnoticias.sapo.pt
+ 224 rr.pt
+ 100 publico.clix.pt
+  91 expresso.pt
+  67 acorianooriental.pt
+  35 dinheirodigital.sapo.pt
+  24 jornaldiabo.com
+  21 online.expresso.pt
+   6 iol.pt
