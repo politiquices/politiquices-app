@@ -3,7 +3,12 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 function CircularIndeterminate() {
   return (
-    <Box alignItems="center" sx={{ display: 'flex' }}>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: '50vh' }} // Ensures the box takes up the full viewport height
+    >
       <CircularProgress />
     </Box>
   )
