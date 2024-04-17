@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Select from 'react-select' // https://react-select.com/home
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
+// eslint-disable-next-line no-unused-vars
 import Switch from '@mui/material/Switch'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
@@ -88,10 +89,12 @@ function Queries() {
     state = e
   }
 
+  // eslint-disable-next-line no-unused-vars
   const handleChangeRelationships = (e) => {
     onlySentiment = e.target.checked
   }
 
+  // eslint-disable-next-line no-unused-vars
   const handleChangePersons = (e) => {
     onlyAmongSelected = e.target.checked
   }
@@ -104,14 +107,14 @@ function Queries() {
     <React.Fragment>
       <Typography component="div" sx={{ paddingTop: 15 }}>
         <Box sx={{ textAlign: 'center', m: 1 }}>
-        Escolha uma ou mais personalidades e um intervalo de anos para ver as notícias que as envolvem.
+        Escolha as personalidades e um intervalo de tempo para ver as notícias ontem interagem
       </Box>
     </Typography>
       {loading ? (
         <CircularIndeterminate />
       ) : (
         <React.Fragment>
-          {/* select personality */}
+          {/* select personalities */}
           <Grid container sx={{ paddingTop: 2 }}>
             <Grid item xs={4} />
             <Grid item xs={4} sx={{ paddingTop: 2 }}>
@@ -121,11 +124,11 @@ function Queries() {
           </Grid>
 
           {/* dates interval */}
-          <Grid container>
+          <Grid container sx={{ paddingTop: 1 }}>
             <Grid item xs={4} />
             <Grid item xs={4}>
               <center>
-                <Box sx={{ width: 300 }}>
+                <Box sx={{ width: 400 }}>
                   <Slider
                     getAriaLabel={() => 'Intervalo Datas'}
                     value={Yearsvalues}
@@ -140,23 +143,33 @@ function Queries() {
           </Grid>
 
           {/* switch buttons */}
-          <Grid container>
-            <Grid item xs={4} />
-            <Grid item xs={2}>
-              <Switch defaultChecked={onlyAmongSelected} onChange={handleChangePersons} />
-              Apenas entre seleccionados
+          <Grid container alignItems="center" spacing={1} sx={{ width: '80%', margin: 'auto', paddingTop: -1 }}>
+            <Grid item xs={2} />
+            <Grid item xs={4} container direction="column" alignItems="center">
+              <Grid item>
+                <Switch defaultChecked={onlyAmongSelected} onChange={handleChangePersons} />
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">Apenas entre os seleccionados</Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={2}>
-              <Switch defaultChecked={onlySentiment} onChange={handleChangeRelationships} />
-              Apenas apoio/oposição
+            <Grid item xs={4} container direction="column" alignItems="center">
+              <Grid item>
+                <Switch defaultChecked={onlySentiment} onChange={handleChangeRelationships} />
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">Apenas notícias apoio/oposição</Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={4} />
+            <Grid item xs={2} />
           </Grid>
+
+
 
           {/* update button */}
           <Grid container>
             <Grid item xs={4} />
-            <Grid item xs={4} sx={{ paddingBottom: 2 }}>
+            <Grid item xs={4} sx={{ paddingBottom: 2, paddingTop: 2 }}>
               <center>
                 <Button
                   variant="contained"
