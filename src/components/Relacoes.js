@@ -113,6 +113,7 @@ function Queries() {
         <CircularIndeterminate />
       ) : (
         <React.Fragment>
+          
           {/* select personalities */}
           <Grid container sx={{ paddingTop: 2 }}>
             <Grid item xs={4} />
@@ -162,8 +163,6 @@ function Queries() {
             </Grid>
             <Grid item xs={2} />
           </Grid>
-
-
 
           {/* update button */}
           <Grid container>

@@ -9,14 +9,16 @@ import { Grid } from '@mui/material'
 import Button from '@mui/material/Button'
 import Switch from '@mui/material/Switch'
 import Slider from '@mui/material/Slider'
+import Typography from '@mui/material/Typography';
+import TextField from '@material-ui/core/TextField';
 import NewsTitles from './utils/NewsTitles'
+
 
 let state = { selectedOption: null }
 let onlyAmongSelected = true
 let onlySentiment = true
 const minYear = 1994
 const maxYear = 2024
-
 
 function VisNetwork() {
   const container = useRef(null)
@@ -44,6 +46,7 @@ function VisNetwork() {
   const [selectedOption, setSelectedOption] = useState()
   const [Yearsvalues, setValue] = useState([2000, 2024])
   const [personalities, setPersonalities] = useState()
+  const [minNoticias, setMinNoticias] = useState(10);
 
   // read the persons.json to fill the select
   function loadPersonalities() {
@@ -130,6 +133,12 @@ function VisNetwork() {
     setValue(yearsValues)
   }
 
+  const handleMinNoticiasChange = (event) => {
+    // eslint-disable-next-line radix
+    setMinNoticias(parseInt(event.target.value));
+  };
+  
+
   useEffect(() => {
     console.log("calling useEffect 2")
   	// Use `network` here to configure events, etc.
@@ -150,8 +159,8 @@ function VisNetwork() {
       ></div>
     </Box>
     
-    {/* select personality */}
-    <Grid container sx={{ paddingTop: 10 }}>
+    {/* select personalities */}
+    <Grid container sx={{ paddingTop: 2 }}>
       <Grid item xs={4} />
       <Grid item xs={4} sx={{ paddingTop: 2 }}>
         <Select class="centered" isMulti value={selectedOption} onChange={handleChange} options={personalities} />
@@ -160,11 +169,11 @@ function VisNetwork() {
     </Grid>
 
     {/* dates interval */}
-    <Grid container>
+    <Grid container sx={{ paddingTop: 1 }}>
       <Grid item xs={4} />
       <Grid item xs={4}>
         <center>
-          <Box sx={{ width: 300 }}>
+          <Box sx={{ width: 400 }}>
             <Slider
               getAriaLabel={() => 'Intervalo Datas'}
               value={Yearsvalues}
@@ -179,17 +188,39 @@ function VisNetwork() {
     </Grid>
 
     {/* switch buttons */}
-    <Grid container>
-      <Grid item xs={4} />
-      <Grid item xs={2}>
-        <Switch defaultChecked={onlyAmongSelected} onChange={handleChangePersons} />
-        Apenas entre seleccionados
+    <Grid container alignItems="center" spacing={1} sx={{ width: '80%', margin: 'auto', paddingTop: -1 }}>
+      <Grid item xs={2} />
+      <Grid item xs={2} container direction="column" alignItems="center">
+        <TextField
+          id="minNoticias"
+          label="nº min noticias"
+          type="number"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+          size="small"
+          value={10}
+          onChange={handleMinNoticiasChange}
+        />
       </Grid>
-      <Grid item xs={2}>
-        <Switch defaultChecked={onlySentiment} onChange={handleChangeRelationships} />
-        Apenas apoio/oposição
+      <Grid item xs={4} container direction="column" alignItems="center">
+      <Grid item>
+          <Switch defaultChecked={onlyAmongSelected} onChange={handleChangePersons} />
       </Grid>
-      <Grid item xs={4} />
+      <Grid item>
+          <Typography variant="body1">Apenas entre os seleccionados</Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={4} container direction="column" alignItems="center">
+        <Grid item>
+          <Switch defaultChecked={onlySentiment} onChange={handleChangeRelationships} />
+        </Grid>
+        <Grid item>
+          <Typography variant="body1">Apenas notícias apoio/oposição</Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={2} />
     </Grid>
 
     {/* update button */}
