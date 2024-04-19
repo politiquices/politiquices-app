@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import Select from 'react-select' // https://react-select.com/home
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
-// eslint-disable-next-line no-unused-vars
 import Switch from '@mui/material/Switch'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'

@@ -25,6 +25,7 @@ import { styled } from '@mui/material/styles'
 const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
 const AEIOU = '/assets/images/jornais/logotipo-aeiou-2010-240.png'
 const DN = '/assets/images/jornais/diario_noticias.jpg'
+const DESTAK = '/assets/images/jornais/Destak_logo.svg'
 const DiarioDigital = '/assets/images/jornais/diariodigital.gif'
 const Expresso = '/assets/images/jornais/expresso.png'
 const Ionline = '/assets/images/jornais/i_online.png'
@@ -73,7 +74,6 @@ function dateConverter({ dateString }) {
 }
 
 function ProcessArticleLink(domain) {
-  // eslint-disable-next-line react/destructuring-assignment
 
   /*
   dc:creator "PUBLICO-CHAVE"^^xsd:string
@@ -84,7 +84,6 @@ function ProcessArticleLink(domain) {
   dc:creator "cmpt"^^xsd:string
   dc:creator "correioalentejo.com"^^xsd:string
   dc:creator "correiodominho.com"^^xsd:string
-  dc:creator "destak.pt"^^xsd:string
   dc:creator "diarioaveiro.pt"^^xsd:string
   dc:creator "diariocoimbra.pt"^^xsd:string
   dc:creator "diariodetrasosmontes.com"^^xsd:string
@@ -132,6 +131,7 @@ function ProcessArticleLink(domain) {
   mappings['aeiou.pt'] = AEIOU;
   mappings['aeiou.visao.pt'] = AEIOU;
   mappings['zap.aeiou.pt'] = AEIOU;
+  mappings['destak.pt'] = DESTAK;
   mappings['dn.pt'] = DN;
   mappings['dn.sapo.pt'] = DN;
   mappings['dnoticias.pt'] = DN;
@@ -283,6 +283,7 @@ const translateRelType = (rel_type) => {
           </CardContent>
         </Collapse>
         <CardActions>
+        {entry.url !== entry.original_url && entry.url.includes("arquivo.pt") && (
           <Link href={entry.url} target="_blank">
             <Box
               component="img"
@@ -295,6 +296,7 @@ const translateRelType = (rel_type) => {
               src={ArquivoLogo}
             />
           </Link>
+        )}
           <Link href={entry.original_url} target="_blank">
             <Box
               component="img"
