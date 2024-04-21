@@ -22,22 +22,57 @@ const maxYear = 2024
 
 function VisNetwork() {
   const container = useRef(null)
-  const options = {}
-
-  const initNodes = [
-    { id: 1, label: 'Node 1' },
-    { id: 2, label: 'Node 2' },
-    { id: 3, label: 'Node 3' },
-    { id: 4, label: 'Node 4' },
-    { id: 5, label: 'Node 5' },
-  ]
-
-  const initEdges = [
-    { from: 1, to: 3 },
-    { from: 1, to: 2 },
-    { from: 2, to: 4 },
-    { from: 2, to: 5 },
-  ]
+  // see: https://visjs.github.io/vis-network/docs/network/#options
+  const options = {
+    physics:{
+        enabled: true,
+        // solver: 'repulsion'
+        solver: 'forceAtlas2Based'
+    },
+    interaction: {
+        navigationButtons: true,
+        selectConnectedEdges: false
+    },
+    nodes: {
+      shape: 'dot',
+      font: {
+        size: 18,
+        strokeWidth: 7},
+      },
+    edges: {
+      arrows: {
+        to: { enabled: true }
+      },
+      length: 300,
+      scaling:{
+            min: 1,
+            max: 15,
+            label: {
+                enabled: true,
+                min: 14,
+                max: 30,
+                maxVisible: 30,
+                drawThreshold: 5
+            },
+            customScalingFunction (min,max,total,value) {
+                if (max === min) {
+                    return 0.5;
+                }
+                
+                    const scale = 1 / (max - min);
+                    return Math.max(0,(value - min)*scale);
+                
+            }
+      }
+    },
+    layout: {
+      improvedLayout: false,
+      hierarchical: {
+        enabled: false,
+        sortMethod: 'hubsize'
+      }
+    },
+  };
 
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState()
@@ -135,6 +170,8 @@ function VisNetwork() {
 
   const handleMinNoticiasChange = (event) => {
     // eslint-disable-next-line radix
+    console.log(parseInt(event.target.value))
+    // eslint-disable-next-line radix
     setMinNoticias(parseInt(event.target.value));
   };
   
@@ -200,7 +237,7 @@ function VisNetwork() {
           }}
           variant="outlined"
           size="small"
-          value={10}
+          value={minNoticias}
           onChange={handleMinNoticiasChange}
         />
       </Grid>
@@ -241,7 +278,7 @@ function VisNetwork() {
       <Grid item xs={4} />
     </Grid>
 
-    {/* news titles */}
+    {/* news titles 
     <Grid
       container
       spacing={1}
@@ -253,6 +290,7 @@ function VisNetwork() {
     >      
       {!response ? <p /> : <NewsTitles data={response} />}
     </Grid>
+    */}
   </>
   )
     }
