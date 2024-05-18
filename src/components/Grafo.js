@@ -123,6 +123,7 @@ function VisNetwork() {
     params += `&sentiment=${onlySentiment}`
     params += `&start=${min}`
     params += `&end=${max}`
+    params += `&min_freq=${minNoticias}`
 
     console.log(params)
 
@@ -156,12 +157,10 @@ function VisNetwork() {
 
   const handleChangeRelationships = (e) => {
     onlySentiment = e.target.checked
-    console.log(onlySentiment)
   }
 
   const handleChangePersons = (e) => {
     onlyAmongSelected = e.target.checked
-    console.log(onlyAmongSelected)
   }
 
   const handleChangeYears = (event, yearsValues) => {
@@ -169,8 +168,6 @@ function VisNetwork() {
   }
 
   const handleMinNoticiasChange = (event) => {
-    // eslint-disable-next-line radix
-    console.log(parseInt(event.target.value))
     // eslint-disable-next-line radix
     setMinNoticias(parseInt(event.target.value));
   };
