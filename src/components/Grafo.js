@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/self-closing-comp */
 import { useEffect, useRef, useState } from 'react';
@@ -194,10 +195,8 @@ function VisNetwork() {
       if (params.edges.length > 0) {
         const edgeId = params.edges[0];
         const edge = network.body.edges[edgeId];
-        const fromNode = edge.from.options.label;
-        const toNode = edge.to.options.label;
-        console.log(`Edge from ${fromNode} to ${toNode}`);
-        setEdgePopoverContent({ from: fromNode, to: toNode });
+        console.log(edge.title);
+        setEdgePopoverContent({ from: edge.from.id, to: edge.to.id });
         setEdgePopoverAnchor(params.event.center);
         setEdgePopoverOpen(true);
       }
@@ -344,9 +343,18 @@ function VisNetwork() {
           <Typography variant="h6">
             Edge from {edgePopoverContent.from} to {edgePopoverContent.to}
           </Typography>
-          <Link href="https://www.publico.pt" target="_blank" rel="noopener">
+          <Link href={`${process.env.REACT_APP_POLITIQUICES_API}/queries?=&ent1=${edgePopoverContent.from}&ent2=${edgePopoverContent.to}&rel_type=${edgePopoverContent.rel_type}&start=${edgePopoverContent.start}&end=${edgePopoverContent.end}`}
+          target="_blank" rel="noopener">
             www.publico.pt
           </Link>
+          {/* 
+            http://127.0.0.1:8000/queries?=
+            &ent1=Q156780
+            &ent2=Q610788
+            &rel_type=ent1_supports_ent2
+            &start=2000
+            &end=2024
+          */}
         </Box>
       </Popover>
     </>
