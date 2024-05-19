@@ -168,40 +168,6 @@ function VisNetwork() {
     setMinNoticias(parseInt(event.target.value));
   };
 
-  const handlePopoverClose = () => {
-    setNodePopoverOpen(false);
-    setNodePopoverAnchor(null);
-    setNodePopoverContent({});
-  };
-
-  /*
-  const handleNodeClick = (params) => {
-    if (params.nodes.length > 0) {
-      const nodeId = params.nodes[0];
-      const nodeName = network.body.nodes[nodeId].options.label;
-      console.log(nodeName);
-      setNodePopoverContent({ id: nodeId, label: nodeName });
-      setNodePopoverAnchor(params.event.center);
-      setNodePopoverOpen(true);
-    }
-  };
-  */
-
-  /*
-  const handleEdgeClick = (params) => {
-    if (params.edges.length > 0) {
-      const edgeId = params.edges[0];
-      const edge = network.body.edges[edgeId];
-      const fromNode = edge.from.options.label;
-      const toNode = edge.to.options.label;
-      console.log(`Edge from ${fromNode} to ${toNode}`);
-      setEdgePopoverContent({ from: fromNode, to: toNode });
-      setEdgePopoverAnchor(params.event.center);
-      setEdgePopoverOpen(true);
-    }
-  };
-  */
-
   const handleNodePopoverClose = () => {
     setNodePopoverOpen(false);
     setNodePopoverAnchor(null);
@@ -237,21 +203,6 @@ function VisNetwork() {
       }
     });
   }, [container, nodes, edges]);
-
-
-  /*
-  useEffect(() => {
-    const network = container.current && new Network(container.current, { nodes, edges }, options);
-    network.on('click', (params) => {
-      if (params.nodes.length > 0) {
-        handleNodeClick(params);
-      } else if (params.edges.length > 0) {
-        handleEdgeClick(params);
-      }
-    });
-  }, [container, nodes, edges]);
-  */
-
 
 
   return (
