@@ -79,9 +79,15 @@ function VisNetwork() {
   const [Yearsvalues, setValue] = useState([2000, 2024]);
   const [personalities, setPersonalities] = useState();
   const [minNoticias, setMinNoticias] = useState(10);
-  const [popoverOpen, setPopoverOpen] = useState(false);
-  const [popoverAnchor, setPopoverAnchor] = useState(null);
-  const [popoverContent, setPopoverContent] = useState({});
+  
+  const [nodePopoverOpen, setNodePopoverOpen] = useState(false);
+  const [nodePopoverAnchor, setNodePopoverAnchor] = useState(null);
+  const [nodePopoverContent, setNodePopoverContent] = useState({});
+
+  const [edgePopoverOpen, setEdgePopoverOpen] = useState(false);
+  const [edgePopoverAnchor, setEdgePopoverAnchor] = useState(null);
+  const [edgePopoverContent, setEdgePopoverContent] = useState({});
+
 
   // read the persons.json to fill the select
   function loadPersonalities() {
@@ -163,10 +169,51 @@ function VisNetwork() {
   };
 
   const handlePopoverClose = () => {
-    setPopoverOpen(false);
-    setPopoverAnchor(null);
-    setPopoverContent({});
+    setNodePopoverOpen(false);
+    setNodePopoverAnchor(null);
+    setNodePopoverContent({});
   };
+
+  /*
+  const handleNodeClick = (params) => {
+    if (params.nodes.length > 0) {
+      const nodeId = params.nodes[0];
+      const nodeName = network.body.nodes[nodeId].options.label;
+      console.log(nodeName);
+      setNodePopoverContent({ id: nodeId, label: nodeName });
+      setNodePopoverAnchor(params.event.center);
+      setNodePopoverOpen(true);
+    }
+  };
+  */
+
+  /*
+  const handleEdgeClick = (params) => {
+    if (params.edges.length > 0) {
+      const edgeId = params.edges[0];
+      const edge = network.body.edges[edgeId];
+      const fromNode = edge.from.options.label;
+      const toNode = edge.to.options.label;
+      console.log(`Edge from ${fromNode} to ${toNode}`);
+      setEdgePopoverContent({ from: fromNode, to: toNode });
+      setEdgePopoverAnchor(params.event.center);
+      setEdgePopoverOpen(true);
+    }
+  };
+  */
+
+  const handleNodePopoverClose = () => {
+    setNodePopoverOpen(false);
+    setNodePopoverAnchor(null);
+    setNodePopoverContent({});
+  };
+
+  const handleEdgePopoverClose = () => {
+    setEdgePopoverOpen(false);
+    setEdgePopoverAnchor(null);
+    setEdgePopoverContent({});
+  };
+
 
   useEffect(() => {
     const network = container.current && new Network(container.current, { nodes, edges }, options);
@@ -174,12 +221,38 @@ function VisNetwork() {
       if (params.nodes.length > 0) {
         const nodeId = params.nodes[0];
         const nodeName = network.body.nodes[nodeId].options.label
-        setPopoverContent({ id: nodeId, label: nodeName });
-        setPopoverAnchor(params.event.center);
-        setPopoverOpen(true);
+        setNodePopoverContent({ id: nodeId, label: nodeName });
+        setNodePopoverAnchor(params.event.center);
+        setNodePopoverOpen(true);
+      }
+      if (params.edges.length > 0) {
+        const edgeId = params.edges[0];
+        const edge = network.body.edges[edgeId];
+        const fromNode = edge.from.options.label;
+        const toNode = edge.to.options.label;
+        console.log(`Edge from ${fromNode} to ${toNode}`);
+        setEdgePopoverContent({ from: fromNode, to: toNode });
+        setEdgePopoverAnchor(params.event.center);
+        setEdgePopoverOpen(true);
       }
     });
   }, [container, nodes, edges]);
+
+
+  /*
+  useEffect(() => {
+    const network = container.current && new Network(container.current, { nodes, edges }, options);
+    network.on('click', (params) => {
+      if (params.nodes.length > 0) {
+        handleNodeClick(params);
+      } else if (params.edges.length > 0) {
+        handleEdgeClick(params);
+      }
+    });
+  }, [container, nodes, edges]);
+  */
+
+
 
   return (
     <>
@@ -277,14 +350,14 @@ function VisNetwork() {
         <Grid item xs={4} />
       </Grid>
 
-      {/* Popover */}
+      {/* Node Popover */}
       <Popover
-        open={popoverOpen}
+        open={nodePopoverOpen}
         anchorReference="anchorPosition"
         anchorPosition={
-          popoverAnchor ? { top: popoverAnchor.y, left: popoverAnchor.x } : undefined
+          nodePopoverAnchor ? { top: nodePopoverAnchor.y, left: nodePopoverAnchor.x } : undefined
         }
-        onClose={handlePopoverClose}
+        onClose={handleNodePopoverClose}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'left',
@@ -295,8 +368,33 @@ function VisNetwork() {
         }}
       >
         <Box p={2}>
-          <Link href={`/personalidade/${popoverContent.id}`} target="_blank" rel="noopener">
-          {popoverContent.label}
+          <Link href={`/personalidade/${nodePopoverContent.id}`} target="_blank" rel="noopener">
+          {nodePopoverContent.label}
+          </Link>
+        </Box>
+      </Popover>
+
+      {/* Edge Popover */}
+      <Popover
+        open={edgePopoverOpen}
+        anchorReference="anchorPosition"
+        anchorPosition={edgePopoverAnchor ? { top: edgePopoverAnchor.y, left: edgePopoverAnchor.x } : undefined}
+        onClose={handleEdgePopoverClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <Box p={2}>
+          <Typography variant="h6">
+            Edge from {edgePopoverContent.from} to {edgePopoverContent.to}
+          </Typography>
+          <Link href="https://www.publico.pt" target="_blank" rel="noopener">
+            www.publico.pt
           </Link>
         </Box>
       </Popover>
