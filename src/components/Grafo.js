@@ -22,6 +22,7 @@ const maxYear = 2024;
 
 function VisNetwork() {
   const container = useRef(null);
+  const networkRef = useRef(null);
 
   // see: https://visjs.github.io/vis-network/docs/network/#options
 
@@ -135,10 +136,14 @@ function VisNetwork() {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
+        console.log(data.nodes);
+        console.log(data.edges);
         setNodes(data.nodes);
         setEdges(data.edges);
         console.log('nodes: ', nodes);
         console.log('edges: ', edges);
+        console.log('data: ', data);
       })
       .catch((err) => {
         console.log(err);
@@ -183,6 +188,49 @@ function VisNetwork() {
 
 
   useEffect(() => {
+    if (networkRef.current) {
+      networkRef.current.setData({ nodes, edges });
+    } else {
+      networkRef.current = new Network(container.current, { nodes, edges }, options);
+      networkRef.current.on('click', (params) => {
+        if (params.nodes.length > 0) {
+          const nodeId = params.nodes[0];
+          const nodeName = networkRef.current.body.nodes[nodeId].options.label;
+          setNodePopoverContent({ id: nodeId, label: nodeName });
+          setNodePopoverAnchor(params.event.center);
+          setNodePopoverOpen(true);
+        }
+        if (params.edges.length > 0) {
+          const edgeId = params.edges[0];
+          const edge = networkRef.current.body.edges[edgeId];
+          console.log(edgeId);
+          console.log(edge.id);
+          console.log(edge.title);
+          console.log(edge.from.id);
+          console.log(edge.to.id);
+          const numNoticias = edges[edgeId-1].value;
+          const [min, max] = Yearsvalues;
+          if (edge.title === 'apoia') {
+            setEdgePopoverContent({ from: edge.from.id, to: edge.to.id, rel_type: 'ent1_supports_ent2', start: min, end: max, n_noticias: numNoticias, label: edge.title });
+          } else if (edge.title === 'opõe-se') {
+            setEdgePopoverContent({ from: edge.from.id, to: edge.to.id, rel_type: 'ent1_opposes_ent2', start: min, end: max, n_noticias: numNoticias, label: edge.title });
+          }
+          setEdgePopoverAnchor(params.event.center);
+          setEdgePopoverOpen(true);
+        }
+      });
+    }
+    return () => {
+      if (networkRef.current) {
+        networkRef.current.destroy();
+        networkRef.current = null;
+      }
+    };
+  }, [nodes, edges]);
+
+
+  /*
+  useEffect(() => {
     const network = container.current && new Network(container.current, { nodes, edges }, options);
     network.on('click', (params) => {
       if (params.nodes.length > 0) {
@@ -195,13 +243,18 @@ function VisNetwork() {
       if (params.edges.length > 0) {
         const edgeId = params.edges[0];
         const edge = network.body.edges[edgeId];
-        console.log(edge.title);
-        setEdgePopoverContent({ from: edge.from.id, to: edge.to.id });
+        const [min, max] = Yearsvalues;
+        if (edge.title === 'apoia') {
+          setEdgePopoverContent({ from: edge.from.id, to: edge.to.id, rel_type: 'ent1_supports_ent2', start: min, end: max });
+        } else if (edge.title === 'opõe') {
+          setEdgePopoverContent({ from: edge.from.id, to: edge.to.id, rel_type: 'ent1_opposes_ent2', start: min, end: max });
+        }        
         setEdgePopoverAnchor(params.event.center);
         setEdgePopoverOpen(true);
       }
     });
   }, [container, nodes, edges]);
+  */
 
 
   return (
@@ -340,21 +393,10 @@ function VisNetwork() {
         }}
       >
         <Box p={2}>
-          <Typography variant="h6">
-            Edge from {edgePopoverContent.from} to {edgePopoverContent.to}
-          </Typography>
           <Link href={`${process.env.REACT_APP_POLITIQUICES_API}/queries?=&ent1=${edgePopoverContent.from}&ent2=${edgePopoverContent.to}&rel_type=${edgePopoverContent.rel_type}&start=${edgePopoverContent.start}&end=${edgePopoverContent.end}`}
           target="_blank" rel="noopener">
-            www.publico.pt
+          {edgePopoverContent.label} ({edgePopoverContent.n_noticias})
           </Link>
-          {/* 
-            http://127.0.0.1:8000/queries?=
-            &ent1=Q156780
-            &ent2=Q610788
-            &rel_type=ent1_supports_ent2
-            &start=2000
-            &end=2024
-          */}
         </Box>
       </Popover>
     </>
