@@ -14,6 +14,10 @@ import CardHeader from '@mui/material/CardHeader'
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
 
+const minYear = 1994
+const maxYear = 2024
+
+
 function FillIn(elements, url) {
   // to remove the last part of the current URL
   const completeURL = window.location.href
@@ -240,7 +244,7 @@ function TopRelated(data) {
           title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
           subheader={
             <Link
-              href={`/versus/${entry.wiki_id}/${'ent1_opposes_ent2'}/${data.data.wiki_id}`}
+              href={`/versus/${entry.wiki_id}/${'ent1_opposes_ent2'}/${data.data.wiki_id}/${minYear}/${maxYear}`}
             >{`${entry.relative} (${entry.freq})`}</Link>
           }
         />
@@ -258,7 +262,7 @@ function TopRelated(data) {
           title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
           subheader={
             <Link
-              href={`/versus/${entry.wiki_id}/${'ent1_supports_ent2'}/${data.data.wiki_id}`}
+              href={`/versus/${entry.wiki_id}/${'ent1_supports_ent2'}/${data.data.wiki_id}/${minYear}/${maxYear}`}
             >{`${entry.relative} (${entry.freq})`}</Link>
           }
         />
@@ -276,7 +280,7 @@ function TopRelated(data) {
           title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
           subheader={
             <Link
-              href={`/versus/${data.data.wiki_id}/${'ent1_supports_ent2'}/${entry.wiki_id}`}
+              href={`/versus/${data.data.wiki_id}/${'ent1_supports_ent2'}/${entry.wiki_id}/${minYear}/${maxYear}`}
             >{`${entry.relative} (${entry.freq})`}</Link>
           }
         />
@@ -294,7 +298,7 @@ function TopRelated(data) {
           title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
           subheader={
             <Link
-              href={`/versus/${data.data.wiki_id}/${'ent1_opposes_ent2'}/${entry.wiki_id}`}
+              href={`/versus/${data.data.wiki_id}/${'ent1_opposes_ent2'}/${entry.wiki_id}/${minYear}/${maxYear}`}
             >{`${entry.relative} (${entry.freq})`}</Link>
           }
         />

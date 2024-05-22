@@ -26,7 +26,7 @@ function App() {
         <Route path="/personalidades" element={<ListPersonalidades />} />
         <Route path="/estatistica" element={<Estatistica />} />
         <Route path="/sobre" element={<Sobre />} />
-        <Route path="/versus/:ent1/:relType/:ent2" element={<EntityVersusEntity />} />
+        <Route path="/versus/:ent1/:relType/:ent2/:start/:end" element={<EntityVersusEntity />} />
         <Route path="/personalidade/:id" element={<FetchPersonalidade />} />
         <Route path="/education/:id" element={<ListPersonalidadesFiltered type="education" />} />
         <Route path="/occupation/:id" element={<ListPersonalidadesFiltered type="occupation" />} />

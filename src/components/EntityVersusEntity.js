@@ -5,13 +5,17 @@ import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
 
 function EntityVersusEntity() {
-  const { ent1, ent2, relType } = useParams()
+  const { ent1, ent2, relType, start, end} = useParams()
   const [headlines, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
 
   const fetchData = () => {
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/relationships/${ent1}/${relType}/${ent2}`)
+
+    console.log(ent1, ent2, relType, start, end)
+
+    setIsLoading(true)
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/relationships/${ent1}/${relType}/${ent2}/${start}/${end}`)
       .then((response) => response.json())
       .then((data) => {
         setIsLoading(false)

@@ -393,7 +393,7 @@ function VisNetwork() {
         }}
       >
         <Box p={2}>
-          <Link href={`${process.env.REACT_APP_POLITIQUICES_API}/queries?=&ent1=${edgePopoverContent.from}&ent2=${edgePopoverContent.to}&rel_type=${edgePopoverContent.rel_type}&start=${edgePopoverContent.start}&end=${edgePopoverContent.end}`}
+          <Link href={`/versus/${edgePopoverContent.from}/${edgePopoverContent.rel_type}/${edgePopoverContent.to}/${edgePopoverContent.start}/${edgePopoverContent.end}`}
           target="_blank" rel="noopener">
           {edgePopoverContent.label} ({edgePopoverContent.n_noticias})
           </Link>
