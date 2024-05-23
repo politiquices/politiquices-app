@@ -83,7 +83,6 @@ function Relacoes() {
       .then((res) => res.json())
       .then((data) => {
         setResponse(data)
-        console.log(data)
         setLoading(false)
       })
       .catch((err) => {

@@ -21,7 +21,6 @@ const pages = [
   ['Personalidades', 'personalidades'],
   ['Relações', 'relacoes'],
   ['Grafo', 'grafo'],
-  // ['Topicos', 'topicos'],
   ['Estatística', 'estatistica'],
   ['Sobre', 'sobre'],
 ]
@@ -57,7 +56,8 @@ const assembleias = [
   ['Q3570377', 'XII Legislatura (2011 - 2015)'],
   ['Q25379987', 'XIII Legislatura (2015 - 2019)'],
   ['Q72073997', 'XIV Legislatura (2019 - 2022'],
-  ['Q110768513', 'XV Legislatura (2022 -	)'],
+  ['Q110768513', 'XV Legislatura (2022 - 2024	)'],
+  ['Q125131548', 'XVI Legislatura (2024 -	)'],
 ]
 
 /*
@@ -88,7 +88,8 @@ const governments = [
   ['Q21554845', 'XX Governo (2015 - 2015)'],
   ['Q21224349', 'XXI Governo (2015 - 2019)'],
   ['Q71014092', 'XXII Governo (2019 - 2022)'],
-  ['Q110819776', 'XXIII Governo (2022 - )'],
+  ['Q110819776', 'XXIII Governo (2022 - 2024)'],
+  ['Q123509897', 'XXIV Governo (2024 -)']
 ]
 
 function NewResponsiveAppBar() {
