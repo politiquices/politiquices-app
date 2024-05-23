@@ -36,6 +36,7 @@ const Observador = '/assets/images/jornais/observador.png'
 const PublicoLogo = '/assets/images/logos/publico_logo.png'
 const RTP = '/assets/images/jornais/rtp.svg.png'
 const TSF = '/assets/images/jornais/tsf.png'
+const TVI = '/assets/images/jornais/Logótipo_TVI.png'
 
 // const Supports = 'assets/images/logos/handshake.png'
 // const Opposes = 'assets/images/logos/discrimination.png'
@@ -121,7 +122,6 @@ function ProcessArticleLink(domain) {
   dc:creator "sicnoticias.sapo.pt"^^xsd:string
   dc:creator "sol.sapo.pt"^^xsd:string
   dc:creator "terrasdabeira.gmpress.pt"^^xsd:string
-  dc:creator "tvi24.iol.pt"^^xsd:string
   dc:creator "visao.sapo.pt"^^xsd:string
   dc:creator "zap.aeiou.pt"^^xsd:string
   */
@@ -150,6 +150,7 @@ function ProcessArticleLink(domain) {
   mappings['observador.pt'] = Observador;
   mappings['rtp.pt'] = RTP;
   mappings['tsf.pt'] = TSF;
+  mappings['tvi24.iol.pt'] = TVI;
 
   if (domain in mappings) {
     return mappings[domain];
