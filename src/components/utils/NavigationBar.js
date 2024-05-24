@@ -97,6 +97,7 @@ function NewResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [anchorElUserAss, setAnchorElUserAss] = React.useState(null)
   const [personalities, setPersonalities] = React.useState(null)
+  const [parties, setParties] = React.useState(null)
 
   // read the persons.json to fill the select
   function loadPersonalities() {
@@ -113,12 +114,39 @@ function NewResponsiveAppBar() {
       })
   }
 
+  function loadParties() {
+    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/parties/`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const partiesWikis = new Set(data.map((item) => item.wiki_id));
+        console.log(partiesWikis)
+        setParties(partiesWikis)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   useEffect(() => {
     loadPersonalities()
+    loadParties()
   }, [])
 
+  function isParty(selected) {
+    // check if the selected value is in partiesWikis
+    return parties.has(selected.value)
+  }
+
   function handleChange(e, selected) {
-    window.open(`/personalidade/${selected.value}`, '_self')
+    if (isParty(selected)) {
+      window.open(`/party/${selected.value}`, '_self')
+    }
+    else {
+      window.open(`/personalidade/${selected.value}`, '_self')
+      }
   }
 
   function ComboBox() {
