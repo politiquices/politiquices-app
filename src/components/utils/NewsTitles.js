@@ -24,6 +24,7 @@ import { styled } from '@mui/material/styles'
 
 const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
 const AEIOU = '/assets/images/jornais/logotipo-aeiou-2010-240.png'
+const CorreioAlentejo = '/assets/images/jornais/correio_alentejo.png'
 const DN = '/assets/images/jornais/diario_noticias.jpg'
 const DESTAK = '/assets/images/jornais/Destak_logo.svg'
 const DiarioDigital = '/assets/images/jornais/diariodigital.gif'
@@ -35,6 +36,9 @@ const JornalNegocios = '/assets/images/jornais/jornal_negocios.png'
 const Observador = '/assets/images/jornais/observador.png'
 const PublicoLogo = '/assets/images/logos/publico_logo.png'
 const RTP = '/assets/images/jornais/rtp.svg.png'
+const Sabado = '/assets/images/jornais/Revista_Sábado_logo.png'
+const Sol = '/assets/images/jornais/sol.png'
+const SICNoticias = '/assets/images/jornais/SIC_noticias.png'
 const TSF = '/assets/images/jornais/tsf.png'
 const TVI = '/assets/images/jornais/Logótipo_TVI.png'
 
@@ -83,7 +87,6 @@ function ProcessArticleLink(domain) {
   dc:creator "asbeiras.pt"^^xsd:string
   dc:creator "avozdetrasosmontes.pt"^^xsd:string
   dc:creator "cmpt"^^xsd:string
-  dc:creator "correioalentejo.com"^^xsd:string
   dc:creator "correiodominho.com"^^xsd:string
   dc:creator "diarioaveiro.pt"^^xsd:string
   dc:creator "diariocoimbra.pt"^^xsd:string
@@ -97,7 +100,6 @@ function ProcessArticleLink(domain) {
   dc:creator "dinheirodigital.sapo.pt"^^xsd:string
   dc:creator "dinheirovivo.pt"^^xsd:string
   dc:creator "eco.sapo.pt"^^xsd:string
-  dc:creator "economico.sapo.pt"^^xsd:string
   dc:creator "guimaraesdigital.com"^^xsd:string
   dc:creator "imediato.pt"^^xsd:string
   dc:creator "iol.pt"^^xsd:string
@@ -110,17 +112,12 @@ function ProcessArticleLink(domain) {
   dc:creator "noticias.sapo.pt"^^xsd:string
   dc:creator "ointerior.pt"^^xsd:string
   dc:creator "omirante.pt"^^xsd:string
-  dc:creator "online.expresso.pt"^^xsd:string
   dc:creator "osetubalense.com"^^xsd:string
   dc:creator "postal.pt"^^xsd:string
   dc:creator "regiao-sul.pt"^^xsd:string
   dc:creator "regiaodeleiria.pt"^^xsd:string
   dc:creator "rr.pt"^^xsd:string
-  dc:creator "sabado.pt"^^xsd:string
   dc:creator "sapo.pt"^^xsd:string
-  dc:creator "sicnoticias.pt"^^xsd:string
-  dc:creator "sicnoticias.sapo.pt"^^xsd:string
-  dc:creator "sol.sapo.pt"^^xsd:string
   dc:creator "terrasdabeira.gmpress.pt"^^xsd:string
   dc:creator "visao.sapo.pt"^^xsd:string
   dc:creator "zap.aeiou.pt"^^xsd:string
@@ -131,6 +128,7 @@ function ProcessArticleLink(domain) {
   mappings['aeiou.pt'] = AEIOU;
   mappings['aeiou.visao.pt'] = AEIOU;
   mappings['zap.aeiou.pt'] = AEIOU;
+  mappings['"correioalentejo.com"'] = CorreioAlentejo;
   mappings['destak.pt'] = DESTAK;
   mappings['dn.pt'] = DN;
   mappings['dn.sapo.pt'] = DN;
@@ -138,6 +136,7 @@ function ProcessArticleLink(domain) {
   mappings['diariodigital.sapo.pt'] = DiarioDigital;  
   mappings['expresso.pt'] = Expresso;
   mappings['expresso.sapo.pt'] = Expresso;
+  mappings['online.expresso.pt'] = Expresso;
   mappings['ionline.sapo.pt'] = Ionline;
   mappings['ionline.pt'] = Ionline;
   mappings['jn.pt'] = JN;
@@ -145,10 +144,15 @@ function ProcessArticleLink(domain) {
   mappings['jn.sapo.pt'] = JN;
   mappings['jornaldenegocios.pt'] = JornalNegocios;
   mappings['jornaleconomico.sapo.pt'] = JornalEconomico;
+  mappings['economico.sapo.pt'] = JornalEconomico;
   mappings['publico.pt'] = PublicoLogo;
   mappings['publico.clix.pt'] = PublicoLogo;
   mappings['observador.pt'] = Observador;
   mappings['rtp.pt'] = RTP;
+  mappings['sabado.pt'] = Sabado;
+  mappings['sicnoticias.pt'] = SICNoticias;
+  mappings['sicnoticias.sapo.pt'] = SICNoticias;
+  mappings['sol.sapo.pt'] = Sol;
   mappings['tsf.pt'] = TSF;
   mappings['tvi24.iol.pt'] = TVI;
 
