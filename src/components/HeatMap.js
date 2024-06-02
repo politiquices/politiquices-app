@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-unused-vars */
 import HeatMap from "react-heatmap-grid";
 
 const xLabels = new Array(24).fill(0).map((_, i) => `${i}`);
