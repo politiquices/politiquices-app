@@ -8,6 +8,7 @@ import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography';
 
+import HeatMapComponent from './utils/HeatMap'
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
 
@@ -208,6 +209,9 @@ function Relacoes() {
           </Grid>
 
           {/* news titles */}
+          <Grid>
+            <HeatMapComponent/>
+          </Grid>
           <Grid
             container
             spacing={1}
