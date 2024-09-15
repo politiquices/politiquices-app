@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import NavigationBar from './components/utils/NavigationBar'
 import Footer from './components/utils/Footer'
-import Home from './components/Home'
+import Bilateral from './components/Bilateral'
 import Relacoes from './components/Relacoes'
 import VisNetwork from './components/Grafo'
 import ListPersonalidades from './components/ListPersonalidadesLazy'
@@ -11,6 +11,7 @@ import EntityVersusEntity from './components/EntityVersusEntity'
 import Estatistica from './components/Estatistica'
 import Sobre from './components/Sobre'
 import Pesquisa from './components/Pesquisa'
+import Home from './components/Home'
 import './App.css';
 
 function App() {
@@ -20,12 +21,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/bilateral" element={<Bilateral />} />
         <Route path="/relacoes" element={<Relacoes />} />
         <Route path="/pesquisa" element={<Pesquisa />} />
         <Route path="/grafo" element={<VisNetwork />} />
         <Route path="/personalidades" element={<ListPersonalidades />} />
         <Route path="/estatistica" element={<Estatistica />} />
-        <Route path="/sobre" element={<Sobre />} />
+        <Route path="/sobre" element={<Sobre />} />        
         <Route path="/versus/:ent1/:relType/:ent2/:start/:end" element={<EntityVersusEntity />} />
         <Route path="/personalidade/:id" element={<FetchPersonalidade />} />
         <Route path="/education/:id" element={<ListPersonalidadesFiltered type="education" />} />

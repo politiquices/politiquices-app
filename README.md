@@ -40,5 +40,4 @@ If it looks ok build it to send it to the remove server. Make sure `REACT_APP_PO
 
 Or in a single command:
 
-	echo "REACT_APP_POLITIQUICES_API=http://politiquices.pt:8000" >> .env && npm run build && rsync -avz --delete build/ politiquices.pt:/var/www/html/politiquices_beta/
-
+	echo "REACT_APP_POLITIQUICES_API=http://politiquices.pt:8000" >> .env && npm run build && rsync -avz --delete build/ politiquices.pt:/var/www/html/politiquices/
