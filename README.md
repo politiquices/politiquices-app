@@ -35,6 +35,7 @@ Will install the needed modules, creating `node_modules` and `package-lock.json`
 
 If it looks ok build it to send it to the remove server. Make sure `REACT_APP_POLITIQUICES_API=http://politiquices.pt:8000` in the `.env`
 
+	echo "REACT_APP_POLITIQUICES_API=http://politiquices.pt:8000" >> .env
 	npm run build
 	rsync -avz --delete build/ politiquices.pt:/var/www/html/politiquices_beta/
 
