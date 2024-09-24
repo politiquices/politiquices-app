@@ -19,7 +19,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 const pages = [
   ['Home', 'home'],
   ['Personalidades', 'personalidades'],
-  ['Bilateral', 'bilateral'],
+  ['Versus', 'versus'],
   ['Relações', 'relacoes'],
   ['Grafo', 'grafo'],
   ['Estatística', 'estatistica'],

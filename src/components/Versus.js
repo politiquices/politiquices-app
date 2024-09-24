@@ -34,7 +34,7 @@ const relations = [
   },
 ]
 
-function Bilateral() {
+function Versus() {
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState()
   const [selectedOptionLeft, setSelectedOptionLeft] = useState()
@@ -225,4 +225,4 @@ function Bilateral() {
   )
 }
 
-export default Bilateral
+export default Versus

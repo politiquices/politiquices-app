@@ -37,6 +37,7 @@ If it looks ok build it to send it to the remove server. Make sure `REACT_APP_PO
 
 	echo "REACT_APP_POLITIQUICES_API=http://politiquices.pt:8000" >> .env
 	npm run build
+	cp htaccess build/.htaccess
 	rsync -avz --delete build/ politiquices.pt:/var/www/html/politiquices_beta/
 
 Or in a single command:

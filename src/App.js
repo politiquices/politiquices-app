@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import NavigationBar from './components/utils/NavigationBar'
 import Footer from './components/utils/Footer'
-import Bilateral from './components/Bilateral'
+import Versus from './components/Versus'
 import Relacoes from './components/Relacoes'
 import VisNetwork from './components/Grafo'
 import ListPersonalidades from './components/ListPersonalidadesLazy'
@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/bilateral" element={<Bilateral />} />
+        <Route path="/versus" element={<Versus />} />
         <Route path="/relacoes" element={<Relacoes />} />
         <Route path="/pesquisa" element={<Pesquisa />} />
         <Route path="/grafo" element={<VisNetwork />} />
