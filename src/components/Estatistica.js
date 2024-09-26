@@ -19,7 +19,8 @@ function ArticlesYearBar(data) {
       padding={0.3}
       valueScale={{ type: 'linear' }}
       indexScale={{ type: 'band', round: true }}
-      colors={{ scheme: 'nivo' }}
+      // Custom colors for each key
+      colors={['red', 'green']} // Colors for 'oposição' and 'apoio'
       defs={[
         {
           id: 'dots',
@@ -82,6 +83,15 @@ function ArticlesYearBar(data) {
         from: 'color',
         modifiers: [['darker', 1.6]],
       }}
+      // Add theme to customize label styles
+      // theme={{
+      //  labels: {
+      //    text: {
+      //      fontWeight: 'bold', // Make the labels bold
+      //      fontSize: 14,       // Increase font size if needed
+      //    },
+      //  },
+      // }}
       legends={[
         {
           dataFrom: 'keys',
@@ -107,10 +117,6 @@ function ArticlesYearBar(data) {
         },
       ]}
       role="application"
-      ariaLabel="Nivo bar chart demo"
-      barAriaLabel={function (e) {
-        return e.id + ': ' + e.formattedValue + ' in country: ' + e.indexValue
-      }}
     />
   )
 }
@@ -144,7 +150,7 @@ function PersonalityArticlesYearBar(data) {
           id: 'lines',
           type: 'patternLines',
           background: 'inherit',
-          color: '#eed312',
+          color: 'green',
           rotation: -45,
           lineWidth: 6,
           spacing: 10,
