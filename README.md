@@ -12,10 +12,8 @@
 	make build 
 	make production
 
-
 	# ToDo: --env sparql_endpoint='http://jena_sparql:3030' pass the correct SPARQL IP+PORT
 	docker run -dit --env SPARQL_ENDPOINT='http://127.0.0.1:3030' --name politiquices-api -p 127.0.0.1:8000:8000 politiquices-api
-
 
 	# ToDo: get the SPARQL IP+PORT from the docker network
 	docker run -dit --env SPARQL_ENDPOINT='http://172.17.0.2:3030' --name politiquices-api -p 127.0.0.1:8000:8000 politiquices-api
@@ -38,7 +36,7 @@ If it looks ok build it to send it to the remove server. Make sure `REACT_APP_PO
 	echo "REACT_APP_POLITIQUICES_API=http://politiquices.pt:8000" >> .env
 	npm run build
 	cp htaccess build/.htaccess
-	rsync -avz --delete build/ politiquices.pt:/var/www/html/politiquices_beta/
+	rsync -avz --delete build/ politiquices.pt:/var/www/html/politiquices/
 
 Or in a single command:
 
