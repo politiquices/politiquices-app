@@ -19,11 +19,12 @@ import Autocomplete from '@mui/material/Autocomplete'
 const pages = [
   ['Home', 'home'],
   ['Personalidades', 'personalidades'],
+  ['Random', 'random'], // Add this new option
   ['Versus', 'versus'],
   ['Relações', 'relacoes'],
   ['Grafo', 'grafo'],
   ['Estatística', 'estatistica'],
-  ['Sobre', 'sobre'],
+  ['Sobre', 'sobre'],  
 ]
 
 /*
@@ -202,6 +203,14 @@ function NewResponsiveAppBar() {
     setAnchorElUserAss(null)
   }
 
+  const handleRandomPersonality = () => {
+    if (personalities && personalities.length > 0) {
+      const randomIndex = Math.floor(Math.random() * personalities.length);
+      const randomPerson = personalities[randomIndex];
+      window.open(`/personalidade/${randomPerson.value}`, '_self');
+    }
+  };
+
   return (
     <AppBar position="fixed">
       <Container maxWidth="xl">
@@ -266,14 +275,23 @@ function NewResponsiveAppBar() {
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Link key={page} style={{ textDecoration: 'none' }} to={`/${page[1]}`}>
-                <Button key={page[0]} onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
+              <Link 
+                key={page[0]} 
+                style={{ textDecoration: 'none' }} 
+                to={page[1] === 'random' ? '#' : `/${page[1]}`}
+                onClick={page[1] === 'random' ? handleRandomPersonality : undefined}
+              >
+                <Button 
+                  key={page[0]} 
+                  onClick={handleCloseNavMenu} 
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
                   {page[0]}
                 </Button>
               </Link>
             ))}
           </Box>
-          
+
           {/* Pesquisa */}
           <ComboBox />
          

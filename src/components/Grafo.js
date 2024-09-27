@@ -259,20 +259,9 @@ function VisNetwork() {
 
   return (
     <>
-      <Box alignItems="center">
-        <div
-          ref={container}
-          style={{
-            marginTop: '100px',
-            height: '650px',
-            width: '1250px',
-            border: '1px solid rgb(0, 0, 0)',
-          }}
-        ></div>
-      </Box>
 
       {/* select personalities */}
-      <Grid container sx={{ paddingTop: 2 }}>
+      <Grid container sx={{ paddingTop: 9 }}>
         <Grid item xs={4} />
         <Grid item xs={4} sx={{ paddingTop: 2 }}>
           <Select class="centered" isMulti value={selectedOption} onChange={handleChange} options={personalities} />
@@ -300,7 +289,7 @@ function VisNetwork() {
       </Grid>
 
       {/* switch buttons */}
-      <Grid container alignItems="center" spacing={1} sx={{ width: '80%', margin: 'auto', paddingTop: -1 }}>
+      <Grid container alignItems="center" spacing={0} sx={{ width: '80%', margin: 'auto', paddingTop: -1 }}>
         <Grid item xs={2} />
         <Grid item xs={2} container direction="column" alignItems="center">
           <TextField
@@ -399,6 +388,19 @@ function VisNetwork() {
           </Link>
         </Box>
       </Popover>
+
+      <Box alignItems="center">
+        <div
+          ref={container}
+          style={{
+            marginTop: '10px',
+            height: '650px',
+            width: '1250px',
+            border: '1px solid rgb(0, 0, 0)',
+          }}
+        ></div>
+      </Box>
+
     </>
   );
 }
