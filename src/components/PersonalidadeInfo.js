@@ -11,6 +11,7 @@ import { SiWikidata } from 'react-icons/si'
 import { HiAcademicCap } from 'react-icons/hi'
 import { ResponsiveBar } from '@nivo/bar'
 import CardHeader from '@mui/material/CardHeader'
+import Button from '@mui/material/Button';
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
 
@@ -41,107 +42,123 @@ function FillIn(elements, url) {
   )
 }
 
-function ArticlesYearBar(data) {
+function ArticlesYearBar({ data }) {
+  const [showChart, setShowChart] = useState(true);
   const colors = { opposes: '#FF0000', supports: '#44861E', opposed_by: '#980000', supported_by: '#70DA33' }
   const getColor = (bar) => colors[bar.id]
 
+  const toggleChart = () => {
+    setShowChart(!showChart);
+  };
+
   return (
-    <ResponsiveBar
-      data={data.data}
-      keys={['opposes', 'supports', 'opposed_by', 'supported_by']}
-      indexBy="year"
-      margin={{ top: 150, right: 150, bottom: 150, left: 150 }}
-      padding={0.3}
-      groupMode="grouped"
-      valueScale={{ type: 'linear' }}
-      indexScale={{ type: 'band', round: true }}
-      colors={getColor}
-      defs={[
-        {
-          id: 'dots',
-          type: 'patternDots',
-          background: 'inherit',
-          color: '#38bcb2',
-          size: 4,
-          padding: 1,
-          stagger: true,
-        },
-        {
-          id: 'lines',
-          type: 'patternLines',
-          background: 'inherit',
-          color: '#dc3545',
-          rotation: -45,
-          lineWidth: 6,
-          spacing: 10,
-        },
-      ]}
-      fill={[
-        {
-          match: {
-            id: 'fries',
-          },
-          id: 'dots',
-        },
-        {
-          match: {
-            id: 'sandwich',
-          },
-          id: 'lines',
-        },
-      ]}
-      borderColor={{
-        from: 'color',
-        modifiers: [['darker', 1.6]],
-      }}
-      axisTop={null}
-      axisRight={null}
-      axisBottom={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: '',
-        legendPosition: 'middle',
-        legendOffset: 32,
-      }}
-      axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legendPosition: 'middle',
-        legendOffset: -40,
-      }}
-      labelSkipWidth={12}
-      labelSkipHeight={12}
-      labelTextColor={{
-        from: 'color',
-        modifiers: [['darker', 1.6]],
-      }}
-      legends={[
-        {
-          dataFrom: 'keys',
-          anchor: 'top',
-          direction: 'row',
-          justify: false,
-          translateX: 0,
-          translateY: -25,
-          itemsSpacing: 2,
-          itemWidth: 100,
-          itemHeight: 20,
-          itemDirection: 'left-to-right',
-          itemOpacity: 0.85,
-          symbolSize: 20,
-          effects: [
-            {
-              on: 'hover',
-              style: {
-                itemOpacity: 1,
+    <div>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, mb: 2 }}>
+        <Button variant="contained" onClick={toggleChart}>
+          {showChart ? 'Hide Chart' : 'Show Chart'}
+        </Button>
+      </Box>
+      {showChart && (
+        <div style={{ height: 500 }}>
+          <ResponsiveBar
+            data={data}
+            keys={['opposes', 'supports', 'opposed_by', 'supported_by']}
+            indexBy="year"
+            margin={{ top: 150, right: 150, bottom: 150, left: 150 }}
+            padding={0.3}
+            groupMode="grouped"
+            valueScale={{ type: 'linear' }}
+            indexScale={{ type: 'band', round: true }}
+            colors={getColor}
+            defs={[
+              {
+                id: 'dots',
+                type: 'patternDots',
+                background: 'inherit',
+                color: '#38bcb2',
+                size: 4,
+                padding: 1,
+                stagger: true,
               },
-            },
-          ],
-        },
-      ]}
-    />
+              {
+                id: 'lines',
+                type: 'patternLines',
+                background: 'inherit',
+                color: '#dc3545',
+                rotation: -45,
+                lineWidth: 6,
+                spacing: 10,
+              },
+            ]}
+            fill={[
+              {
+                match: {
+                  id: 'fries',
+                },
+                id: 'dots',
+              },
+              {
+                match: {
+                  id: 'sandwich',
+                },
+                id: 'lines',
+              },
+            ]}
+            borderColor={{
+              from: 'color',
+              modifiers: [['darker', 1.6]],
+            }}
+            axisTop={null}
+            axisRight={null}
+            axisBottom={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: '',
+              legendPosition: 'middle',
+              legendOffset: 32,
+            }}
+            axisLeft={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legendPosition: 'middle',
+              legendOffset: -40,
+            }}
+            labelSkipWidth={12}
+            labelSkipHeight={12}
+            labelTextColor={{
+              from: 'color',
+              modifiers: [['darker', 1.6]],
+            }}
+            legends={[
+              {
+                dataFrom: 'keys',
+                anchor: 'top',
+                direction: 'row',
+                justify: false,
+                translateX: 0,
+                translateY: -25,
+                itemsSpacing: 2,
+                itemWidth: 100,
+                itemHeight: 20,
+                itemDirection: 'left-to-right',
+                itemOpacity: 0.85,
+                symbolSize: 20,
+                effects: [
+                  {
+                    on: 'hover',
+                    style: {
+                      itemOpacity: 1,
+                    },
+                  },
+                ],
+              },
+            ]}
+          />
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -218,9 +235,7 @@ function PersonalidadeInfo({ data }) {
           </Grid>
         </Grid>
       </Box>
-      <div style={{ height: 500 }}>
-        <ArticlesYearBar data={data.relationships_charts} />
-      </div>
+      <ArticlesYearBar data={data.relationships_charts} />
     </>
   )
 }

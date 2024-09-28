@@ -228,35 +228,6 @@ function VisNetwork() {
     };
   }, [nodes, edges]);
 
-
-  /*
-  useEffect(() => {
-    const network = container.current && new Network(container.current, { nodes, edges }, options);
-    network.on('click', (params) => {
-      if (params.nodes.length > 0) {
-        const nodeId = params.nodes[0];
-        const nodeName = network.body.nodes[nodeId].options.label
-        setNodePopoverContent({ id: nodeId, label: nodeName });
-        setNodePopoverAnchor(params.event.center);
-        setNodePopoverOpen(true);
-      }
-      if (params.edges.length > 0) {
-        const edgeId = params.edges[0];
-        const edge = network.body.edges[edgeId];
-        const [min, max] = Yearsvalues;
-        if (edge.title === 'apoia') {
-          setEdgePopoverContent({ from: edge.from.id, to: edge.to.id, rel_type: 'ent1_supports_ent2', start: min, end: max });
-        } else if (edge.title === 'opõe') {
-          setEdgePopoverContent({ from: edge.from.id, to: edge.to.id, rel_type: 'ent1_opposes_ent2', start: min, end: max });
-        }        
-        setEdgePopoverAnchor(params.event.center);
-        setEdgePopoverOpen(true);
-      }
-    });
-  }, [container, nodes, edges]);
-  */
-
-
   return (
     <>
 
