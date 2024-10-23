@@ -20,6 +20,9 @@ import Collapse from '@mui/material/Collapse'
 import { red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
 import { styled } from '@mui/material/styles'
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 // import { Stack } from '@mui/material'
 
 const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
@@ -168,53 +171,19 @@ function ProcessArticleLink(domain) {
 
 // loads news titles
 function NewsTitles(props) {
-  const [isOpenCollapse, setIsOpenCollapse] = React.useState(null)
+  const [isOpenCollapse, setIsOpenCollapse] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedNewsIndex, setSelectedNewsIndex] = React.useState(null);
 
-  const handleOpen = (clickedIndex) => {
-    if (isOpenCollapse === clickedIndex) {
-      setIsOpenCollapse(null)
-    } else {
-      setIsOpenCollapse(clickedIndex)
-    }
-  }
-
-  const { data } = props
+  const { data } = props;
 
   if (data.length === 0) {
     return (
       <Grid item sx={{ paddingTop: 1.5 }}>
         <Alert severity="info">Não foram encontrados resultados.</Alert>
       </Grid>
-    )
+    );
   }
-
-const translateRelType = (rel_type) => {
-  let translatedText;
-  let color;
-
-
-  // Translate rel_type and assign color
-  switch (rel_type.rel_type) {
-    case 'ent1_opposes_ent2':
-    case 'opposes':
-      translatedText = 'opõe-se';
-      color = 'red';
-      break;
-    case 'ent1_supports_ent2':
-    case 'supports':
-      translatedText = 'apoia';
-      color = 'green';
-      break;
-    default:
-      // For any other rel_type, return null
-      return null;
-  }
-
-  // Return JSX element with translated text and color
-  return (
-    <span style={{ color }}>{translatedText}</span>
-  );
-};
 
   const headlines = data.map((RawData) => ({
     title: RawData.title,
@@ -222,24 +191,88 @@ const translateRelType = (rel_type) => {
     url: RawData.arquivo_doc,
     date: RawData.date,
     rel_type: RawData.rel_type,
-    
-    // rel_image: ProcessRelationship(RawData.rel_type),
-    
     original_url: RawData.original_url,
     original_url_image: ProcessArticleLink(RawData.domain),
-
     main_ent_image: RawData.ent1_img,
     main_ent_name: RawData.ent1_str,
     main_ent_url: RawData.ent1_id,
-
     other_ent_image: RawData.ent2_img,
     other_ent_name: RawData.ent2_str,
     other_ent_url: RawData.ent2_id,
-  }))
+  }));
+
+  const handleOpen = (clickedIndex) => {
+    if (isOpenCollapse === clickedIndex) {
+      setIsOpenCollapse(null);
+    } else {
+      setIsOpenCollapse(clickedIndex);
+    }
+  };
+
+  const handleCorrectClick = (event, index) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedNewsIndex(index);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setSelectedNewsIndex(null);
+  };
+
+  const handleRelationshipSelect = async (relationship) => {
+    if (selectedNewsIndex !== null) {
+      const selectedNews = headlines[selectedNewsIndex];
+      const dataToSend = {
+        title: selectedNews.title,
+        selectedRelationship: relationship,
+      };
+
+      try {
+        const response = await fetch(`${process.env.REACT_APP_POLITIQUICES_API}/timeline/?`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataToSend),
+        });
+        const respo = await response.json();
+        console.log(respo);
+      } catch (error) {
+        console.error('Error sending data:', error);
+      }
+    }
+    handleClose();
+  };
+
+  const translateRelType = (rel_type) => {
+    let translatedText;
+    let color;
+
+
+    // Translate rel_type and assign color
+    switch (rel_type.rel_type) {
+      case 'ent1_opposes_ent2':
+      case 'opposes':
+        translatedText = 'opõe-se';
+        color = 'red';
+        break;
+      case 'ent1_supports_ent2':
+      case 'supports':
+        translatedText = 'apoia';
+        color = 'green';
+        break;
+      default:
+        // For any other rel_type, return null
+        return null;
+    }
+
+    // Return JSX element with translated text and color
+    return (
+      <span style={{ color }}>{translatedText}</span>
+    );
+  };
 
   const titlesRendered = headlines.map((entry, index) => (
     <Grid item key={index} align="center" sx={{ display: 'flex', justifyContent: 'center' }}>
-      <Card sx={{ width: 750, margin: '1rem' }}>
+      <Card sx={{ width: 750, margin: '1rem', position: 'relative' }}>
         <CardHeader
           avatar={
             <Link href={`/personalidade/${entry.main_ent_url}`}>
@@ -270,15 +303,7 @@ const translateRelType = (rel_type) => {
             </Typography>}
         />
         <CardContent>
-          <Typography variant="h6" color="text.secondary" 
-          style={{ 
-            color: "black", 
-            // fontFamily: "Times New Roman, Times, serif" 
-            // fontFamily: "Lobster, serif"
-            // fontFamily: "Playfair Display, serif"
-            // fontFamily: "Pacifico, serif"
-            // fontFamily: "Merriweather, serif"
-            }}>
+          <Typography variant="h6" color="text.secondary" style={{ color: "black" }}>
             {entry.title}
           </Typography>
         </CardContent>
@@ -323,11 +348,39 @@ const translateRelType = (rel_type) => {
           </ExpandMore>
           </IconButton>
         </CardActions>
+        
+        {/* Corrigir button positioned absolutely */}
+        <Button
+          size="small"
+          onClick={(event) => handleCorrectClick(event, index)}
+          sx={{
+            position: 'absolute',
+            bottom: 8,
+            right: 8,
+          }}
+        >
+          Corrigir
+        </Button>
       </Card>
     </Grid>
-  ))
+  ));
 
-  return titlesRendered
+  return (
+    <>
+      {titlesRendered}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={() => handleRelationshipSelect('ent1_supports_ent2')}>ent1 supports ent2</MenuItem>
+        <MenuItem onClick={() => handleRelationshipSelect('ent1_opposes_ent2')}>ent1 opposes ent2</MenuItem>
+        <MenuItem onClick={() => handleRelationshipSelect('ent2_supports_ent1')}>ent2 supports ent1</MenuItem>
+        <MenuItem onClick={() => handleRelationshipSelect('ent2_opposes_ent1')}>ent2 opposes ent1</MenuItem>
+        <MenuItem onClick={() => handleRelationshipSelect('other')}>other</MenuItem>
+      </Menu>
+    </>
+  );
 }
 
 export default NewsTitles
