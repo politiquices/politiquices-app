@@ -16,6 +16,7 @@ import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import CardActions from '@mui/material/CardActions'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import EditIcon from '@mui/icons-material/Edit';
 import Collapse from '@mui/material/Collapse'
 import { red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
@@ -223,17 +224,26 @@ function NewsTitles(props) {
     if (selectedNewsIndex !== null) {
       const selectedNews = headlines[selectedNewsIndex];
       const dataToSend = {
-        title: selectedNews.title,
-        selectedRelationship: relationship,
+          title: selectedNews.title,
+          selectedRelationship: relationship,
+          paragraph: selectedNews.paragraph,
+          url: selectedNews.url,
+          date: selectedNews.date,
+          main_ent_name: selectedNews.main_ent_name,
+          main_ent_url: selectedNews.main_ent_url,
+          other_ent_name: selectedNews.other_ent_name,
+          other_ent_url: selectedNews.other_ent_url,
+          original_rel_type: selectedNews.rel_type,
+          timestamp: new Date().toISOString(),
       };
 
       try {
-        const response = await fetch(`${process.env.REACT_APP_POLITIQUICES_API}/timeline/?`, {
+        const response = await fetch(`${process.env.REACT_APP_POLITIQUICES_API}/corrections/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(dataToSend),
         });
-        const respo = await response.json();
+        const respo = await response.json();        
         console.log(respo);
       } catch (error) {
         console.error('Error sending data:', error);
@@ -359,7 +369,7 @@ function NewsTitles(props) {
             right: 8,
           }}
         >
-          Corrigir
+          <EditIcon />
         </Button>
       </Card>
     </Grid>
