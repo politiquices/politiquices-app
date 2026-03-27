@@ -1,6 +1,4 @@
-/* eslint-disable react/jsx-fragments */
-/* eslint-disable react/jsx-no-useless-fragment */
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Select from 'react-select' // https://react-select.com/home
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -12,16 +10,14 @@ import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
 import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
 
-let state = { selectedOption: null }
-let onlyAmongSelected = true
-let onlySentiment = true
-
 function Queries() {
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState()
   const [selectedOption, setSelectedOption] = useState()
   const [Yearsvalues, setValue] = useState([2000, 2024])
   const [personalities, setPersonalities] = useState()
+  const [onlyAmongSelected, setOnlyAmongSelected] = useState(true)
+  const [onlySentiment, setOnlySentiment] = useState(true)
   const [isError, setIsError] = useState(false)
 
   // read the persons.json to fill the select
@@ -50,7 +46,7 @@ function Queries() {
 
   const handleClick = async () => {
     // get selected persons
-    const result = state.map((a) => a.value)
+    const result = selectedOption ? selectedOption.map((a) => a.value) : []
     let params = ''
     for (let i = 0; i < result.length; i += 1) {
       params += `&q=${result[i]}`
@@ -80,23 +76,19 @@ function Queries() {
         setIsError(true)
         console.log(err)
       })
-    setSelectedOption(state)
   }
 
   // handle onChange event of the dropdown
   const handleChange = (e) => {
     setSelectedOption(e)
-    state = e
   }
 
-  // eslint-disable-next-line no-unused-vars
   const handleChangeRelationships = (e) => {
-    onlySentiment = e.target.checked
+    setOnlySentiment(e.target.checked)
   }
 
-  // eslint-disable-next-line no-unused-vars
   const handleChangePersons = (e) => {
-    onlyAmongSelected = e.target.checked
+    setOnlyAmongSelected(e.target.checked)
   }
 
   const handleChangeYears = (event, yearsValues) => {
@@ -104,7 +96,7 @@ function Queries() {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Typography component="div" sx={{ paddingTop: 15 }}>
         <Box sx={{ textAlign: 'center', m: 1 }}>
         Escolha as personalidades e um intervalo de tempo para ver as notícias ontem interagem
@@ -113,8 +105,7 @@ function Queries() {
       {loading ? (
         <CircularIndeterminate />
       ) : (
-        <React.Fragment>
-          
+        <>
           {/* select personalities */}
           <Grid container sx={{ paddingTop: 2 }}>
             <Grid item xs={4} />
@@ -148,7 +139,7 @@ function Queries() {
             <Grid item xs={2} />
             <Grid item xs={4} container direction="column" alignItems="center">
               <Grid item>
-                <Switch defaultChecked={onlyAmongSelected} onChange={handleChangePersons} />
+                <Switch checked={onlyAmongSelected} onChange={handleChangePersons} />
               </Grid>
               <Grid item>
                 <Typography variant="body1">Apenas entre os seleccionados</Typography>
@@ -156,7 +147,7 @@ function Queries() {
             </Grid>
             <Grid item xs={4} container direction="column" alignItems="center">
               <Grid item>
-                <Switch defaultChecked={onlySentiment} onChange={handleChangeRelationships} />
+                <Switch checked={onlySentiment} onChange={handleChangeRelationships} />
               </Grid>
               <Grid item>
                 <Typography variant="body1">Apenas notícias apoio/oposição</Typography>
@@ -196,9 +187,9 @@ function Queries() {
             {isError && <div>Erro ao carregar dados.</div>}
             {!response ? <p /> : <NewsTitles data={response} />}
           </Grid>
-        </React.Fragment>
+        </>
       )}
-    </React.Fragment>
+    </>
   )
 }
 

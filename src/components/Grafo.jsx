@@ -15,10 +15,6 @@ import Popover from '@mui/material/Popover';
 import Link from '@mui/material/Link';
 import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
 
-let state = { selectedOption: null };
-let onlyAmongSelected = true;
-let onlySentiment = true;
-
 function VisNetwork() {
   const container = useRef(null);
   const networkRef = useRef(null);
@@ -80,6 +76,8 @@ function VisNetwork() {
   const [Yearsvalues, setValue] = useState([2000, 2024]);
   const [personalities, setPersonalities] = useState();
   const [minNoticias, setMinNoticias] = useState(10);
+  const [onlyAmongSelected, setOnlyAmongSelected] = useState(true);
+  const [onlySentiment, setOnlySentiment] = useState(true);
   const [isError, setIsError] = useState(false);
   
   const [nodePopoverOpen, setNodePopoverOpen] = useState(false);
@@ -114,7 +112,7 @@ function VisNetwork() {
   // handle 'Actualizar' button click
   const handleClick = async () => {
     // get selected persons
-    const result = state.map((a) => a.value);
+    const result = selectedOption ? selectedOption.map((a) => a.value) : [];
     let params = '';
     for (let i = 0; i < result.length; i += 1) {
       params += `&q=${result[i]}`;
@@ -150,21 +148,19 @@ function VisNetwork() {
         setIsError(true);
         console.log(err);
       });
-    setSelectedOption(state);
   };
 
   // handle onChange event of the dropdown
   const handleChange = (e) => {
     setSelectedOption(e);
-    state = e;
   };
 
   const handleChangeRelationships = (e) => {
-    onlySentiment = e.target.checked;
+    setOnlySentiment(e.target.checked);
   };
 
   const handleChangePersons = (e) => {
-    onlyAmongSelected = e.target.checked;
+    setOnlyAmongSelected(e.target.checked);
   };
 
   const handleChangeYears = (event, yearsValues) => {
@@ -280,7 +276,7 @@ function VisNetwork() {
         </Grid>
         <Grid item xs={4} container direction="column" alignItems="center">
           <Grid item>
-            <Switch defaultChecked={onlyAmongSelected} onChange={handleChangePersons} />
+            <Switch checked={onlyAmongSelected} onChange={handleChangePersons} />
           </Grid>
           <Grid item>
             <Typography variant="body1">Apenas entre os seleccionados</Typography>
@@ -288,7 +284,7 @@ function VisNetwork() {
         </Grid>
         <Grid item xs={4} container direction="column" alignItems="center">
           <Grid item>
-            <Switch defaultChecked={onlySentiment} onChange={handleChangeRelationships} />
+            <Switch checked={onlySentiment} onChange={handleChangeRelationships} />
           </Grid>
           <Grid item>
             <Typography variant="body1">Apenas notícias apoio/oposição</Typography>
