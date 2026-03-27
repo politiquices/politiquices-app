@@ -24,6 +24,7 @@ import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { postCorrection } from '../../api'
 // import { Stack } from '@mui/material'
 
 const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
@@ -235,12 +236,7 @@ function NewsTitles(props) {
       };
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_POLITIQUICES_API}/corrections/`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(dataToSend),
-        });
-        await response.json();
+        await postCorrection(dataToSend);
       } catch (error) {
         console.error('Error sending data:', error);
       }

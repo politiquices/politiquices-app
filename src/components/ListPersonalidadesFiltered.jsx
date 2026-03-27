@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
+import { getPersonalitiesFiltered } from '../api'
 
 function ListPersonalidadesFiltered(personalities) {
   const headlines = personalities.data.map((rawData) => ({
@@ -27,60 +28,27 @@ function ListPersonalidadesFiltered(personalities) {
 }
 
 function FetchPersonalidades(requestType) {
-  const Base = import.meta.env.VITE_POLITIQUICES_API
-  let Full = ''
-  // use object's key name to create variables and assign them with the value from the object for the same key
   const { type } = requestType
   const { id } = useParams()
-
-  switch (type) {
-    case 'education':
-      Full = `${Base}/personalities/educated_at/${id}`
-      break
-
-    case 'occupation':
-      Full = `${Base}/personalities/occupation/${id}`
-      break
-
-    case 'government':
-      Full = `${Base}/personalities/government/${id}`
-      break
-
-    case 'assembly':
-      Full = `${Base}/personalities/assembly/${id}`
-      break
-
-    case 'public_office':
-      Full = `${Base}/personalities/public_office/${id}`
-      break
-
-    case 'party':
-      Full = `${Base}/personalities/party/${id}`
-      break
-
-    default:
-      break
-  }
 
   const [data, setNotes] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
   const fetchData = () => {
     setIsLoading(true)
-    fetch(Full)
-      .then((response) => response.json())
+    getPersonalitiesFiltered(type, id)
       .then((personalities) => {
         setIsLoading(false)
         setNotes(personalities)
       })
-      .catch((error) => {
+      .catch(() => {
         setIsLoading(false)
         setIsError(true)
       })
   }
   useEffect(() => {
     fetchData()
-  }, [Full])
+  }, [type, id])
   if (isLoading) {
     return <div>Loading...</div>
   }

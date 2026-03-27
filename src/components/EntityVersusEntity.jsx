@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid'
 import { useParams } from 'react-router-dom'
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
+import { getRelationships } from '../api'
 
 function EntityVersusEntity() {
   const { ent1, ent2, relType, start, end} = useParams()
@@ -13,13 +14,12 @@ function EntityVersusEntity() {
   const fetchData = () => {
 
     setIsLoading(true)
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/relationships/${ent1}/${relType}/${ent2}/${start}/${end}`)
-      .then((response) => response.json())
+    getRelationships(ent1, relType, ent2, start, end)
       .then((data) => {
         setIsLoading(false)
         setData(data)
       })
-      .catch((error) => {
+      .catch(() => {
         setIsLoading(false)
         setIsError(true)
       })

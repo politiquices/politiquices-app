@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
 import Link from '@mui/material/Link';
 import CircularProgress from '@mui/material/CircularProgress';
+import { getPersonalitiesPaged } from '../api'
 
 function ListPersonalidades({ personalities }) {
   return personalities.map((entry) => (
@@ -25,8 +26,7 @@ function FetchPersonalidades() {
 
   const fetchData = () => {
     setIsLoading(true);
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/personalities/${pageRef.current}`)
-      .then((response) => response.json())
+    getPersonalitiesPaged(pageRef.current)
       .then((data) => {
         setIsLoading(false);
         setPersonalities((prevPersonalities) => [...prevPersonalities, ...data]);
@@ -34,7 +34,7 @@ function FetchPersonalidades() {
         pageRef.current++;
         setHasMore(data.length > 0);
       })
-      .catch((error) => {
+      .catch(() => {
         setIsLoading(false);
         setIsError(true);
       });

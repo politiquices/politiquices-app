@@ -11,6 +11,7 @@ import {
 } from 'recharts'
 import Typography from '@mui/material/Typography'
 import CircularIndeterminate from './utils/Circular'
+import { getStats } from '../api'
 
 function ArticlesYearBar({ data }) {
   return (
@@ -56,13 +57,12 @@ function Stats() {
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/stats`)
-      .then((response) => response.json())
+    getStats()
       .then((stats) => {
         setIsLoading(false)
         setData(stats)
       })
-      .catch((error) => {
+      .catch(() => {
         setIsLoading(false)
         setIsError(true)
       })

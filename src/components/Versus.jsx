@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
 import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
+import { getPersonsAndParties, getQueries } from '../api'
 
 const relations = [
   {
@@ -45,16 +46,12 @@ function Versus() {
   // read the persons.json to fill the select
   function loadPersonalities() {
     setLoading(true)
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/persons_and_parties/`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
+    getPersonsAndParties()
       .then((data) => {
         setPersonalities(data)
         setLoading(false)
       })
-      .catch((err) => {
+      .catch(() => {
         setLoading(false)
         setIsError(true)
       })
@@ -66,26 +63,13 @@ function Versus() {
 
   const handleClick = async () => {
     const [min, max] = Yearsvalues
-    let params = ''
-
-    params += `&ent1=${selectedOptionLeft.value}`
-    params += `&ent2=${selectedOptionRight.value}`
-    params += `&rel_type=${selectedRelType.value}`
-    params += `&start=${min}`
-    params += `&end=${max}`
-
     setLoading(true)
-
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/queries?${params}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
+    getQueries({ ent1: selectedOptionLeft.value, ent2: selectedOptionRight.value, relType: selectedRelType.value, start: min, end: max })
       .then((data) => {
         setResponse(data)
         setLoading(false)
       })
-      .catch((err) => {
+      .catch(() => {
         setLoading(false)
         setIsError(true)
       })

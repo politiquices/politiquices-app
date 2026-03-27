@@ -14,6 +14,7 @@ import TextField from '@mui/material/TextField';
 import Popover from '@mui/material/Popover';
 import Link from '@mui/material/Link';
 import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
+import { getPersons, getTimeline } from '../api'
 
 function VisNetwork() {
   const container = useRef(null);
@@ -91,15 +92,11 @@ function VisNetwork() {
 
   // read the persons.json to fill the select
   function loadPersonalities() {
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/persons/`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
+    getPersons()
       .then((data) => {
         setPersonalities(data);
       })
-      .catch((err) => {
+      .catch(() => {
         setIsError(true);
       });
   }
@@ -110,32 +107,14 @@ function VisNetwork() {
 
   // handle 'Actualizar' button click
   const handleClick = async () => {
-    // get selected persons
-    const result = selectedOption ? selectedOption.map((a) => a.value) : [];
-    let params = '';
-    for (let i = 0; i < result.length; i += 1) {
-      params += `&q=${result[i]}`;
-    }
-
-    // get years range
+    const persons = selectedOption ? selectedOption.map((a) => a.value) : [];
     const [min, max] = Yearsvalues;
-
-    params += `&selected=${onlyAmongSelected}`;
-    params += `&sentiment=${onlySentiment}`;
-    params += `&start=${min}`;
-    params += `&end=${max}`;
-    params += `&min_freq=${minNoticias}`;
-
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/timeline/?${params}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
+    getTimeline({ persons, onlyAmongSelected, onlySentiment, start: min, end: max, minFreq: minNoticias })
       .then((data) => {
         setNodes(data.nodes);
         setEdges(data.edges);
       })
-      .catch((err) => {
+      .catch(() => {
         setIsError(true);
       });
   };

@@ -14,6 +14,7 @@ import CardHeader from '@mui/material/CardHeader'
 import Button from '@mui/material/Button';
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
+import { getPersonality, getPersonalityRelationships, getPersonalityTopRelated } from '../api'
 import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
 
 
@@ -260,42 +261,15 @@ function FetchPersonalidade() {
   const [isError, setIsError] = useState(false)
 
   const fetchData = () => {
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/personality/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setIsLoading(false)
-        setInfo(data)
-      })
-      .catch((error) => {
-        setIsLoading(false)
-        setIsError(true)
-      })
+    getPersonality(id).then(setInfo).catch(() => { setIsLoading(false); setIsError(true) })
   }
 
   const fetchDataHeadlines = () => {
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/personality/relationships/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setIsLoading(false)
-        setHeadlines(data)
-      })
-      .catch((error) => {
-        setIsLoading(false)
-        setIsError(true)
-      })
+    getPersonalityRelationships(id).then(setHeadlines).catch(() => { setIsLoading(false); setIsError(true) })
   }
 
   const fetchTopRelated = () => {
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/personality/top_related_personalities/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setIsLoading(false)
-        setTopRelated(data)
-      })
-      .catch((error) => {
-        setIsLoading(false)
-        setIsError(true)
-      })
+    getPersonalityTopRelated(id).then(setTopRelated).catch(() => { setIsLoading(false); setIsError(true) })
   }
 
   useEffect(() => {

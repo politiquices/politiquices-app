@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography'
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
 import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
+import { getPersons, getTimeline } from '../api'
 
 function Queries() {
   const [loading, setLoading] = useState(false)
@@ -23,16 +24,12 @@ function Queries() {
   // read the persons.json to fill the select
   function loadPersonalities() {
     setLoading(true)
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/persons/`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
+    getPersons()
       .then((data) => {
         setPersonalities(data)
         setLoading(false)
       })
-      .catch((err) => {
+      .catch(() => {
         setLoading(false)
         setIsError(true)
       })
@@ -43,33 +40,15 @@ function Queries() {
   }, [])
 
   const handleClick = async () => {
-    // get selected persons
-    const result = selectedOption ? selectedOption.map((a) => a.value) : []
-    let params = ''
-    for (let i = 0; i < result.length; i += 1) {
-      params += `&q=${result[i]}`
-    }
-
-    // get years range
+    const persons = selectedOption ? selectedOption.map((a) => a.value) : []
     const [min, max] = Yearsvalues
-
-    params += `&selected=${onlyAmongSelected}`
-    params += `&sentiment=${onlySentiment}`
-    params += `&start=${min}`
-    params += `&end=${max}`
-
     setLoading(true)
-
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/timeline/?${params}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
+    getTimeline({ persons, onlyAmongSelected, onlySentiment, start: min, end: max })
       .then((data) => {
         setResponse(data.news)
         setLoading(false)
       })
-      .catch((err) => {
+      .catch(() => {
         setLoading(false)
         setIsError(true)
       })

@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid'
 import { TextField, Typography } from '@mui/material'
 import CircularIndeterminate from './utils/Circular'
 import Answers from './utils/Answers'
+import { getQA } from '../api'
 
 function Pesquisa() {
   const [loading, setIsLoading] = useState(false)
@@ -15,13 +16,12 @@ function Pesquisa() {
 
   const handleClick = async () => {
     setIsLoading(true)
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/qa/${question}`)
-      .then((response) => response.json())
+    getQA(question)
       .then((answers) => {
         setIsLoading(false)
         setData(answers)
       })
-      .catch((error) => {
+      .catch(() => {
         setIsLoading(false)
         setIsError(true)
       })

@@ -15,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { Link } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
+import { getPersonsAndParties, getParties } from '../../api'
 
 const pages = [
   ['Home', 'home'],
@@ -103,30 +104,20 @@ function NewResponsiveAppBar() {
 
   // read the persons.json to fill the select
   function loadPersonalities() {
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/persons_and_parties/`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
+    getPersonsAndParties()
       .then((data) => {
         setPersonalities(data)
       })
-      .catch((err) => {
-      })
+      .catch(() => {})
   }
 
   function loadParties() {
-    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/parties/`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
+    getParties()
       .then((data) => {
         const partiesWikis = new Set(data.map((item) => item.wiki_id));
         setParties(partiesWikis)
       })
-      .catch((err) => {
-      })
+      .catch(() => {})
   }
 
   useEffect(() => {
