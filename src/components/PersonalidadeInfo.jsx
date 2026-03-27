@@ -9,7 +9,7 @@ import Avatar from '@mui/material/Avatar'
 import Stack from '@mui/material/Stack'
 import { SiWikidata } from 'react-icons/si'
 import { HiAcademicCap } from 'react-icons/hi'
-import { ResponsiveBar } from '@nivo/bar'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import CardHeader from '@mui/material/CardHeader'
 import Button from '@mui/material/Button';
 import NewsTitles from './utils/NewsTitles'
@@ -42,119 +42,28 @@ function FillIn(elements, url) {
 
 function ArticlesYearBar({ data }) {
   const [showChart, setShowChart] = useState(true);
-  const colors = { opposes: '#FF0000', supports: '#44861E', opposed_by: '#980000', supported_by: '#70DA33' }
-  const getColor = (bar) => colors[bar.id]
-
-  const toggleChart = () => {
-    setShowChart(!showChart);
-  };
 
   return (
     <div>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, mb: 2 }}>
-        <Button variant="contained" onClick={toggleChart}>
+        <Button variant="contained" onClick={() => setShowChart(!showChart)}>
           {showChart ? 'Hide Chart' : 'Show Chart'}
         </Button>
       </Box>
       {showChart && (
-        <div style={{ height: 500 }}>
-          <ResponsiveBar
-            data={data}
-            keys={['opposes', 'supports', 'opposed_by', 'supported_by']}
-            indexBy="year"
-            margin={{ top: 150, right: 150, bottom: 150, left: 150 }}
-            padding={0.3}
-            groupMode="grouped"
-            valueScale={{ type: 'linear' }}
-            indexScale={{ type: 'band', round: true }}
-            colors={getColor}
-            defs={[
-              {
-                id: 'dots',
-                type: 'patternDots',
-                background: 'inherit',
-                color: '#38bcb2',
-                size: 4,
-                padding: 1,
-                stagger: true,
-              },
-              {
-                id: 'lines',
-                type: 'patternLines',
-                background: 'inherit',
-                color: '#dc3545',
-                rotation: -45,
-                lineWidth: 6,
-                spacing: 10,
-              },
-            ]}
-            fill={[
-              {
-                match: {
-                  id: 'fries',
-                },
-                id: 'dots',
-              },
-              {
-                match: {
-                  id: 'sandwich',
-                },
-                id: 'lines',
-              },
-            ]}
-            borderColor={{
-              from: 'color',
-              modifiers: [['darker', 1.6]],
-            }}
-            axisTop={null}
-            axisRight={null}
-            axisBottom={{
-              tickSize: 5,
-              tickPadding: 5,
-              tickRotation: 0,
-              legend: '',
-              legendPosition: 'middle',
-              legendOffset: 32,
-            }}
-            axisLeft={{
-              tickSize: 5,
-              tickPadding: 5,
-              tickRotation: 0,
-              legendPosition: 'middle',
-              legendOffset: -40,
-            }}
-            labelSkipWidth={12}
-            labelSkipHeight={12}
-            labelTextColor={{
-              from: 'color',
-              modifiers: [['darker', 1.6]],
-            }}
-            legends={[
-              {
-                dataFrom: 'keys',
-                anchor: 'top',
-                direction: 'row',
-                justify: false,
-                translateX: 0,
-                translateY: -25,
-                itemsSpacing: 2,
-                itemWidth: 100,
-                itemHeight: 20,
-                itemDirection: 'left-to-right',
-                itemOpacity: 0.85,
-                symbolSize: 20,
-                effects: [
-                  {
-                    on: 'hover',
-                    style: {
-                      itemOpacity: 1,
-                    },
-                  },
-                ],
-              },
-            ]}
-          />
-        </div>
+        <ResponsiveContainer width="100%" height={500}>
+          <BarChart data={data} margin={{ top: 20, right: 150, bottom: 20, left: 150 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="year" />
+            <YAxis />
+            <Tooltip />
+            <Legend verticalAlign="top" />
+            <Bar dataKey="opposes" fill="#FF0000" />
+            <Bar dataKey="supports" fill="#44861E" />
+            <Bar dataKey="opposed_by" fill="#980000" />
+            <Bar dataKey="supported_by" fill="#70DA33" />
+          </BarChart>
+        </ResponsiveContainer>
       )}
     </div>
   )
