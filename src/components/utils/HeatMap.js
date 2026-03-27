@@ -1,10 +1,9 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
 import HeatMap from "react-heatmap-grid";
+import { MIN_YEAR, MAX_YEAR } from '../../constants'
 
-const xLabels = ["1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", 
-                 "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", 
-                 "2018", "2019", "2020", "2021", "2022"];
+const xLabels = Array.from({ length: MAX_YEAR - MIN_YEAR + 1 }, (_, i) => String(MIN_YEAR + i));
 
 /*
 // Display only even labels

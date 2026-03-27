@@ -249,6 +249,9 @@ function Stats() {
     fetchData()
   }, [])
 
+  if (isError) {
+    return <div>Erro ao carregar dados.</div>
+  }
   if (isLoading || !data.year_values) {
     return <CircularIndeterminate />
   }

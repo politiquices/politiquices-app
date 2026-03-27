@@ -15,8 +15,7 @@ function ShowTopic({ data }) {
 function Topicos() {
   const { url } = useParams()
   const [topicData, setData] = useState([])
-  // const [isLoading, setIsLoading] = useState(false)
-  // const [isError, setIsError] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   console.log(url)
   const base64URL = window.btoa(url)
@@ -31,8 +30,7 @@ function Topicos() {
         console.log(data)
       })
       .catch((error) => {
-        // setIsLoading(false)
-        // setIsError(true)
+        setIsError(true)
         console.log(error)
       })
   }
@@ -43,6 +41,9 @@ function Topicos() {
 
   console.log(topicData)
 
+  if (isError) {
+    return <div>Erro ao carregar dados.</div>
+  }
   if (topicData) {
     return <div>{topicData && <ShowTopic data={topicData} />}</div>
   }

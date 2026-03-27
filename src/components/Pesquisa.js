@@ -11,6 +11,7 @@ function Pesquisa() {
   const [loading, setIsLoading] = useState(false)
   const [data, setData] = useState([])
   const [question, setQuestion] = useState('')
+  const [isError, setIsError] = useState(false)
 
   const handleClick = async () => {
     setIsLoading(true)
@@ -22,6 +23,7 @@ function Pesquisa() {
       })
       .catch((error) => {
         setIsLoading(false)
+        setIsError(true)
         console.log(error)
       })
   }
@@ -81,6 +83,7 @@ function Pesquisa() {
             style={{ minHeight: '100vh' }}
             sx={{ paddingTop: 2 }}
           >
+            {isError && <div>Erro ao carregar dados.</div>}
             {!data ? <p /> : <Answers data={data} />}
           </Grid>
         </React.Fragment>

@@ -45,6 +45,7 @@ function Partido(parties) {
 
 function Partidos() {
   const [data, setData] = useState([])
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_POLITIQUICES_API}/parties/`)
@@ -52,8 +53,15 @@ function Partidos() {
       .then((parties) => {
         setData(parties)
       })
+      .catch((error) => {
+        setIsError(true)
+        console.log(error)
+      })
   }, [])
 
+  if (isError) {
+    return <div>Erro ao carregar dados.</div>
+  }
   if (data.length === 0) {
     return <div className="row">Nothing loaded</div>
   }

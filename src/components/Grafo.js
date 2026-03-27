@@ -80,6 +80,7 @@ function VisNetwork() {
   const [Yearsvalues, setValue] = useState([2000, 2024]);
   const [personalities, setPersonalities] = useState();
   const [minNoticias, setMinNoticias] = useState(10);
+  const [isError, setIsError] = useState(false);
   
   const [nodePopoverOpen, setNodePopoverOpen] = useState(false);
   const [nodePopoverAnchor, setNodePopoverAnchor] = useState(null);
@@ -101,6 +102,7 @@ function VisNetwork() {
         setPersonalities(data);
       })
       .catch((err) => {
+        setIsError(true);
         console.log(err);
       });
   }
@@ -145,6 +147,7 @@ function VisNetwork() {
         console.log('data: ', data);
       })
       .catch((err) => {
+        setIsError(true);
         console.log(err);
       });
     setSelectedOption(state);
@@ -358,6 +361,8 @@ function VisNetwork() {
           </Link>
         </Box>
       </Popover>
+
+      {isError && <div>Erro ao carregar dados.</div>}
 
       <Box alignItems="center">
         <div

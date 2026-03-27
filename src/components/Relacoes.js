@@ -22,6 +22,7 @@ function Queries() {
   const [selectedOption, setSelectedOption] = useState()
   const [Yearsvalues, setValue] = useState([2000, 2024])
   const [personalities, setPersonalities] = useState()
+  const [isError, setIsError] = useState(false)
 
   // read the persons.json to fill the select
   function loadPersonalities() {
@@ -38,6 +39,7 @@ function Queries() {
       })
       .catch((err) => {
         setLoading(false)
+        setIsError(true)
         console.log(err)
       })
   }
@@ -75,6 +77,7 @@ function Queries() {
       })
       .catch((err) => {
         setLoading(false)
+        setIsError(true)
         console.log(err)
       })
     setSelectedOption(state)
@@ -190,6 +193,7 @@ function Queries() {
             style={{ minHeight: '100vh' }}
             sx={{ paddingTop: 10 }}
           >
+            {isError && <div>Erro ao carregar dados.</div>}
             {!response ? <p /> : <NewsTitles data={response} />}
           </Grid>
         </React.Fragment>
