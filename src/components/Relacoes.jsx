@@ -110,7 +110,7 @@ function Queries() {
           <Grid container sx={{ paddingTop: 2 }}>
             <Grid item xs={4} />
             <Grid item xs={4} sx={{ paddingTop: 2 }}>
-              <Select class="centered" isMulti value={selectedOption} onChange={handleChange} options={personalities} />
+              <Select className="centered" isMulti value={selectedOption} onChange={handleChange} options={personalities} />
             </Grid>
             <Grid item xs={4} />
           </Grid>

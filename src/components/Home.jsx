@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
       O politiquices.pt permite pesquisar relações de apoio ou oposição entre personalidades e partidos políticos
       expressas em títulos de notícias.
       <Typography component="div">
-        <Box sx={{ textAlign: 'left', s: 1 }}>
+        <Box sx={{ textAlign: 'left', m: 1 }}>
         <ul>
           <li>Explorar as relações de forma bilateral a penas entre duas entidades (e.g.: políticos ou partidos)</li>
           <li>Explorar a rede de notícias envolvendo vários actores políticos através de relações de apoio ou 

@@ -106,7 +106,7 @@ function PersonalidadeInfo({ data }) {
                 data.parties.map((entry) => (
                   <Link key={entry.wiki_id} href={`${baseURL}/party/${entry.wiki_id}`}>
                     <div>
-                      <img key="{index}" width="68" src={entry.image_url} alt={entry.name} />
+                      <img width="68" src={entry.image_url} alt={entry.name} />
                       <br />
                     </div>
                   </Link>

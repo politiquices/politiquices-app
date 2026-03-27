@@ -8,6 +8,7 @@ import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography';
 
+// import HeatMapComponent from './utils/HeatMap'
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
 import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
@@ -116,7 +117,7 @@ function Versus() {
         <Box sx={{ textAlign: 'left', m: 1 }}>
         Alguns exemplos de pesquisas que pode fazer envolvendo duas personalidades ou partidos políticos:
         <Typography component="div">
-          <Box sx={{ textAlign: 'left', s: 1 }}>
+          <Box sx={{ textAlign: 'left', m: 1 }}>
           <ul>
           <li>Que acusações fez Passos Coelho a José Sócrates?</li>
           <li>Quem do PS se opôs/apoiou a José Sócrates?</li>
@@ -140,7 +141,7 @@ function Versus() {
             {/* Ent1 */}
             <Grid item xs={3}>
               <Select
-                class="centered"
+                className="centered"
                 value={selectedOptionLeft}
                 onChange={(e) => handleChange(e, 'left')}
                 options={personalities}
@@ -150,7 +151,7 @@ function Versus() {
             {/* RelType */}
             <Grid item xs={2}>
               <Select
-                class="centered"
+                className="centered"
                 value={selectedRelType}
                 onChange={(e) => handleChange(e, 'rel_type')}
                 options={relations}
@@ -160,7 +161,7 @@ function Versus() {
             {/* Ent2 */}
             <Grid item xs={3}>
               <Select
-                class="centered"
+                className="centered"
                 value={selectedOptionRight}
                 onChange={(e) => handleChange(e, 'right')}
                 options={personalities}

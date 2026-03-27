@@ -63,9 +63,10 @@ function FetchPersonalidades(requestType) {
   }
 
   const [data, setNotes] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
   const fetchData = () => {
+    setIsLoading(true)
     fetch(Full)
       .then((response) => response.json())
       .then((personalities) => {
