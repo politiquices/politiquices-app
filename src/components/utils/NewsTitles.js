@@ -7,7 +7,7 @@
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
-import Link from '@material-ui/core/Link'
+import Link from '@mui/material/Link'
 import Alert from '@mui/material/Alert'
 import Avatar from '@mui/material/Avatar'
 import * as React from 'react'

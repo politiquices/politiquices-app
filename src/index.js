@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { Container, ThemeProvider, createTheme } from '@material-ui/core'
+import CssBaseline from "@mui/material/CssBaseline";
+import { Container, ThemeProvider, createTheme } from '@mui/material'
 import App from './App'
 
 const customTheme = createTheme({
@@ -22,22 +22,15 @@ const customTheme = createTheme({
       default: "#e0e0e0"
     },
     primary: {
-      main: "#2222dd",
+      main: "#1976d2",
       light: "#42a5f5",
       dark: "#1565c0"
     },
     secondary: {
-      main: "#1976dd",
+      main: "#1976d2",
       light: "#42a5f5",
       dark: "#1565c0"
     }    
-  },
-  overrides: {
-    AppBar: {
-      colorPrimary: {
-        backgroundColor: "#662E9B",
-      },
-    },
   },
 })
 

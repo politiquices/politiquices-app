@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 import Popover from '@mui/material/Popover';
 import Link from '@mui/material/Link';
 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
-import Link from '@material-ui/core/Link';
+import Link from '@mui/material/Link';
 import CircularProgress from '@mui/material/CircularProgress';
 
 function ListPersonalidades({ personalities }) {

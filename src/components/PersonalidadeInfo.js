@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import Link from '@material-ui/core/Link'
+import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'

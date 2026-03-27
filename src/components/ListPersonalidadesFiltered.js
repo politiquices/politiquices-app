@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
-import Link from '@material-ui/core/Link'
+import Link from '@mui/material/Link'
 
 function ListPersonalidadesFiltered(personalities) {
   const headlines = personalities.data.map((rawData) => ({
