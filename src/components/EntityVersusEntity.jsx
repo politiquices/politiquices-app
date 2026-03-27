@@ -15,7 +15,7 @@ function EntityVersusEntity() {
     console.log(ent1, ent2, relType, start, end)
 
     setIsLoading(true)
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/relationships/${ent1}/${relType}/${ent2}/${start}/${end}`)
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/relationships/${ent1}/${relType}/${ent2}/${start}/${end}`)
       .then((response) => response.json())
       .then((data) => {
         setIsLoading(false)

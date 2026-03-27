@@ -48,7 +48,7 @@ function Partidos() {
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/parties/`)
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/parties/`)
       .then((response) => response.json())
       .then((parties) => {
         setData(parties)

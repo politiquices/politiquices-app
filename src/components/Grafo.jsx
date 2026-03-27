@@ -93,7 +93,7 @@ function VisNetwork() {
 
   // read the persons.json to fill the select
   function loadPersonalities() {
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/persons/`, {
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/persons/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -131,7 +131,7 @@ function VisNetwork() {
 
     console.log(params);
 
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/timeline/?${params}`, {
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/timeline/?${params}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })

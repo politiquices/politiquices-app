@@ -15,7 +15,7 @@ function Pesquisa() {
 
   const handleClick = async () => {
     setIsLoading(true)
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/qa/${question}`)
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/qa/${question}`)
       .then((response) => response.json())
       .then((answers) => {
         setIsLoading(false)

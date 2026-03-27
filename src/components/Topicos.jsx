@@ -22,7 +22,7 @@ function Topicos() {
   console.log(base64URL)
 
   const fetchData = () => {
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/topics/${url}`)
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/topics/${url}`)
       .then((response) => response.json())
       .then((data) => {
         // setIsLoading(false)

@@ -25,7 +25,7 @@ function FetchPersonalidades() {
 
   const fetchData = () => {
     setIsLoading(true);
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/personalities/${pageRef.current}`)
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/personalities/${pageRef.current}`)
       .then((response) => response.json())
       .then((data) => {
         setIsLoading(false);

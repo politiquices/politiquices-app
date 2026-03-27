@@ -238,7 +238,7 @@ function NewsTitles(props) {
       };
 
       try {
-        const response = await fetch(`${process.env.REACT_APP_POLITIQUICES_API}/corrections/`, {
+        const response = await fetch(`${import.meta.env.VITE_POLITIQUICES_API}/corrections/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(dataToSend),

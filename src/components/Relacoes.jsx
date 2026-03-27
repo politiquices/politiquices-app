@@ -27,7 +27,7 @@ function Queries() {
   // read the persons.json to fill the select
   function loadPersonalities() {
     setLoading(true)
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/persons/`, {
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/persons/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -66,7 +66,7 @@ function Queries() {
 
     setLoading(true)
 
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/timeline/?${params}`, {
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/timeline/?${params}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })

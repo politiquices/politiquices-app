@@ -45,7 +45,7 @@ function Versus() {
   // read the persons.json to fill the select
   function loadPersonalities() {
     setLoading(true)
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/persons_and_parties/`, {
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/persons_and_parties/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -77,7 +77,7 @@ function Versus() {
 
     setLoading(true)
 
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/queries?${params}`, {
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/queries?${params}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })

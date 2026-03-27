@@ -351,7 +351,7 @@ function FetchPersonalidade() {
   const [isError, setIsError] = useState(false)
 
   const fetchData = () => {
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/personality/${id}`)
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/personality/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setIsLoading(false)
@@ -365,7 +365,7 @@ function FetchPersonalidade() {
   }
 
   const fetchDataHeadlines = () => {
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/personality/relationships/${id}`)
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/personality/relationships/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setIsLoading(false)
@@ -379,7 +379,7 @@ function FetchPersonalidade() {
   }
 
   const fetchTopRelated = () => {
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/personality/top_related_personalities/${id}`)
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/personality/top_related_personalities/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setIsLoading(false)

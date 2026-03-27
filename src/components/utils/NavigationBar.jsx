@@ -103,7 +103,7 @@ function NewResponsiveAppBar() {
 
   // read the persons.json to fill the select
   function loadPersonalities() {
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/persons_and_parties/`, {
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/persons_and_parties/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -117,7 +117,7 @@ function NewResponsiveAppBar() {
   }
 
   function loadParties() {
-    fetch(`${process.env.REACT_APP_POLITIQUICES_API}/parties/`, {
+    fetch(`${import.meta.env.VITE_POLITIQUICES_API}/parties/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
