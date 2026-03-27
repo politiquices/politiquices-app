@@ -12,12 +12,14 @@ import Estatistica from './components/Estatistica'
 import Sobre from './components/Sobre'
 import Pesquisa from './components/Pesquisa'
 import Home from './components/Home'
+import ErrorBoundary from './components/utils/ErrorBoundary'
 import './App.css';
 
 function App() {
   return (
     <>
       <NavigationBar />
+      <ErrorBoundary>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
@@ -37,6 +39,7 @@ function App() {
         <Route path="/assembly/:id" element={<ListPersonalidadesFiltered type="assembly" />} />
         <Route path="/party/:id" element={<ListPersonalidadesFiltered type="party" />} />
       </Routes>
+      </ErrorBoundary>
       <Footer/>
     </>
   )
