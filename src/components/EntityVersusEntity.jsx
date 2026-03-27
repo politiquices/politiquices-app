@@ -12,8 +12,6 @@ function EntityVersusEntity() {
 
   const fetchData = () => {
 
-    console.log(ent1, ent2, relType, start, end)
-
     setIsLoading(true)
     fetch(`${import.meta.env.VITE_POLITIQUICES_API}/relationships/${ent1}/${relType}/${ent2}/${start}/${end}`)
       .then((response) => response.json())
@@ -24,7 +22,6 @@ function EntityVersusEntity() {
       .catch((error) => {
         setIsLoading(false)
         setIsError(true)
-        console.log(error)
       })
   }
   useEffect(() => {

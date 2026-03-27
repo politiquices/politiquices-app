@@ -269,7 +269,6 @@ function FetchPersonalidade() {
       .catch((error) => {
         setIsLoading(false)
         setIsError(true)
-        console.log(error)
       })
   }
 
@@ -283,7 +282,6 @@ function FetchPersonalidade() {
       .catch((error) => {
         setIsLoading(false)
         setIsError(true)
-        console.log(error)
       })
   }
 
@@ -297,7 +295,6 @@ function FetchPersonalidade() {
       .catch((error) => {
         setIsLoading(false)
         setIsError(true)
-        console.log(error)
       })
   }
 

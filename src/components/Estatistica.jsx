@@ -65,7 +65,6 @@ function Stats() {
       .catch((error) => {
         setIsLoading(false)
         setIsError(true)
-        console.log(error)
       })
   }, [])
 

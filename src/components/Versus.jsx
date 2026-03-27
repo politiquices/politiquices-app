@@ -57,7 +57,6 @@ function Versus() {
       .catch((err) => {
         setLoading(false)
         setIsError(true)
-        console.log(err)
       })
   }
 
@@ -89,7 +88,6 @@ function Versus() {
       .catch((err) => {
         setLoading(false)
         setIsError(true)
-        console.log(err)
       })
   }
 

@@ -54,9 +54,6 @@ const TVI = '/assets/images/jornais/Logótipo_TVI.png'
 
 const ExpandMore = styled((props) => {
   
-  // const expand = props['aria-expanded']
-  // console.log('props: ', props)
-  // console.log('expanded: ', expand)
   const { ...other } = props
   return <IconButton {...other} />
 })(({ theme, expand }) => ({
@@ -243,8 +240,7 @@ function NewsTitles(props) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(dataToSend),
         });
-        const respo = await response.json();        
-        console.log(respo);
+        await response.json();
       } catch (error) {
         console.error('Error sending data:', error);
       }

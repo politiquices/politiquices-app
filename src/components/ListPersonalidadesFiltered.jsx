@@ -59,7 +59,7 @@ function FetchPersonalidades(requestType) {
       break
 
     default:
-      console.log('ERROR')
+      break
   }
 
   const [data, setNotes] = useState([])
@@ -76,7 +76,6 @@ function FetchPersonalidades(requestType) {
       .catch((error) => {
         setIsLoading(false)
         setIsError(true)
-        console.log(error)
       })
   }
   useEffect(() => {

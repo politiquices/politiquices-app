@@ -101,7 +101,6 @@ function VisNetwork() {
       })
       .catch((err) => {
         setIsError(true);
-        console.log(err);
       });
   }
 
@@ -127,26 +126,17 @@ function VisNetwork() {
     params += `&end=${max}`;
     params += `&min_freq=${minNoticias}`;
 
-    console.log(params);
-
     fetch(`${import.meta.env.VITE_POLITIQUICES_API}/timeline/?${params}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        console.log(data.nodes);
-        console.log(data.edges);
         setNodes(data.nodes);
         setEdges(data.edges);
-        console.log('nodes: ', nodes);
-        console.log('edges: ', edges);
-        console.log('data: ', data);
       })
       .catch((err) => {
         setIsError(true);
-        console.log(err);
       });
   };
 
@@ -201,11 +191,6 @@ function VisNetwork() {
         if (params.edges.length > 0) {
           const edgeId = params.edges[0];
           const edge = networkRef.current.body.edges[edgeId];
-          console.log(edgeId);
-          console.log(edge.id);
-          console.log(edge.title);
-          console.log(edge.from.id);
-          console.log(edge.to.id);
           const numNoticias = edges[edgeId-1].value;
           const [min, max] = Yearsvalues;
           if (edge.title === 'apoia') {

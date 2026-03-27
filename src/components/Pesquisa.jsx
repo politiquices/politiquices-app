@@ -24,7 +24,6 @@ function Pesquisa() {
       .catch((error) => {
         setIsLoading(false)
         setIsError(true)
-        console.log(error)
       })
   }
 

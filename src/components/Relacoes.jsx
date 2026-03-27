@@ -31,12 +31,10 @@ function Queries() {
       .then((data) => {
         setPersonalities(data)
         setLoading(false)
-        console.log('loaded')
       })
       .catch((err) => {
         setLoading(false)
         setIsError(true)
-        console.log(err)
       })
   }
 
@@ -74,7 +72,6 @@ function Queries() {
       .catch((err) => {
         setLoading(false)
         setIsError(true)
-        console.log(err)
       })
   }
 

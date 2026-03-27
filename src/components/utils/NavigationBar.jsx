@@ -112,7 +112,6 @@ function NewResponsiveAppBar() {
         setPersonalities(data)
       })
       .catch((err) => {
-        console.log(err)
       })
   }
 
@@ -124,11 +123,9 @@ function NewResponsiveAppBar() {
       .then((res) => res.json())
       .then((data) => {
         const partiesWikis = new Set(data.map((item) => item.wiki_id));
-        console.log(partiesWikis)
         setParties(partiesWikis)
       })
       .catch((err) => {
-        console.log(err)
       })
   }
 

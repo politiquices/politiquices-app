@@ -37,7 +37,6 @@ function FetchPersonalidades() {
       .catch((error) => {
         setIsLoading(false);
         setIsError(true);
-        console.log(error);
       });
   };
 
@@ -45,8 +44,6 @@ function FetchPersonalidades() {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && hasMore) {
         fetchData();
-        console.log('fetching more data');
-        console.log('page:', pageRef);
       }
     }, { threshold: 1 });
     if (loader.current) {
