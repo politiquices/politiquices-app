@@ -14,9 +14,7 @@ import CardHeader from '@mui/material/CardHeader'
 import Button from '@mui/material/Button';
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
-
-const minYear = 1994
-const maxYear = 2024
+import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
 
 
 function FillIn(elements, url) {

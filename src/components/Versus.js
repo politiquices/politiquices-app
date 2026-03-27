@@ -11,9 +11,7 @@ import Typography from '@mui/material/Typography';
 // import HeatMapComponent from './utils/HeatMap'
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
-
-const minYear = 1994
-const maxYear = 2024
+import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
 
 const relations = [
   {

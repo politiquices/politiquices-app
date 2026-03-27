@@ -10,13 +10,11 @@ import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
-
+import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
 
 let state = { selectedOption: null }
 let onlyAmongSelected = true
 let onlySentiment = true
-const minYear = 1994
-const maxYear = 2024
 
 function Queries() {
   const [loading, setLoading] = useState(false)
