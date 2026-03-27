@@ -396,7 +396,7 @@ function FetchPersonalidade() {
     fetchData()
     fetchDataHeadlines()
     fetchTopRelated()
-  }, [])
+  }, [id])
 
   if (isLoading || !info.relationships_charts || !headlines) {
     return <CircularIndeterminate />

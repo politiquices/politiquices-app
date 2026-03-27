@@ -29,7 +29,7 @@ function EntityVersusEntity() {
   }
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [ent1, ent2, relType, start, end])
 
   if (isLoading || !headlines) {
     return <CircularIndeterminate />

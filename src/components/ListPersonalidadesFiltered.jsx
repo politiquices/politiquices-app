@@ -80,7 +80,7 @@ function FetchPersonalidades(requestType) {
   }
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [Full])
   if (isLoading) {
     return <div>Loading...</div>
   }
