@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:5173/src/App.jsx)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:5173/src/components/utils/Circular.jsx\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:5173/src/index.jsx\")",
+      "Bash(curl -s \"http://localhost:5173/src/index.jsx\")",
+      "Bash(curl -s \"http://localhost:5173/node_modules/.vite/deps/@nivo_bar.js\")",
+      "Bash(pkill -f vite)",
+      "Bash(npm start:*)",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w %{http_code} http://localhost:5173/node_modules/.vite/deps/vis-network.js 2)",
+      "Bash(/dev/null echo:*)",
+      "Bash(curl -s -I \"http://localhost:5173/src/components/Estatistica.jsx\")",
+      "Bash(npm run:*)",
+      "Bash(curl -s \"http://localhost:5173/src/components/Estatistica.jsx\")",
+      "Bash(curl -s \"http://localhost:5173/node_modules/.vite/deps/react-plotly__js.js?v=1b7ad93b\")",
+      "Bash(curl -s \"http://localhost:5173/src/components/utils/Circular.jsx\")",
+      "Bash(curl -v \"http://localhost:5173/src/components/Estatistica.jsx\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:5173/@react-refresh\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:5173/@vite/client\")",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
