@@ -6,16 +6,13 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
-import Stack from '@mui/material/Stack'
 import { SiWikidata } from 'react-icons/si'
 import { HiAcademicCap } from 'react-icons/hi'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import CardHeader from '@mui/material/CardHeader'
-import Button from '@mui/material/Button';
 import NewsTitles from './utils/NewsTitles'
+import ArticlesYearBar from './utils/ArticlesYearBar'
+import TopRelated from './TopRelated'
 import CircularIndeterminate from './utils/Circular'
 import { getPersonality, getPersonalityRelationships, getPersonalityTopRelated } from '../api'
-import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
 
 
 function FillIn(elements, url) {
@@ -41,34 +38,6 @@ function FillIn(elements, url) {
   )
 }
 
-function ArticlesYearBar({ data }) {
-  const [showChart, setShowChart] = useState(true);
-
-  return (
-    <div>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, mb: 2 }}>
-        <Button variant="contained" onClick={() => setShowChart(!showChart)}>
-          {showChart ? 'Hide Chart' : 'Show Chart'}
-        </Button>
-      </Box>
-      {showChart && (
-        <ResponsiveContainer width="100%" height={500}>
-          <BarChart data={data} margin={{ top: 20, right: 150, bottom: 20, left: 150 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" />
-            <YAxis />
-            <Tooltip />
-            <Legend verticalAlign="top" />
-            <Bar dataKey="opposes" fill="#FF0000" />
-            <Bar dataKey="supports" fill="#44861E" />
-            <Bar dataKey="opposed_by" fill="#980000" />
-            <Bar dataKey="supported_by" fill="#70DA33" />
-          </BarChart>
-        </ResponsiveContainer>
-      )}
-    </div>
-  )
-}
 
 function PersonalidadeInfo({ data }) {
   const wikiURL = `http://www.wikidata.org/wiki/${data.wiki_id}`
@@ -148,109 +117,6 @@ function PersonalidadeInfo({ data }) {
   )
 }
 
-function TopRelated(data) {
-  if (data.data.relationships.who_opposes_person) {
-    // sort by freq.
-    data.data.relationships.who_opposes_person.sort((a, b) => b.freq - a.freq)
-    data.data.relationships.who_supports_person.sort((a, b) => b.freq - a.freq)
-    data.data.relationships.who_person_supports.sort((a, b) => b.freq - a.freq)
-    data.data.relationships.who_person_opposes.sort((a, b) => b.freq - a.freq)
-
-    const whoOpposesPerson = data.data.relationships.who_opposes_person.map((entry) => (
-      <Stack spacing={1}>
-        <CardHeader
-          avatar={
-            <Link href={`${entry.wiki_id}`}>
-              <Avatar alt={entry.name} src={entry.image_url} sx={{ width: 66, height: 66 }} />
-            </Link>
-          }
-          title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
-          subheader={
-            <Link
-              href={`/versus/${entry.wiki_id}/${'ent1_opposes_ent2'}/${data.data.wiki_id}/${minYear}/${maxYear}`}
-            >{`${entry.relative} (${entry.freq})`}</Link>
-          }
-        />
-      </Stack>
-    ))
-
-    const whoSupportsPerson = data.data.relationships.who_supports_person.map((entry) => (
-      <Stack spacing={1}>
-        <CardHeader
-          avatar={
-            <Link href={`${entry.wiki_id}`}>
-              <Avatar alt={entry.name} src={entry.image_url} sx={{ width: 66, height: 66 }} />
-            </Link>
-          }
-          title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
-          subheader={
-            <Link
-              href={`/versus/${entry.wiki_id}/${'ent1_supports_ent2'}/${data.data.wiki_id}/${minYear}/${maxYear}`}
-            >{`${entry.relative} (${entry.freq})`}</Link>
-          }
-        />
-      </Stack>
-    ))
-
-    const whoPersonSupports = data.data.relationships.who_person_supports.map((entry) => (
-      <Stack spacing={1}>
-        <CardHeader
-          avatar={
-            <Link href={`${entry.wiki_id}`}>
-              <Avatar alt={entry.name} src={entry.image_url} sx={{ width: 66, height: 66 }} />
-            </Link>
-          }
-          title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
-          subheader={
-            <Link
-              href={`/versus/${data.data.wiki_id}/${'ent1_supports_ent2'}/${entry.wiki_id}/${minYear}/${maxYear}`}
-            >{`${entry.relative} (${entry.freq})`}</Link>
-          }
-        />
-      </Stack>
-    ))
-
-    const whoPersonOpposes = data.data.relationships.who_person_opposes.map((entry) => (
-      <Stack spacing={1} align="center">
-        <CardHeader
-          avatar={
-            <Link href={`${entry.wiki_id}`}>
-              <Avatar alt={entry.name} src={entry.image_url} sx={{ width: 66, height: 66 }} />
-            </Link>
-          }
-          title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
-          subheader={
-            <Link
-              href={`/versus/${data.data.wiki_id}/${'ent1_opposes_ent2'}/${entry.wiki_id}/${minYear}/${maxYear}`}
-            >{`${entry.relative} (${entry.freq})`}</Link>
-          }
-        />
-      </Stack>
-    ))
-
-    return (
-      <Grid container direction="row" spacing={1} justifyContent="space-evenly">
-        <Box sx={{ width: '15%' }}>
-          <Typography align="center">Oposto Por</Typography>
-          {whoOpposesPerson}
-        </Box>
-        <Box sx={{ width: '15%' }}>
-          <Typography align="center">Apoiado Por</Typography>
-          {whoSupportsPerson}
-        </Box>
-        <Box sx={{ width: '15%' }}>
-          <Typography align="center">Apoia</Typography>
-          {whoPersonSupports}
-        </Box>
-        <Box sx={{ width: '15%' }}>
-          <Typography align="center">Opõe-se</Typography>
-          {whoPersonOpposes}
-        </Box>
-      </Grid>
-    )
-  }
-  return null
-}
 
 function FetchPersonalidade() {
   const { id } = useParams()
