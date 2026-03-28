@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { getPersons, getTimeline } from '../api'
 import GrafoControls from './GrafoControls'
-import useVisNetwork from '../hooks/useVisNetwork'
+import useVisNetwork from '../hooks/useVisNetwork.jsx'
 
 function VisNetwork() {
   const [nodes, setNodes] = useState([]);
