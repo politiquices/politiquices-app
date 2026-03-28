@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import CssBaseline from "@mui/material/CssBaseline";
 import { Container, ThemeProvider, createTheme } from '@mui/material'
@@ -35,7 +35,7 @@ const customTheme = createTheme({
 })
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Container maxWidth="lg">
     <ThemeProvider theme={customTheme}>
@@ -45,6 +45,5 @@ ReactDOM.render(
       </BrowserRouter>
     </ThemeProvider>
     </Container>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 )
