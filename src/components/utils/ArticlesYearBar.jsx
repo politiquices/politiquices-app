@@ -4,18 +4,18 @@ import Button from '@mui/material/Button'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 function ArticlesYearBar({ data }) {
-  const [showChart, setShowChart] = useState(true);
+  const [showChart, setShowChart] = useState(false);
 
   return (
     <div>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, mb: 2 }}>
         <Button variant="contained" onClick={() => setShowChart(!showChart)}>
-          {showChart ? 'Hide Chart' : 'Show Chart'}
+          Linha Temporal
         </Button>
       </Box>
       {showChart && (
-        <ResponsiveContainer width="100%" height={500}>
-          <BarChart data={data} margin={{ top: 20, right: 150, bottom: 20, left: 150 }}>
+        <ResponsiveContainer width="100%" aspect={3}>
+          <BarChart data={data} margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" />
             <YAxis />

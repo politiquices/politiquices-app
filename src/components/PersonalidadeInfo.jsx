@@ -6,35 +6,50 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
+import Paper from '@mui/material/Paper'
+import Stack from '@mui/material/Stack'
+import Chip from '@mui/material/Chip'
+import Pagination from '@mui/material/Pagination'
 import { SiWikidata } from 'react-icons/si'
 import { HiAcademicCap } from 'react-icons/hi'
 import NewsTitles from './utils/NewsTitles'
 import ArticlesYearBar from './utils/ArticlesYearBar'
 import TopRelated from './TopRelated'
+import PersonalidadeGraph from './PersonalidadeGraph'
 import CircularIndeterminate from './utils/Circular'
 import { getPersonality, getPersonalityRelationships, getPersonalityTopRelated } from '../api'
 
 
 function FillIn(elements, url) {
-  // to remove the last part of the current URL
   const completeURL = window.location.href
   const baseURL = completeURL.replace(window.location.pathname, '')
 
   const { length } = elements
   if (length > 0) {
-    // eslint-disable-next-line react/destructuring-assignment
     return elements.map((item) => (
       <Link key={item.wiki_id.split('/').at(-1)} href={`${baseURL}/${url}/${item.wiki_id.split('/').at(-1)}`}>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+        <Typography sx={{ mb: 0.5 }} color="text.secondary">
           {item.label}
         </Typography>
       </Link>
     ))
   }
   return (
-    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+    <Typography sx={{ mb: 0.5 }} color="text.secondary">
       -
     </Typography>
+  )
+}
+
+
+function InfoSection({ label, children }) {
+  return (
+    <Box>
+      <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+        {label}
+      </Typography>
+      <Box>{children}</Box>
+    </Box>
   )
 }
 
@@ -44,78 +59,90 @@ function PersonalidadeInfo({ data }) {
   const baseURL = window.location.href.replace(window.location.pathname, '')
 
   return (
-    <>
-      <Box sx={{ flexGrow: 1, paddingTop: 10 }}>
-        <Grid
-          container
-          spacing={1}
-          columns={14}
-          alignItems="center"
-          justifyContent="center"
-          // style={gridStyles}
-        >
-          {/* Foto + Nome + WikiData link */}
-          <Grid item xs={2}>
-            <center>
-              <Avatar alt={data.name} src={data.image_url} sx={{ width: 160, height: 160 }} />
-              <Typography variant="h6" component="div">
-                <b>{data.name}</b>
-              </Typography>
-              <Link href={wikiURL} target="_blank">
-                <SiWikidata size={35} />
-              </Link>
-            </center>
+    <Box sx={{ paddingTop: 10 }}>
+      {/* Hero card */}
+      <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
+        <Grid container spacing={3} alignItems="flex-start">
+          {/* Avatar + name + wiki */}
+          <Grid item xs={12} sm={3} sx={{ textAlign: 'center' }}>
+            <Avatar
+              alt={data.name}
+              src={data.image_url}
+              sx={{ width: 160, height: 160, mx: 'auto', mb: 1 }}
+            />
+            <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+              {data.name}
+            </Typography>
+            <Link href={wikiURL} target="_blank" title="Ver no Wikidata">
+              <SiWikidata size={28} />
+            </Link>
           </Grid>
 
-          {/* Partido(s) Político(s) */}
-          <Grid item xs={2}>
-            <center>
-              {!data || !data.parties ? (
-                <p>Loading...</p>
-              ) : (
-                data.parties.map((entry) => (
-                  <Link key={entry.wiki_id} href={`${baseURL}/party/${entry.wiki_id}`}>
-                    <div>
-                      <img width="68" src={entry.image_url} alt={entry.name} />
-                      <br />
-                    </div>
-                  </Link>
-                ))
-              )}
-            </center>
-          </Grid>
+          {/* Party logos + info fields */}
+          <Grid item xs={12} sm={9}>
+            {/* Party logos */}
+            {data.parties && data.parties.length > 0 && (
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+                  Partido(s)
+                </Typography>
+                <Stack direction="row" flexWrap="wrap" gap={1} sx={{ mt: 0.5 }}>
+                  {data.parties.map((entry) => (
+                    <Link key={entry.wiki_id} href={`${baseURL}/party/${entry.wiki_id}`}>
+                      <img width="60" src={entry.image_url} alt={entry.name} title={entry.name} />
+                    </Link>
+                  ))}
+                </Stack>
+              </Box>
+            )}
 
-          {/* Profissão(ões) */}
-          <Grid item xs={2}>
-            {!data || !data.occupations ? <p>Loading...</p> : FillIn(data.occupations, 'occupation')}
-          </Grid>
+            {/* Info fields in 3 columns */}
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4}>
+                <InfoSection label="Profissões">
+                  {!data.occupations ? <Typography color="text.secondary">-</Typography> : FillIn(data.occupations, 'occupation')}
+                </InfoSection>
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <InfoSection label="Cargos Públicos">
+                  {!data.positions ? <Typography color="text.secondary">-</Typography> : FillIn(data.positions, 'public_office')}
+                </InfoSection>
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <InfoSection label="Mandatos">
+                  {!data.governments ? <Typography color="text.secondary">-</Typography> : FillIn(data.governments, 'government')}
+                  {!data.assemblies ? null : FillIn(data.assemblies, 'assembly')}
+                </InfoSection>
+              </Grid>
+            </Grid>
 
-          {/* Cargos públicos */}
-          <Grid item xs={2}>
-            {!data || !data.positions ? <p>Loading...</p> : FillIn(data.positions, 'public_office')}
-          </Grid>
-
-          {/* Legislaturas - governos de que fez parte */}
-          <Grid item xs={2}>
-            {!data || !data.governments ? <p>Loading...</p> : FillIn(data.governments, 'government')}
-          </Grid>
-
-          {/* Assembleias de deputados de que fez parte */}
-          <Grid item xs={2}>
-            {!data || !data.assemblies ? <p>Loading...</p> : FillIn(data.assemblies, 'assembly')}
-          </Grid>
-
-          {/* Estudos */}
-          <Grid item xs={2}>
-            <HiAcademicCap size={35} />
-            {!data || !data.education ? <p>Loading...</p> : FillIn(data.education, 'education')}
+            {/* Education */}
+            {data.education && data.education.length > 0 && (
+              <Box sx={{ mt: 2 }}>
+                <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
+                  <HiAcademicCap size={20} />
+                  <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+                    Educação
+                  </Typography>
+                </Stack>
+                {FillIn(data.education, 'education')}
+              </Box>
+            )}
           </Grid>
         </Grid>
-      </Box>
-      <ArticlesYearBar data={data.relationships_charts} />
-    </>
+      </Paper>
+
+    </Box>
   )
 }
+
+
+const NEWS_FILTERS = [
+  { value: 'all', label: 'Todas' },
+  { value: 'ent1_supports_ent2', label: 'Apoia' },
+  { value: 'ent1_opposes_ent2', label: 'Opõe-se' },
+]
+const PAGE_SIZE = 10
 
 
 function FetchPersonalidade() {
@@ -125,6 +152,9 @@ function FetchPersonalidade() {
   const [topRelated, setTopRelated] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+
+  const [newsFilter, setNewsFilter] = useState('all')
+  const [newsPage, setNewsPage] = useState(1)
 
   const fetchData = () => {
     getPersonality(id).then(setInfo).catch(() => { setIsLoading(false); setIsError(true) })
@@ -150,15 +180,59 @@ function FetchPersonalidade() {
 
   info.wiki_id = id
 
-  const myHonda = {
+  const topRelatedData = {
     relationships: topRelated,
     wiki_id: info.wiki_id,
+  }
+
+  const allArticles = headlines.sentiment ?? []
+  const filteredArticles = newsFilter === 'all'
+    ? allArticles
+    : allArticles.filter((a) => a.rel_type === newsFilter)
+  const pagedArticles = filteredArticles.slice((newsPage - 1) * PAGE_SIZE, newsPage * PAGE_SIZE)
+
+  const handleFilterChange = (value) => {
+    setNewsFilter(value)
+    setNewsPage(1)
   }
 
   return (
     <div>
       {info && <PersonalidadeInfo data={info} />}
-      {topRelated && <TopRelated data={myHonda} />}
+
+      {topRelated && (
+        <PersonalidadeGraph
+          topRelated={topRelated}
+          mainId={info.wiki_id}
+          mainName={info.name}
+          mainImageUrl={info.image_url}
+        />
+      )}
+
+      {/* News section title */}
+      <Typography variant="h6" sx={{ mb: 1, px: 2, pt: 2 }}>
+        Notícias
+      </Typography>
+
+      {/* News filter chips */}
+      <Box sx={{ display: 'flex', gap: 1, px: 2, pb: 1 }}>
+        {NEWS_FILTERS.map((f) => {
+          const count = f.value === 'all'
+            ? allArticles.length
+            : allArticles.filter((a) => a.rel_type === f.value).length
+          return (
+            <Chip
+              key={f.value}
+              label={`${f.label} (${count})`}
+              onClick={() => handleFilterChange(f.value)}
+              variant={newsFilter === f.value ? 'filled' : 'outlined'}
+              color={newsFilter === f.value ? 'primary' : 'default'}
+              clickable
+            />
+          )
+        })}
+      </Box>
+
       <Grid
         container
         spacing={1}
@@ -166,11 +240,27 @@ function FetchPersonalidade() {
         alignItems="center"
         justify="center"
         style={{ minHeight: '100vh' }}
-        sx={{ paddingTop: 2 }}
+        sx={{ paddingTop: 1 }}
       >
-        {headlines.sentiment && <NewsTitles data={headlines.sentiment} />}
+        {headlines.sentiment && <NewsTitles data={pagedArticles} />}
         {isError && <div>Error fetching data.</div>}
       </Grid>
+
+      {/* Pagination */}
+      {filteredArticles.length > PAGE_SIZE && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
+          <Pagination
+            count={Math.ceil(filteredArticles.length / PAGE_SIZE)}
+            page={newsPage}
+            onChange={(_, value) => setNewsPage(value)}
+            color="primary"
+          />
+        </Box>
+      )}
+
+      <ArticlesYearBar data={info.relationships_charts} />
+
+      {topRelated && <TopRelated data={topRelatedData} />}
     </div>
   )
 }

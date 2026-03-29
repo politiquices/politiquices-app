@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { Link } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
-import { getPersonsAndParties, getParties } from '../../api'
+import { getPersonsAndParties, getParties, getPersons } from '../../api'
 
 const pages = [
   ['Home', 'home'],
@@ -101,6 +101,7 @@ function NewResponsiveAppBar() {
   const [anchorElUserAss, setAnchorElUserAss] = React.useState(null)
   const [personalities, setPersonalities] = React.useState(null)
   const [parties, setParties] = React.useState(null)
+  const [personsWithNews, setPersonsWithNews] = React.useState([])
 
   // read the persons.json to fill the select
   function loadPersonalities() {
@@ -123,6 +124,7 @@ function NewResponsiveAppBar() {
   useEffect(() => {
     loadPersonalities()
     loadParties()
+    getPersons().then(setPersonsWithNews).catch(() => {})
   }, [])
 
   function isParty(selected) {
@@ -192,9 +194,9 @@ function NewResponsiveAppBar() {
   }
 
   const handleRandomPersonality = () => {
-    if (personalities && personalities.length > 0) {
-      const randomIndex = Math.floor(Math.random() * personalities.length);
-      const randomPerson = personalities[randomIndex];
+    if (personsWithNews.length > 0) {
+      const randomIndex = Math.floor(Math.random() * personsWithNews.length);
+      const randomPerson = personsWithNews[randomIndex];
       window.open(`/personalidade/${randomPerson.value}`, '_self');
     }
   };
