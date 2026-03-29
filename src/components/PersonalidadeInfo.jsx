@@ -10,6 +10,10 @@ import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
 import Chip from '@mui/material/Chip'
 import Pagination from '@mui/material/Pagination'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SiWikidata } from 'react-icons/si'
 import { HiAcademicCap } from 'react-icons/hi'
 import NewsTitles from './utils/NewsTitles'
@@ -20,37 +24,20 @@ import CircularIndeterminate from './utils/Circular'
 import { getPersonality, getPersonalityRelationships, getPersonalityTopRelated } from '../api'
 
 
-function FillIn(elements, url) {
-  const completeURL = window.location.href
-  const baseURL = completeURL.replace(window.location.pathname, '')
-
-  const { length } = elements
-  if (length > 0) {
-    return elements.map((item) => (
-      <Link key={item.wiki_id.split('/').at(-1)} href={`${baseURL}/${url}/${item.wiki_id.split('/').at(-1)}`}>
-        <Typography sx={{ mb: 0.5 }} color="text.secondary">
-          {item.label}
-        </Typography>
-      </Link>
-    ))
+function FillIn(elements, url, baseURL) {
+  if (!elements || elements.length === 0) {
+    return (
+      <Typography sx={{ mb: 0.5 }} color="text.secondary">-</Typography>
+    )
   }
-  return (
-    <Typography sx={{ mb: 0.5 }} color="text.secondary">
-      -
-    </Typography>
-  )
-}
-
-
-function InfoSection({ label, children }) {
-  return (
-    <Box>
-      <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 'bold' }}>
-        {label}
-      </Typography>
-      <Box>{children}</Box>
-    </Box>
-  )
+  return elements.map((item) => {
+    const id = item.wiki_id.split('/').at(-1)
+    return (
+      <Link key={id} href={url ? `${baseURL}/${url}/${id}` : undefined}>
+        <Typography sx={{ mb: 0.5 }} color="text.secondary">{item.label}</Typography>
+      </Link>
+    )
+  })
 }
 
 
@@ -96,38 +83,42 @@ function PersonalidadeInfo({ data }) {
               </Box>
             )}
 
-            {/* Info fields in 3 columns */}
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={4}>
-                <InfoSection label="Profissões">
-                  {!data.occupations ? <Typography color="text.secondary">-</Typography> : FillIn(data.occupations, 'occupation')}
-                </InfoSection>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <InfoSection label="Cargos Públicos">
-                  {!data.positions ? <Typography color="text.secondary">-</Typography> : FillIn(data.positions, 'public_office')}
-                </InfoSection>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <InfoSection label="Mandatos">
-                  {!data.governments ? <Typography color="text.secondary">-</Typography> : FillIn(data.governments, 'government')}
-                  {!data.assemblies ? null : FillIn(data.assemblies, 'assembly')}
-                </InfoSection>
-              </Grid>
-            </Grid>
-
-            {/* Education */}
-            {data.education && data.education.length > 0 && (
-              <Box sx={{ mt: 2 }}>
-                <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
-                  <HiAcademicCap size={20} />
-                  <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 'bold' }}>
-                    Educação
-                  </Typography>
-                </Stack>
-                {FillIn(data.education, 'education')}
-              </Box>
-            )}
+            {/* Info fields as Accordions */}
+            <Box sx={{ mt: 1 }}>
+              {[
+                { label: 'Profissões', items: data.occupations, url: 'occupation' },
+                { label: 'Cargos Públicos', items: data.positions, url: 'public_office' },
+                {
+                  label: 'Mandatos',
+                  items: [...(data.governments ?? []), ...(data.assemblies ?? [])],
+                  url: null,
+                  mixed: true,
+                },
+                { label: 'Educação', items: data.education, url: 'education', icon: <HiAcademicCap size={16} /> },
+              ]
+                .filter((s) => s.items && s.items.length > 0)
+                .map((section) => (
+                  <Accordion key={section.label} disableGutters elevation={0} sx={{ '&:before': { display: 'none' }, border: '1px solid', borderColor: 'divider', mb: 0.5, borderRadius: '4px !important' }}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ minHeight: 36, '& .MuiAccordionSummary-content': { my: 0.5 } }}>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        {section.icon}
+                        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>{section.label}</Typography>
+                        <Typography variant="caption" color="text.secondary">({section.items.length})</Typography>
+                      </Stack>
+                    </AccordionSummary>
+                    <AccordionDetails sx={{ pt: 0.5, pb: 1 }}>
+                      {section.mixed
+                        ? <>
+                            {FillIn(data.governments ?? [], 'government', baseURL)}
+                            {FillIn(data.assemblies ?? [], 'assembly', baseURL)}
+                          </>
+                        : FillIn(section.items, section.url, baseURL)
+                      }
+                    </AccordionDetails>
+                  </Accordion>
+                ))
+              }
+            </Box>
           </Grid>
         </Grid>
       </Paper>
@@ -137,11 +128,6 @@ function PersonalidadeInfo({ data }) {
 }
 
 
-const NEWS_FILTERS = [
-  { value: 'all', label: 'Todas' },
-  { value: 'ent1_supports_ent2', label: 'Apoia' },
-  { value: 'ent1_opposes_ent2', label: 'Opõe-se' },
-]
 const PAGE_SIZE = 10
 
 
@@ -153,7 +139,6 @@ function FetchPersonalidade() {
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  const [newsFilter, setNewsFilter] = useState('all')
   const [newsPage, setNewsPage] = useState(1)
   const [selectedEdge, setSelectedEdge] = useState(null)
 
@@ -188,23 +173,14 @@ function FetchPersonalidade() {
 
   const allArticles = headlines.sentiment ?? []
 
-  const edgeArticles = selectedEdge
+  const filteredArticles = selectedEdge
     ? allArticles.filter((a) =>
         (a.ent1_id === selectedEdge.from && a.ent2_id === selectedEdge.to) ||
         (a.ent1_id === selectedEdge.to && a.ent2_id === selectedEdge.from)
       )
     : allArticles
 
-  const filteredArticles = newsFilter === 'all'
-    ? edgeArticles
-    : edgeArticles.filter((a) => a.rel_type === newsFilter)
-
   const pagedArticles = filteredArticles.slice((newsPage - 1) * PAGE_SIZE, newsPage * PAGE_SIZE)
-
-  const handleFilterChange = (value) => {
-    setNewsFilter(value)
-    setNewsPage(1)
-  }
 
   const handleEdgeClick = (edge) => {
     setSelectedEdge(edge)
@@ -245,25 +221,6 @@ function FetchPersonalidade() {
               />
             </Box>
           )}
-
-          {/* Sentiment filter chips */}
-          <Box sx={{ display: 'flex', gap: 1, px: 1, pb: 1 }}>
-            {NEWS_FILTERS.map((f) => {
-              const count = f.value === 'all'
-                ? edgeArticles.length
-                : edgeArticles.filter((a) => a.rel_type === f.value).length
-              return (
-                <Chip
-                  key={f.value}
-                  label={`${f.label} (${count})`}
-                  onClick={() => handleFilterChange(f.value)}
-                  variant={newsFilter === f.value ? 'filled' : 'outlined'}
-                  color={newsFilter === f.value ? 'primary' : 'default'}
-                  clickable
-                />
-              )
-            })}
-          </Box>
 
           {headlines.sentiment && <NewsTitles data={pagedArticles} />}
           {isError && <div>Error fetching data.</div>}
