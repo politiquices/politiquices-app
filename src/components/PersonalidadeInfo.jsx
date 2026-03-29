@@ -155,6 +155,7 @@ function FetchPersonalidade() {
 
   const [newsFilter, setNewsFilter] = useState('all')
   const [newsPage, setNewsPage] = useState(1)
+  const [selectedEdge, setSelectedEdge] = useState(null)
 
   const fetchData = () => {
     getPersonality(id).then(setInfo).catch(() => { setIsLoading(false); setIsError(true) })
@@ -186,9 +187,18 @@ function FetchPersonalidade() {
   }
 
   const allArticles = headlines.sentiment ?? []
+
+  const edgeArticles = selectedEdge
+    ? allArticles.filter((a) =>
+        (a.ent1_id === selectedEdge.from && a.ent2_id === selectedEdge.to) ||
+        (a.ent1_id === selectedEdge.to && a.ent2_id === selectedEdge.from)
+      )
+    : allArticles
+
   const filteredArticles = newsFilter === 'all'
-    ? allArticles
-    : allArticles.filter((a) => a.rel_type === newsFilter)
+    ? edgeArticles
+    : edgeArticles.filter((a) => a.rel_type === newsFilter)
+
   const pagedArticles = filteredArticles.slice((newsPage - 1) * PAGE_SIZE, newsPage * PAGE_SIZE)
 
   const handleFilterChange = (value) => {
@@ -196,67 +206,79 @@ function FetchPersonalidade() {
     setNewsPage(1)
   }
 
+  const handleEdgeClick = (edge) => {
+    setSelectedEdge(edge)
+    setNewsPage(1)
+  }
+
+  const handleClearEdge = () => {
+    setSelectedEdge(null)
+    setNewsPage(1)
+  }
+
   return (
     <div>
       {info && <PersonalidadeInfo data={info} />}
 
+      {/* Graph */}
       {topRelated && (
         <PersonalidadeGraph
           topRelated={topRelated}
           mainId={info.wiki_id}
           mainName={info.name}
           mainImageUrl={info.image_url}
+          onEdgeClick={handleEdgeClick}
+          onBackgroundClick={handleClearEdge}
         />
       )}
 
-      {/* News section title */}
-      <Typography variant="h6" sx={{ mb: 1, px: 2, pt: 2 }}>
-        Notícias
-      </Typography>
+      {/* News */}
+      <Box sx={{ mt: 1 }}>
+          {/* Active edge indicator */}
+          {selectedEdge && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 1, mb: 1 }}>
+              <Chip
+                label={`${selectedEdge.from} ${selectedEdge.label} ${selectedEdge.to}`}
+                onDelete={handleClearEdge}
+                color="primary"
+                size="small"
+              />
+            </Box>
+          )}
 
-      {/* News filter chips */}
-      <Box sx={{ display: 'flex', gap: 1, px: 2, pb: 1 }}>
-        {NEWS_FILTERS.map((f) => {
-          const count = f.value === 'all'
-            ? allArticles.length
-            : allArticles.filter((a) => a.rel_type === f.value).length
-          return (
-            <Chip
-              key={f.value}
-              label={`${f.label} (${count})`}
-              onClick={() => handleFilterChange(f.value)}
-              variant={newsFilter === f.value ? 'filled' : 'outlined'}
-              color={newsFilter === f.value ? 'primary' : 'default'}
-              clickable
-            />
-          )
-        })}
+          {/* Sentiment filter chips */}
+          <Box sx={{ display: 'flex', gap: 1, px: 1, pb: 1 }}>
+            {NEWS_FILTERS.map((f) => {
+              const count = f.value === 'all'
+                ? edgeArticles.length
+                : edgeArticles.filter((a) => a.rel_type === f.value).length
+              return (
+                <Chip
+                  key={f.value}
+                  label={`${f.label} (${count})`}
+                  onClick={() => handleFilterChange(f.value)}
+                  variant={newsFilter === f.value ? 'filled' : 'outlined'}
+                  color={newsFilter === f.value ? 'primary' : 'default'}
+                  clickable
+                />
+              )
+            })}
+          </Box>
+
+          {headlines.sentiment && <NewsTitles data={pagedArticles} />}
+          {isError && <div>Error fetching data.</div>}
+
+          {filteredArticles.length > PAGE_SIZE && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
+              <Pagination
+                count={Math.ceil(filteredArticles.length / PAGE_SIZE)}
+                page={newsPage}
+                onChange={(_, value) => setNewsPage(value)}
+                color="primary"
+              />
+            </Box>
+          )}
       </Box>
-
-      <Grid
-        container
-        spacing={1}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: '100vh' }}
-        sx={{ paddingTop: 1 }}
-      >
-        {headlines.sentiment && <NewsTitles data={pagedArticles} />}
-        {isError && <div>Error fetching data.</div>}
-      </Grid>
-
-      {/* Pagination */}
-      {filteredArticles.length > PAGE_SIZE && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
-          <Pagination
-            count={Math.ceil(filteredArticles.length / PAGE_SIZE)}
-            page={newsPage}
-            onChange={(_, value) => setNewsPage(value)}
-            color="primary"
-          />
-        </Box>
-      )}
 
       <ArticlesYearBar data={info.relationships_charts} />
 

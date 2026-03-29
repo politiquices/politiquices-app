@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import Popover from '@mui/material/Popover'
 import Link from '@mui/material/Link'
 
-function useVisNetwork({ nodes, edges, Yearsvalues }) {
+function useVisNetwork({ nodes, edges, Yearsvalues, onEdgeClick, onBackgroundClick }) {
   const container = useRef(null);
   const networkRef = useRef(null);
 
@@ -31,7 +31,7 @@ function useVisNetwork({ nodes, edges, Yearsvalues }) {
       length: 300,
       scaling: {
         min: 1,
-        max: 15,
+        max: 5,
         label: {
           enabled: true,
           min: 14,
@@ -89,19 +89,21 @@ function useVisNetwork({ nodes, edges, Yearsvalues }) {
           setNodePopoverContent({ id: nodeId, label: nodeName });
           setNodePopoverAnchor(params.event.center);
           setNodePopoverOpen(true);
-        }
-        if (params.edges.length > 0) {
+        } else if (params.edges.length > 0) {
           const edgeId = params.edges[0];
           const edge = networkRef.current.body.edges[edgeId];
-          const numNoticias = edges[edgeId-1].value;
-          const [min, max] = Yearsvalues;
-          if (edge.title === 'apoia') {
-            setEdgePopoverContent({ from: edge.from.id, to: edge.to.id, rel_type: 'ent1_supports_ent2', start: min, end: max, n_noticias: numNoticias, label: edge.title });
-          } else if (edge.title === 'opõe-se') {
-            setEdgePopoverContent({ from: edge.from.id, to: edge.to.id, rel_type: 'ent1_opposes_ent2', start: min, end: max, n_noticias: numNoticias, label: edge.title });
+          const rel_type = edge.title === 'apoia' ? 'ent1_supports_ent2' : 'ent1_opposes_ent2';
+          if (onEdgeClick) {
+            onEdgeClick({ from: edge.from.id, to: edge.to.id, rel_type, label: edge.title });
+          } else {
+            const numNoticias = edges[edgeId-1].value;
+            const [min, max] = Yearsvalues;
+            setEdgePopoverContent({ from: edge.from.id, to: edge.to.id, rel_type, start: min, end: max, n_noticias: numNoticias, label: edge.title });
+            setEdgePopoverAnchor(params.event.center);
+            setEdgePopoverOpen(true);
           }
-          setEdgePopoverAnchor(params.event.center);
-          setEdgePopoverOpen(true);
+        } else {
+          if (onBackgroundClick) onBackgroundClick();
         }
       });
     }

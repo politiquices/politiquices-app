@@ -22,6 +22,7 @@ import { red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
 import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { postCorrection } from '../../api'
@@ -54,8 +55,7 @@ const TVI = '/assets/images/jornais/Logótipo_TVI.png'
 // const Neutral = 'assets/images/logos/conversation.png'
 
 const ExpandMore = styled((props) => {
-  
-  const { ...other } = props
+  const { expand, ...other } = props
   return <IconButton {...other} />
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
@@ -273,39 +273,64 @@ function NewsTitles(props) {
   };
 
   const titlesRendered = headlines.map((entry, index) => (
-    <Grid item key={index} align="center" sx={{ display: 'flex', justifyContent: 'center' }}>
-      <Card sx={{ width: 750, margin: '1rem', position: 'relative' }}>
-        <CardHeader
-          avatar={
+    <Grid item key={index} xs={12} sm={6} sx={{ display: 'flex' }}>
+      <Card sx={{
+        width: '100%',
+        margin: '0.5rem',
+        position: 'relative',
+        borderTop: `4px solid ${entry.rel_type.includes('supports') ? '#44861E' : '#FF0000'}`,
+        transition: 'box-shadow 0.2s',
+        '&:hover': { boxShadow: 6 },
+      }}>
+        {/* Avatars + sentiment chip */}
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', px: 2, pt: 2 }}>
+          {/* Left entity */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 80 }}>
             <Link href={`/personalidade/${entry.main_ent_url}`}>
               <Avatar
-                sx={{ bgcolor: red[500], width: 66, height: 66 }}
+                sx={{ bgcolor: red[500], width: 72, height: 72 }}
                 aria-label={entry.main_ent_name}
                 src={entry.main_ent_image}
               />
             </Link>
-          }
-          action={
+            <Typography variant="caption" sx={{ mt: 0.5, textAlign: 'center', width: 80, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {entry.main_ent_name}
+            </Typography>
+          </Box>
+
+          {/* Centre: date + sentiment chip */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, px: 1, pt: 1 }}>
+            <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5 }}>
+              {dateConverter({ dateString: entry.date })}
+            </Typography>
+            <Chip
+              label={translateRelType({ rel_type: entry.rel_type })}
+              size="small"
+              sx={{
+                fontWeight: 'bold',
+                bgcolor: entry.rel_type.includes('supports') ? '#e8f5e9' : '#ffebee',
+                color: entry.rel_type.includes('supports') ? '#44861E' : '#c62828',
+              }}
+            />
+          </Box>
+
+          {/* Right entity */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 80 }}>
             <Link href={`/personalidade/${entry.other_ent_url}`}>
               <Avatar
-                sx={{ bgcolor: red[500], width: 66, height: 66 }}
+                sx={{ bgcolor: red[500], width: 72, height: 72 }}
                 aria-label={entry.other_ent_name}
                 src={entry.other_ent_image}
               />
             </Link>
-          }
-          title={
-            <Typography gutterBottom variant="h6" component="h1">
-              {dateConverter({ dateString: entry.date })}      
+            <Typography variant="caption" sx={{ mt: 0.5, textAlign: 'center', width: 80, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {entry.other_ent_name}
             </Typography>
-          }
-          subheader={
-            <Typography variant="h6" color="text.primary" style={{fontWeight: "bold"}}>
-              {translateRelType({ rel_type: entry.rel_type })}
-            </Typography>}
-        />
-        <CardContent>
-          <Typography variant="h6" color="text.secondary" style={{ color: "black" }}>
+          </Box>
+        </Box>
+
+        <CardContent sx={{ pt: 1 }}>
+          <Typography variant="body1" align="center" sx={{ color: 'text.primary', fontWeight: 'bold' }}>
             {entry.title}
           </Typography>
         </CardContent>
@@ -345,7 +370,7 @@ function NewsTitles(props) {
             />
           </Link>
           <IconButton>
-          <ExpandMore onClick={() => handleOpen(index)} aria-expanded={isOpenCollapse === index} aria-label="show more">
+          <ExpandMore onClick={() => handleOpen(index)} expand={isOpenCollapse === index} aria-expanded={isOpenCollapse === index} aria-label="show more">
             <ExpandMoreIcon />          
           </ExpandMore>
           </IconButton>
@@ -369,7 +394,9 @@ function NewsTitles(props) {
 
   return (
     <>
-      {titlesRendered}
+      <Grid container direction="row" flexWrap="wrap" justifyContent="center">
+        {titlesRendered}
+      </Grid>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
