@@ -127,8 +127,8 @@ function Versus() {
         </Grid>
 
         {/* Year slider */}
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', mb: 0.5 }}>
+        <Box sx={{ mb: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 0.5 }}>
             Intervalo de Anos: {yearsValues[0]} – {yearsValues[1]}
           </Typography>
           <Slider
