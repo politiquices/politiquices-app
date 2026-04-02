@@ -104,7 +104,8 @@ function Sobre() {
         ))}
       </Paper>
 
-    </Box>
+
+</Box>
   )
 }
 

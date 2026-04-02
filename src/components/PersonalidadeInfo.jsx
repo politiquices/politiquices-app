@@ -18,7 +18,6 @@ import { SiWikidata } from 'react-icons/si'
 import { HiAcademicCap } from 'react-icons/hi'
 import NewsTitles from './utils/NewsTitles'
 import ArticlesYearBar from './utils/ArticlesYearBar'
-import TopRelated from './TopRelated'
 import PersonalidadeGraph from './PersonalidadeGraph'
 import CircularIndeterminate from './utils/Circular'
 import { getPersonality, getPersonalityRelationships, getPersonalityTopRelated } from '../api'
@@ -166,11 +165,6 @@ function FetchPersonalidade() {
 
   info.wiki_id = id
 
-  const topRelatedData = {
-    relationships: topRelated,
-    wiki_id: info.wiki_id,
-  }
-
   const allArticles = headlines.sentiment ?? []
 
   const filteredArticles = selectedEdge
@@ -238,8 +232,6 @@ function FetchPersonalidade() {
       </Box>
 
       <ArticlesYearBar data={info.relationships_charts} />
-
-      {topRelated && <TopRelated data={topRelatedData} />}
     </div>
   )
 }
