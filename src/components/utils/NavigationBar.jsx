@@ -22,8 +22,7 @@ const pages = [
   ['Personalidades', 'personalidades'],
   ['Random', 'random'], // Add this new option
   ['Versus', 'versus'],
-  ['Relações', 'relacoes'],
-  ['Grafo', 'grafo'],
+  ['Explorar', 'explorar'],
   ['Estatística', 'estatistica'],
   ['Sobre', 'sobre'],  
 ]
