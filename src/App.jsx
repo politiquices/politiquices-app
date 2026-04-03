@@ -7,7 +7,6 @@ import ListPersonalidades from './components/ListPersonalidadesLazy'
 import ListPersonalidadesFiltered from './components/ListPersonalidadesFiltered'
 import FetchPersonalidade from './components/PersonalidadeInfo'
 import EntityVersusEntity from './components/EntityVersusEntity'
-import Estatistica from './components/Estatistica'
 import Sobre from './components/Sobre'
 import Pesquisa from './components/Pesquisa'
 import Home from './components/Home'
@@ -28,7 +27,7 @@ function App() {
         <Route path="/grafo" element={<Explorar />} />
         <Route path="/pesquisa" element={<Pesquisa />} />
         <Route path="/personalidades" element={<ListPersonalidades />} />
-        <Route path="/estatistica" element={<Estatistica />} />
+        <Route path="/estatistica" element={<Sobre />} />
         <Route path="/sobre" element={<Sobre />} />        
         <Route path="/versus/:ent1/:relType/:ent2/:start/:end" element={<EntityVersusEntity />} />
         <Route path="/personalidade/:id" element={<FetchPersonalidade />} />

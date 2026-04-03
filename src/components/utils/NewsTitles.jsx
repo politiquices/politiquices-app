@@ -82,9 +82,7 @@ function dateConverter({ dateString }) {
   
 }
 
-function ProcessArticleLink(domain) {
-
-  /*
+/*
   dc:creator "PUBLICO-CHAVE"^^xsd:string
   dc:creator "acorianooriental.pt"^^xsd:string
   dc:creator "anoticia.pt"^^xsd:string
@@ -103,7 +101,6 @@ function ProcessArticleLink(domain) {
   dc:creator "diarioviseu.pt"^^xsd:string
   dc:creator "dinheirodigital.sapo.pt"^^xsd:string
   dc:creator "dinheirovivo.pt"^^xsd:string
-
   dc:creator "guimaraesdigital.com"^^xsd:string
   dc:creator "imediato.pt"^^xsd:string
   dc:creator "iol.pt"^^xsd:string
@@ -123,48 +120,44 @@ function ProcessArticleLink(domain) {
   dc:creator "terrasdabeira.gmpress.pt"^^xsd:string
   dc:creator "visao.sapo.pt"^^xsd:string
   dc:creator "zap.aeiou.pt"^^xsd:string
-  */
+*/
+const DOMAIN_LOGOS = {
+  'aeiou.pt': AEIOU,
+  'aeiou.visao.pt': AEIOU,
+  'zap.aeiou.pt': AEIOU,
+  'correioalentejo.com': CorreioAlentejo,
+  'destak.pt': DESTAK,
+  'dn.pt': DN,
+  'dn.sapo.pt': DN,
+  'dnoticias.pt': DN,
+  'diariodigital.sapo.pt': DiarioDigital,
+  'eco.sapo.pt': ECO,
+  'expresso.pt': Expresso,
+  'expresso.sapo.pt': Expresso,
+  'online.expresso.pt': Expresso,
+  'ionline.sapo.pt': Ionline,
+  'ionline.pt': Ionline,
+  'jn.pt': JN,
+  'jn.sapo.pt': JN,
+  'jornaldenegocios.pt': JornalNegocios,
+  'jornaleconomico.sapo.pt': JornalEconomico,
+  'economico.sapo.pt': JornalEconomico,
+  'noticias.sapo.pt': SAPO,
+  'observador.pt': Observador,
+  'publico.pt': PublicoLogo,
+  'publico.clix.pt': PublicoLogo,
+  'rtp.pt': RTP,
+  'sabado.pt': Sabado,
+  'sapo.pt': SAPO,
+  'sicnoticias.pt': SICNoticias,
+  'sicnoticias.sapo.pt': SICNoticias,
+  'sol.sapo.pt': Sol,
+  'tsf.pt': TSF,
+  'tvi24.iol.pt': TVI,
+}
 
-  const mappings = {};
-  
-  mappings['aeiou.pt'] = AEIOU;
-  mappings['aeiou.visao.pt'] = AEIOU;
-  mappings['zap.aeiou.pt'] = AEIOU;
-  mappings['correioalentejo.com'] = CorreioAlentejo;
-  mappings['destak.pt'] = DESTAK;
-  mappings['dn.pt'] = DN;
-  mappings['dn.sapo.pt'] = DN;
-  mappings['dnoticias.pt'] = DN;
-  mappings['diariodigital.sapo.pt'] = DiarioDigital;  
-  mappings['eco.sapo.pt'] = ECO;
-  mappings['expresso.pt'] = Expresso;
-  mappings['expresso.sapo.pt'] = Expresso;
-  mappings['online.expresso.pt'] = Expresso;
-  mappings['ionline.sapo.pt'] = Ionline;
-  mappings['ionline.pt'] = Ionline;
-  mappings['jn.pt'] = JN;
-  mappings['jn.sapo.pt'] = JN;
-  mappings['jn.sapo.pt'] = JN;
-  mappings['jornaldenegocios.pt'] = JornalNegocios;
-  mappings['jornaleconomico.sapo.pt'] = JornalEconomico;
-  mappings['economico.sapo.pt'] = JornalEconomico;
-  mappings['noticias.sapo.pt'] = SAPO;
-  mappings['observador.pt'] = Observador;
-  mappings['publico.pt'] = PublicoLogo;
-  mappings['publico.clix.pt'] = PublicoLogo;
-  mappings['rtp.pt'] = RTP;
-  mappings['sabado.pt'] = Sabado;
-  mappings['sapo.pt'] = SAPO;
-  mappings['sicnoticias.pt'] = SICNoticias;
-  mappings['sicnoticias.sapo.pt'] = SICNoticias;
-  mappings['sol.sapo.pt'] = Sol;
-  mappings['tsf.pt'] = TSF;
-  mappings['tvi24.iol.pt'] = TVI;
-
-  if (domain in mappings) {
-    return mappings[domain];
-  }
-  return PublicoLogo;
+function ProcessArticleLink(domain) {
+  return DOMAIN_LOGOS[domain] ?? PublicoLogo
 }
 
 

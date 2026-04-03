@@ -21,11 +21,10 @@ import { GOVERNMENTS, ASSEMBLIES } from '../../constants'
 const pages = [
   ['Home', 'home'],
   ['Personalidades', 'personalidades'],
-  ['Random', 'random'], // Add this new option
+  ['Random', 'random'],
   ['Versus', 'versus'],
   ['Explorar', 'explorar'],
-  ['Estatística', 'estatistica'],
-  ['Sobre', 'sobre'],  
+  ['Sobre', 'sobre'],
 ]
 
 
