@@ -48,8 +48,9 @@ export function getPersonalityTopRelated(id) {
   return get(`/personality/top_related_personalities/${id}`)
 }
 
-export function getPersonalitiesPaged(page) {
-  return get(`/personalities/${page}`)
+export function getPersonalitiesPaged(page, portugueseOnly = false) {
+  const params = portugueseOnly ? '?portuguese_only=true' : ''
+  return get(`/personalities/${page}${params}`)
 }
 
 export function getPersonalitiesFiltered(type, id) {

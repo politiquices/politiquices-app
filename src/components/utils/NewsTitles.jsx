@@ -22,6 +22,7 @@ import { red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
 import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { postCorrection } from '../../api'
@@ -54,8 +55,7 @@ const TVI = '/assets/images/jornais/Logótipo_TVI.png'
 // const Neutral = 'assets/images/logos/conversation.png'
 
 const ExpandMore = styled((props) => {
-  
-  const { ...other } = props
+  const { expand, ...other } = props
   return <IconButton {...other} />
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
@@ -184,21 +184,24 @@ function NewsTitles(props) {
     );
   }
 
-  const headlines = data.map((RawData) => ({
-    title: RawData.title,
-    paragraph: RawData.paragraph,
-    url: RawData.arquivo_doc,
-    date: RawData.date,
-    rel_type: RawData.rel_type,
-    original_url: RawData.original_url,
-    original_url_image: ProcessArticleLink(RawData.domain),
-    main_ent_image: RawData.ent1_img,
-    main_ent_name: RawData.ent1_str,
-    main_ent_url: RawData.ent1_id,
-    other_ent_image: RawData.ent2_img,
-    other_ent_name: RawData.ent2_str,
-    other_ent_url: RawData.ent2_id,
-  }));
+  const headlines = data.map((RawData) => {
+    const isReverse = RawData.rel_type === 'opposed_by' || RawData.rel_type === 'supported_by'
+    return {
+      title: RawData.title,
+      paragraph: RawData.paragraph,
+      url: RawData.arquivo_doc,
+      date: RawData.date,
+      rel_type: RawData.rel_type,
+      original_url: RawData.original_url,
+      original_url_image: ProcessArticleLink(RawData.domain),
+      main_ent_image: isReverse ? RawData.ent2_img : RawData.ent1_img,
+      main_ent_name: isReverse ? RawData.ent2_str : RawData.ent1_str,
+      main_ent_url: isReverse ? RawData.ent2_id : RawData.ent1_id,
+      other_ent_image: isReverse ? RawData.ent1_img : RawData.ent2_img,
+      other_ent_name: isReverse ? RawData.ent1_str : RawData.ent2_str,
+      other_ent_url: isReverse ? RawData.ent1_id : RawData.ent2_id,
+    }
+  });
 
   const handleOpen = (clickedIndex) => {
     if (isOpenCollapse === clickedIndex) {
@@ -244,68 +247,82 @@ function NewsTitles(props) {
     handleClose();
   };
 
-  const translateRelType = (rel_type) => {
-    let translatedText;
-    let color;
-
-
-    // Translate rel_type and assign color
-    switch (rel_type.rel_type) {
-      case 'ent1_opposes_ent2':
-      case 'opposes':
-        translatedText = 'opõe-se';
-        color = 'red';
-        break;
+  const relTypeStyle = (relType) => {
+    switch (relType) {
       case 'ent1_supports_ent2':
+      case 'ent2_supports_ent1':
       case 'supports':
-        translatedText = 'apoia';
-        color = 'green';
-        break;
+      case 'supported_by':
+        return { label: 'apoia', color: '#44861E', bg: '#e8f5e9', border: '#44861E' }
+      case 'ent1_opposes_ent2':
+      case 'ent2_opposes_ent1':
+      case 'opposes':
+      case 'opposed_by':
+        return { label: 'opõe-se', color: '#c62828', bg: '#ffebee', border: '#FF0000' }
       default:
-        // For any other rel_type, return null
-        return null;
+        return { label: 'outro', color: '#757575', bg: '#f5f5f5', border: '#bdbdbd' }
     }
-
-    // Return JSX element with translated text and color
-    return (
-      <span style={{ color }}>{translatedText}</span>
-    );
   };
 
   const titlesRendered = headlines.map((entry, index) => (
-    <Grid item key={index} align="center" sx={{ display: 'flex', justifyContent: 'center' }}>
-      <Card sx={{ width: 750, margin: '1rem', position: 'relative' }}>
-        <CardHeader
-          avatar={
+    <Grid item key={index} xs={12} sm={6} sx={{ display: 'flex' }}>
+      <Card sx={{
+        width: '100%',
+        margin: '0.5rem',
+        position: 'relative',
+        borderTop: `4px solid ${relTypeStyle(entry.rel_type).border}`,
+        transition: 'box-shadow 0.2s',
+        '&:hover': { boxShadow: 6 },
+      }}>
+        {/* Avatars + sentiment chip */}
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', px: 2, pt: 2 }}>
+          {/* Left entity */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 80 }}>
             <Link href={`/personalidade/${entry.main_ent_url}`}>
               <Avatar
-                sx={{ bgcolor: red[500], width: 66, height: 66 }}
+                sx={{ bgcolor: red[500], width: 72, height: 72 }}
                 aria-label={entry.main_ent_name}
                 src={entry.main_ent_image}
               />
             </Link>
-          }
-          action={
+            <Typography variant="caption" sx={{ mt: 0.5, textAlign: 'center', width: 80, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {entry.main_ent_name}
+            </Typography>
+          </Box>
+
+          {/* Centre: date + sentiment chip */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, px: 1, pt: 1 }}>
+            <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5 }}>
+              {dateConverter({ dateString: entry.date })}
+            </Typography>
+            <Chip
+              label={relTypeStyle(entry.rel_type).label}
+              size="small"
+              sx={{
+                fontWeight: 'bold',
+                bgcolor: relTypeStyle(entry.rel_type).bg,
+                color: relTypeStyle(entry.rel_type).color,
+              }}
+            />
+          </Box>
+
+          {/* Right entity */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 80 }}>
             <Link href={`/personalidade/${entry.other_ent_url}`}>
               <Avatar
-                sx={{ bgcolor: red[500], width: 66, height: 66 }}
+                sx={{ bgcolor: red[500], width: 72, height: 72 }}
                 aria-label={entry.other_ent_name}
                 src={entry.other_ent_image}
               />
             </Link>
-          }
-          title={
-            <Typography gutterBottom variant="h6" component="h1">
-              {dateConverter({ dateString: entry.date })}      
+            <Typography variant="caption" sx={{ mt: 0.5, textAlign: 'center', width: 80, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {entry.other_ent_name}
             </Typography>
-          }
-          subheader={
-            <Typography variant="h6" color="text.primary" style={{fontWeight: "bold"}}>
-              {translateRelType({ rel_type: entry.rel_type })}
-            </Typography>}
-        />
-        <CardContent>
-          <Typography variant="h6" color="text.secondary" style={{ color: "black" }}>
+          </Box>
+        </Box>
+
+        <CardContent sx={{ pt: 1 }}>
+          <Typography variant="body1" align="center" sx={{ color: 'text.primary', fontWeight: 'bold' }}>
             {entry.title}
           </Typography>
         </CardContent>
@@ -345,7 +362,7 @@ function NewsTitles(props) {
             />
           </Link>
           <IconButton>
-          <ExpandMore onClick={() => handleOpen(index)} aria-expanded={isOpenCollapse === index} aria-label="show more">
+          <ExpandMore onClick={() => handleOpen(index)} expand={isOpenCollapse === index} aria-expanded={isOpenCollapse === index} aria-label="show more">
             <ExpandMoreIcon />          
           </ExpandMore>
           </IconButton>
@@ -369,7 +386,9 @@ function NewsTitles(props) {
 
   return (
     <>
-      {titlesRendered}
+      <Grid container direction="row" flexWrap="wrap" justifyContent="center">
+        {titlesRendered}
+      </Grid>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}

@@ -2,8 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import NavigationBar from './components/utils/NavigationBar'
 import Footer from './components/utils/Footer'
 import Versus from './components/Versus'
-import Relacoes from './components/Relacoes'
-import VisNetwork from './components/Grafo'
+import Explorar from './components/Explorar'
 import ListPersonalidades from './components/ListPersonalidadesLazy'
 import ListPersonalidadesFiltered from './components/ListPersonalidadesFiltered'
 import FetchPersonalidade from './components/PersonalidadeInfo'
@@ -24,9 +23,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/versus" element={<Versus />} />
-        <Route path="/relacoes" element={<Relacoes />} />
+        <Route path="/explorar" element={<Explorar />} />
+        <Route path="/relacoes" element={<Explorar />} />
+        <Route path="/grafo" element={<Explorar />} />
         <Route path="/pesquisa" element={<Pesquisa />} />
-        <Route path="/grafo" element={<VisNetwork />} />
         <Route path="/personalidades" element={<ListPersonalidades />} />
         <Route path="/estatistica" element={<Estatistica />} />
         <Route path="/sobre" element={<Sobre />} />        

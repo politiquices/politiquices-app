@@ -1,114 +1,136 @@
+import { useState } from 'react'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
-import Stack from '@mui/material/Stack'
-import CardHeader from '@mui/material/CardHeader'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
+import Chip from '@mui/material/Chip'
+import Button from '@mui/material/Button'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemAvatar from '@mui/material/ListItemAvatar'
+import ListItemText from '@mui/material/ListItemText'
 import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
 
-function TopRelated(data) {
-  if (data.data.relationships.who_opposes_person) {
-    // sort by freq.
-    data.data.relationships.who_opposes_person.sort((a, b) => b.freq - a.freq)
-    data.data.relationships.who_supports_person.sort((a, b) => b.freq - a.freq)
-    data.data.relationships.who_person_supports.sort((a, b) => b.freq - a.freq)
-    data.data.relationships.who_person_opposes.sort((a, b) => b.freq - a.freq)
+function TabLabel({ label, count }) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      {label}
+      <Chip label={count} size="small" />
+    </Box>
+  )
+}
 
-    const whoOpposesPerson = data.data.relationships.who_opposes_person.map((entry) => (
-      <Stack spacing={1}>
-        <CardHeader
-          avatar={
-            <Link href={`${entry.wiki_id}`}>
-              <Avatar alt={entry.name} src={entry.image_url} sx={{ width: 66, height: 66 }} />
-            </Link>
-          }
-          title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
-          subheader={
-            <Link
-              href={`/versus/${entry.wiki_id}/${'ent1_opposes_ent2'}/${data.data.wiki_id}/${minYear}/${maxYear}`}
-            >{`${entry.relative} (${entry.freq})`}</Link>
-          }
-        />
-      </Stack>
-    ))
-
-    const whoSupportsPerson = data.data.relationships.who_supports_person.map((entry) => (
-      <Stack spacing={1}>
-        <CardHeader
-          avatar={
-            <Link href={`${entry.wiki_id}`}>
-              <Avatar alt={entry.name} src={entry.image_url} sx={{ width: 66, height: 66 }} />
-            </Link>
-          }
-          title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
-          subheader={
-            <Link
-              href={`/versus/${entry.wiki_id}/${'ent1_supports_ent2'}/${data.data.wiki_id}/${minYear}/${maxYear}`}
-            >{`${entry.relative} (${entry.freq})`}</Link>
-          }
-        />
-      </Stack>
-    ))
-
-    const whoPersonSupports = data.data.relationships.who_person_supports.map((entry) => (
-      <Stack spacing={1}>
-        <CardHeader
-          avatar={
-            <Link href={`${entry.wiki_id}`}>
-              <Avatar alt={entry.name} src={entry.image_url} sx={{ width: 66, height: 66 }} />
-            </Link>
-          }
-          title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
-          subheader={
-            <Link
-              href={`/versus/${data.data.wiki_id}/${'ent1_supports_ent2'}/${entry.wiki_id}/${minYear}/${maxYear}`}
-            >{`${entry.relative} (${entry.freq})`}</Link>
-          }
-        />
-      </Stack>
-    ))
-
-    const whoPersonOpposes = data.data.relationships.who_person_opposes.map((entry) => (
-      <Stack spacing={1} align="center">
-        <CardHeader
-          avatar={
-            <Link href={`${entry.wiki_id}`}>
-              <Avatar alt={entry.name} src={entry.image_url} sx={{ width: 66, height: 66 }} />
-            </Link>
-          }
-          title={<Link href={`${entry.wiki_id}`}>{entry.name}</Link>}
-          subheader={
-            <Link
-              href={`/versus/${data.data.wiki_id}/${'ent1_opposes_ent2'}/${entry.wiki_id}/${minYear}/${maxYear}`}
-            >{`${entry.relative} (${entry.freq})`}</Link>
-          }
-        />
-      </Stack>
-    ))
-
+function RelatedList({ entries, versusHref }) {
+  if (!entries || entries.length === 0) {
     return (
-      <Grid container direction="row" spacing={1} justifyContent="space-evenly">
-        <Box sx={{ width: '15%' }}>
-          <Typography align="center">Oposto Por</Typography>
-          {whoOpposesPerson}
-        </Box>
-        <Box sx={{ width: '15%' }}>
-          <Typography align="center">Apoiado Por</Typography>
-          {whoSupportsPerson}
-        </Box>
-        <Box sx={{ width: '15%' }}>
-          <Typography align="center">Apoia</Typography>
-          {whoPersonSupports}
-        </Box>
-        <Box sx={{ width: '15%' }}>
-          <Typography align="center">Opõe-se</Typography>
-          {whoPersonOpposes}
-        </Box>
-      </Grid>
+      <Typography color="text.secondary" sx={{ mt: 2, ml: 2 }}>
+        Sem resultados.
+      </Typography>
     )
   }
-  return null
+
+  return (
+    <List dense>
+      {entries.map((entry) => (
+        <ListItem key={entry.wiki_id} alignItems="flex-start">
+          <ListItemAvatar>
+            <Link href={entry.wiki_id}>
+              <Avatar alt={entry.name} src={entry.image_url} sx={{ width: 52, height: 52 }} />
+            </Link>
+          </ListItemAvatar>
+          <ListItemText
+            primary={<Link href={entry.wiki_id}>{entry.name}</Link>}
+            secondary={
+              <Link href={versusHref(entry)}>
+                {`${entry.relative} (${entry.freq})`}
+              </Link>
+            }
+          />
+        </ListItem>
+      ))}
+    </List>
+  )
+}
+
+function TopRelated(data) {
+  const [activeTab, setActiveTab] = useState(0)
+  const [showSection, setShowSection] = useState(false)
+
+  if (!data.data.relationships.who_opposes_person) {
+    return null
+  }
+
+  const rels = data.data.relationships
+  const wikiId = data.data.wiki_id
+
+  // Sort all arrays by frequency descending
+  const apoiadoPor = [...rels.who_supports_person].sort((a, b) => b.freq - a.freq)
+  const apoia = [...rels.who_person_supports].sort((a, b) => b.freq - a.freq)
+  const opostoPor = [...rels.who_opposes_person].sort((a, b) => b.freq - a.freq)
+  const opoeSe = [...rels.who_person_opposes].sort((a, b) => b.freq - a.freq)
+
+  const tabs = [
+    {
+      label: 'Apoiado Por',
+      entries: apoiadoPor,
+      versusHref: (entry) => `/versus/${entry.wiki_id}/ent1_supports_ent2/${wikiId}/${minYear}/${maxYear}`,
+    },
+    {
+      label: 'Apoia',
+      entries: apoia,
+      versusHref: (entry) => `/versus/${wikiId}/ent1_supports_ent2/${entry.wiki_id}/${minYear}/${maxYear}`,
+    },
+    {
+      label: 'Oposto Por',
+      entries: opostoPor,
+      versusHref: (entry) => `/versus/${entry.wiki_id}/ent1_opposes_ent2/${wikiId}/${minYear}/${maxYear}`,
+    },
+    {
+      label: 'Opõe-se',
+      entries: opoeSe,
+      versusHref: (entry) => `/versus/${wikiId}/ent1_opposes_ent2/${entry.wiki_id}/${minYear}/${maxYear}`,
+    },
+  ]
+
+  const active = tabs[activeTab]
+
+  return (
+    <Box sx={{ width: '100%', mt: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mb: showSection ? 1 : 0 }}>
+        <Button variant="contained" onClick={() => setShowSection(!showSection)}>
+          Personalidades
+        </Button>
+      </Box>
+      {showSection && (
+        <>
+          <Tabs
+            value={activeTab}
+            onChange={(_, newValue) => setActiveTab(newValue)}
+            variant="fullWidth"
+          >
+            {tabs.map((tab, i) => (
+              <Tab
+                key={tab.label}
+                id={`related-tab-${i}`}
+                aria-controls={`related-tabpanel-${i}`}
+                label={<TabLabel label={tab.label} count={tab.entries.length} />}
+              />
+            ))}
+          </Tabs>
+          <Box
+            role="tabpanel"
+            id={`related-tabpanel-${activeTab}`}
+            aria-labelledby={`related-tab-${activeTab}`}
+            sx={{ maxHeight: 400, overflowY: 'auto' }}
+          >
+            <RelatedList entries={active.entries} versusHref={active.versusHref} />
+          </Box>
+        </>
+      )}
+    </Box>
+  )
 }
 
 export default TopRelated

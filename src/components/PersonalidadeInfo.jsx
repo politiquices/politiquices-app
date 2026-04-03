@@ -1,41 +1,41 @@
 /* eslint-disable react/destructuring-assignment */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
+import Paper from '@mui/material/Paper'
+import Stack from '@mui/material/Stack'
+import Chip from '@mui/material/Chip'
+import Pagination from '@mui/material/Pagination'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SiWikidata } from 'react-icons/si'
 import { HiAcademicCap } from 'react-icons/hi'
 import NewsTitles from './utils/NewsTitles'
-import ArticlesYearBar from './utils/ArticlesYearBar'
-import TopRelated from './TopRelated'
+import PersonalidadeGraph from './PersonalidadeGraph'
 import CircularIndeterminate from './utils/Circular'
 import { getPersonality, getPersonalityRelationships, getPersonalityTopRelated } from '../api'
 
 
-function FillIn(elements, url) {
-  // to remove the last part of the current URL
-  const completeURL = window.location.href
-  const baseURL = completeURL.replace(window.location.pathname, '')
-
-  const { length } = elements
-  if (length > 0) {
-    // eslint-disable-next-line react/destructuring-assignment
-    return elements.map((item) => (
-      <Link key={item.wiki_id.split('/').at(-1)} href={`${baseURL}/${url}/${item.wiki_id.split('/').at(-1)}`}>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {item.label}
-        </Typography>
-      </Link>
-    ))
+function FillIn(elements, url, baseURL) {
+  if (!elements || elements.length === 0) {
+    return (
+      <Typography sx={{ mb: 0.5 }} color="text.secondary">-</Typography>
+    )
   }
-  return (
-    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-      -
-    </Typography>
-  )
+  return elements.map((item) => {
+    const id = item.wiki_id.split('/').at(-1)
+    return (
+      <Link key={id} href={url ? `${baseURL}/${url}/${id}` : undefined}>
+        <Typography sx={{ mb: 0.5 }} color="text.secondary">{item.label}</Typography>
+      </Link>
+    )
+  })
 }
 
 
@@ -44,78 +44,89 @@ function PersonalidadeInfo({ data }) {
   const baseURL = window.location.href.replace(window.location.pathname, '')
 
   return (
-    <>
-      <Box sx={{ flexGrow: 1, paddingTop: 10 }}>
-        <Grid
-          container
-          spacing={1}
-          columns={14}
-          alignItems="center"
-          justifyContent="center"
-          // style={gridStyles}
-        >
-          {/* Foto + Nome + WikiData link */}
-          <Grid item xs={2}>
-            <center>
-              <Avatar alt={data.name} src={data.image_url} sx={{ width: 160, height: 160 }} />
-              <Typography variant="h6" component="div">
-                <b>{data.name}</b>
-              </Typography>
-              <Link href={wikiURL} target="_blank">
-                <SiWikidata size={35} />
-              </Link>
-            </center>
+    <Box sx={{ paddingTop: 10 }}>
+      {/* Hero card */}
+      <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
+        <Grid container spacing={3} alignItems="flex-start">
+          {/* Avatar + name + wiki */}
+          <Grid item xs={12} sm={3} sx={{ textAlign: 'center' }}>
+            <Avatar
+              alt={data.name}
+              src={data.image_url}
+              sx={{ width: 160, height: 160, mx: 'auto', mb: 1 }}
+            />
+            <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+              {data.name}
+            </Typography>
+            <Link href={wikiURL} target="_blank" title="Ver no Wikidata">
+              <SiWikidata size={28} />
+            </Link>
           </Grid>
 
-          {/* Partido(s) Político(s) */}
-          <Grid item xs={2}>
-            <center>
-              {!data || !data.parties ? (
-                <p>Loading...</p>
-              ) : (
-                data.parties.map((entry) => (
-                  <Link key={entry.wiki_id} href={`${baseURL}/party/${entry.wiki_id}`}>
-                    <div>
-                      <img width="68" src={entry.image_url} alt={entry.name} />
-                      <br />
-                    </div>
-                  </Link>
+          {/* Party logos + info fields */}
+          <Grid item xs={12} sm={9}>
+            {/* Party logos */}
+            {data.parties && data.parties.length > 0 && (
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+                  Partido(s)
+                </Typography>
+                <Stack direction="row" flexWrap="wrap" gap={1} sx={{ mt: 0.5 }}>
+                  {data.parties.map((entry) => (
+                    <Link key={entry.wiki_id} href={`${baseURL}/party/${entry.wiki_id}`}>
+                      <img width="60" src={entry.image_url} alt={entry.name} title={entry.name} />
+                    </Link>
+                  ))}
+                </Stack>
+              </Box>
+            )}
+
+            {/* Info fields as Accordions */}
+            <Box sx={{ mt: 1 }}>
+              {[
+                { label: 'Profissões', items: data.occupations, url: 'occupation' },
+                { label: 'Cargos Públicos', items: data.positions, url: 'public_office' },
+                {
+                  label: 'Mandatos',
+                  items: [...(data.governments ?? []), ...(data.assemblies ?? [])],
+                  url: null,
+                  mixed: true,
+                },
+                { label: 'Educação', items: data.education, url: 'education', icon: <HiAcademicCap size={16} /> },
+              ]
+                .filter((s) => s.items && s.items.length > 0)
+                .map((section) => (
+                  <Accordion key={section.label} disableGutters elevation={0} sx={{ '&:before': { display: 'none' }, border: '1px solid', borderColor: 'divider', mb: 0.5, borderRadius: '4px !important' }}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ minHeight: 36, '& .MuiAccordionSummary-content': { my: 0.5 } }}>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        {section.icon}
+                        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>{section.label}</Typography>
+                        <Typography variant="caption" color="text.secondary">({section.items.length})</Typography>
+                      </Stack>
+                    </AccordionSummary>
+                    <AccordionDetails sx={{ pt: 0.5, pb: 1 }}>
+                      {section.mixed
+                        ? <>
+                            {FillIn(data.governments ?? [], 'government', baseURL)}
+                            {FillIn(data.assemblies ?? [], 'assembly', baseURL)}
+                          </>
+                        : FillIn(section.items, section.url, baseURL)
+                      }
+                    </AccordionDetails>
+                  </Accordion>
                 ))
-              )}
-            </center>
-          </Grid>
-
-          {/* Profissão(ões) */}
-          <Grid item xs={2}>
-            {!data || !data.occupations ? <p>Loading...</p> : FillIn(data.occupations, 'occupation')}
-          </Grid>
-
-          {/* Cargos públicos */}
-          <Grid item xs={2}>
-            {!data || !data.positions ? <p>Loading...</p> : FillIn(data.positions, 'public_office')}
-          </Grid>
-
-          {/* Legislaturas - governos de que fez parte */}
-          <Grid item xs={2}>
-            {!data || !data.governments ? <p>Loading...</p> : FillIn(data.governments, 'government')}
-          </Grid>
-
-          {/* Assembleias de deputados de que fez parte */}
-          <Grid item xs={2}>
-            {!data || !data.assemblies ? <p>Loading...</p> : FillIn(data.assemblies, 'assembly')}
-          </Grid>
-
-          {/* Estudos */}
-          <Grid item xs={2}>
-            <HiAcademicCap size={35} />
-            {!data || !data.education ? <p>Loading...</p> : FillIn(data.education, 'education')}
+              }
+            </Box>
           </Grid>
         </Grid>
-      </Box>
-      <ArticlesYearBar data={data.relationships_charts} />
-    </>
+      </Paper>
+
+    </Box>
   )
 }
+
+
+const PAGE_SIZE = 10
 
 
 function FetchPersonalidade() {
@@ -126,23 +137,59 @@ function FetchPersonalidade() {
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  const fetchData = () => {
-    getPersonality(id).then(setInfo).catch(() => { setIsLoading(false); setIsError(true) })
-  }
+  const [newsPage, setNewsPage] = useState(1)
+  const [selectedEdge, setSelectedEdge] = useState(null)
+  const [graphState, setGraphState] = useState({ visibleNodeIds: null, showSupports: true, showOpposes: true })
 
-  const fetchDataHeadlines = () => {
-    getPersonalityRelationships(id).then(setHeadlines).catch(() => { setIsLoading(false); setIsError(true) })
-  }
-
-  const fetchTopRelated = () => {
-    getPersonalityTopRelated(id).then(setTopRelated).catch(() => { setIsLoading(false); setIsError(true) })
-  }
+  // Cache of relationship articles keyed by node ID.
+  // Starts with the main personality; grows as the graph expands to depth > 1.
+  const [headlinesCache, setHeadlinesCache] = useState({})
+  const headlinesCacheRef = useRef({})
 
   useEffect(() => {
-    fetchData()
-    fetchDataHeadlines()
-    fetchTopRelated()
+    headlinesCacheRef.current = headlinesCache
+  }, [headlinesCache])
+
+  useEffect(() => {
+    setInfo([])
+    setHeadlines([])
+    setTopRelated([])
+    setSelectedEdge(null)
+    setNewsPage(1)
+    setHeadlinesCache({})
+    headlinesCacheRef.current = {}
+    setGraphState({ visibleNodeIds: null, showSupports: true, showOpposes: true })
+
+    getPersonality(id).then(setInfo).catch(() => { setIsLoading(false); setIsError(true) })
+    getPersonalityTopRelated(id).then(setTopRelated).catch(() => { setIsLoading(false); setIsError(true) })
+    getPersonalityRelationships(id).then((data) => {
+      setHeadlines(data)
+      const initial = { [id]: data }
+      setHeadlinesCache(initial)
+      headlinesCacheRef.current = initial
+    }).catch(() => { setIsLoading(false); setIsError(true) })
   }, [id])
+
+  // Called by PersonalidadeGraph whenever new nodes are added to the graph cache.
+  // Fetches relationship articles for those nodes (best-effort, depth > 1 only).
+  const handleNodesChange = useCallback((newNodeIds) => {
+    newNodeIds
+      .filter((nodeId) => !headlinesCacheRef.current[nodeId])
+      .forEach((nodeId) => {
+        getPersonalityRelationships(nodeId)
+          .then((data) => {
+            headlinesCacheRef.current = { ...headlinesCacheRef.current, [nodeId]: data }
+            setHeadlinesCache((prev) => ({ ...prev, [nodeId]: data }))
+          })
+          .catch(() => {})
+      })
+  }, [])
+
+  const handleGraphChange = useCallback(({ visibleNodeIds, showSupports, showOpposes }) => {
+    setGraphState({ visibleNodeIds, showSupports, showOpposes })
+    setSelectedEdge(null)
+    setNewsPage(1)
+  }, [])
 
   if (isLoading || !info.relationships_charts || !headlines) {
     return <CircularIndeterminate />
@@ -150,27 +197,139 @@ function FetchPersonalidade() {
 
   info.wiki_id = id
 
-  const myHonda = {
-    relationships: topRelated,
-    wiki_id: info.wiki_id,
+  // Flatten all cached relationship articles into one pool.
+  const allArticles = Object.values(headlinesCache).flatMap((h) => [
+    ...(h.sentiment ?? []),
+    ...(h.opposed_by ?? []),
+    ...(h.supported_by ?? []),
+    ...(h.other ?? []),
+    ...(h.other_by ?? []),
+  ])
+
+  // Filter to nodes visible in the current graph state
+  const visibleArticles = graphState.visibleNodeIds
+    ? allArticles.filter((a) =>
+        graphState.visibleNodeIds.has(a.ent1_id) && graphState.visibleNodeIds.has(a.ent2_id)
+      )
+    : allArticles
+
+  // Filter by rel type matching the graph toggles (other always passes)
+  const typeFilteredArticles = visibleArticles.filter((a) => {
+    if (a.rel_type === 'supports' || a.rel_type === 'supported_by') return graphState.showSupports
+    if (a.rel_type === 'opposes'  || a.rel_type === 'opposed_by')   return graphState.showOpposes
+    return true
+  })
+
+  const rawFiltered = selectedEdge
+    ? typeFilteredArticles.filter((a) => {
+        const directMatch = a.ent1_id === selectedEdge.from && a.ent2_id === selectedEdge.to
+        const reverseMatch = a.ent1_id === selectedEdge.to && a.ent2_id === selectedEdge.from
+        if (!directMatch && !reverseMatch) return false
+        if (selectedEdge.label === 'apoia') {
+          if (directMatch) return a.rel_type === 'supports'
+          return a.rel_type === 'supported_by'
+        } else {
+          if (directMatch) return a.rel_type === 'opposes'
+          return a.rel_type === 'opposed_by'
+        }
+      })
+    : typeFilteredArticles
+
+  // Both caches may contain the same underlying article from different perspectives;
+  // deduplicate by arquivo_doc URL so each article appears only once.
+  const seenUrls = new Set()
+  const filteredArticles = rawFiltered.filter((a) => {
+    const key = a.arquivo_doc || a.original_url
+    if (seenUrls.has(key)) return false
+    seenUrls.add(key)
+    return true
+  })
+
+  const pagedArticles = filteredArticles.slice((newsPage - 1) * PAGE_SIZE, newsPage * PAGE_SIZE)
+
+  const handleEdgeClick = (edge) => {
+    setSelectedEdge(edge)
+    setNewsPage(1)
+  }
+
+  const handleClearEdge = () => {
+    setSelectedEdge(null)
+    setNewsPage(1)
   }
 
   return (
     <div>
       {info && <PersonalidadeInfo data={info} />}
-      {topRelated && <TopRelated data={myHonda} />}
-      <Grid
-        container
-        spacing={1}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: '100vh' }}
-        sx={{ paddingTop: 2 }}
-      >
-        {headlines.sentiment && <NewsTitles data={headlines.sentiment} />}
-        {isError && <div>Error fetching data.</div>}
-      </Grid>
+
+      {/* Graph */}
+      {topRelated && (
+        <PersonalidadeGraph
+          topRelated={topRelated}
+          mainId={info.wiki_id}
+          mainName={info.name}
+          mainImageUrl={info.image_url}
+          onEdgeClick={handleEdgeClick}
+          onBackgroundClick={handleClearEdge}
+          onNodesChange={handleNodesChange}
+          onGraphChange={handleGraphChange}
+        />
+      )}
+
+      {/* News */}
+      {headlines.sentiment && (
+        <Paper elevation={2} sx={{ p: 2, mt: 1 }}>
+          <Stack direction="row" spacing={1} alignItems="center" justifyContent="center" flexWrap="wrap" sx={{ mb: 1 }}>
+            {[
+              { key: 'supports',     label: 'Apoia',       color: '#44861E' },
+              { key: 'opposes',      label: 'Opõe-se',     color: '#d32f2f' },
+              { key: 'supported_by', label: 'Apoiado por', color: '#66bb6a' },
+              { key: 'opposed_by',   label: 'Oposto por',  color: '#ef9a9a' },
+              { key: 'other',        label: 'Outro',       color: '#9e9e9e' },
+            ].map(({ key, label, color }) => {
+              const count = filteredArticles.filter(
+                (a) => a.rel_type === key || (key === 'other' && a.rel_type === 'other_by')
+              ).length
+              if (count === 0) return null
+              return (
+                <Chip
+                  key={key}
+                  label={`${label}: ${count}`}
+                  size="small"
+                  variant="outlined"
+                  sx={{ borderColor: color, color, fontWeight: 'bold' }}
+                />
+              )
+            })}
+          </Stack>
+
+          {selectedEdge && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+              <Chip
+                label={`${selectedEdge.from} ${selectedEdge.label} ${selectedEdge.to}`}
+                onDelete={handleClearEdge}
+                color="primary"
+                size="small"
+              />
+            </Box>
+          )}
+
+          <NewsTitles data={pagedArticles} />
+
+          {isError && <div>Error fetching data.</div>}
+
+          {filteredArticles.length > PAGE_SIZE && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
+              <Pagination
+                count={Math.ceil(filteredArticles.length / PAGE_SIZE)}
+                page={newsPage}
+                onChange={(_, value) => setNewsPage(value)}
+                color="primary"
+              />
+            </Box>
+          )}
+        </Paper>
+      )}
+
     </div>
   )
 }
