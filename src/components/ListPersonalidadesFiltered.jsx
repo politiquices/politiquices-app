@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
+import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
 import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
 import { getPersonalitiesFiltered } from '../api'
+import { GOVERNMENTS, ASSEMBLIES } from '../constants'
 
 function ListPersonalidadesFiltered(personalities) {
   const headlines = personalities.data.map((rawData) => ({
@@ -13,7 +19,6 @@ function ListPersonalidadesFiltered(personalities) {
     nr_articles: rawData.nr_articles,
   }))
 
-  // to remove the last part of the current URL
   const fullURL = window.location.href
   const baseURL = fullURL.replace(window.location.pathname, '')
 
@@ -27,6 +32,33 @@ function ListPersonalidadesFiltered(personalities) {
   ))
 }
 
+function SelectorControl({ type, id }) {
+  const navigate = useNavigate()
+
+  if (type !== 'government' && type !== 'assembly') return null
+
+  const items = type === 'government' ? GOVERNMENTS : ASSEMBLIES
+  const label = type === 'government' ? 'Governo' : 'Assembleia'
+  const basePath = type === 'government' ? '/government' : '/assembly'
+
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+      <FormControl size="small" sx={{ minWidth: 320 }}>
+        <InputLabel>{label}</InputLabel>
+        <Select
+          value={id}
+          label={label}
+          onChange={(e) => navigate(`${basePath}/${e.target.value}`)}
+        >
+          {items.map(([wikiId, name]) => (
+            <MenuItem key={wikiId} value={wikiId}>{name}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
+  )
+}
+
 function FetchPersonalidades(requestType) {
   const { type } = requestType
   const { id } = useParams()
@@ -34,7 +66,8 @@ function FetchPersonalidades(requestType) {
   const [data, setNotes] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
-  const fetchData = () => {
+
+  useEffect(() => {
     setIsLoading(true)
     getPersonalitiesFiltered(type, id)
       .then((personalities) => {
@@ -45,25 +78,20 @@ function FetchPersonalidades(requestType) {
         setIsLoading(false)
         setIsError(true)
       })
-  }
-  useEffect(() => {
-    fetchData()
   }, [type, id])
+
   if (isLoading) {
     return <div>Loading...</div>
   }
-  return (
-    // xs, sm, md, lg, xl
-    // xs - default
-    // sm - min width 600px
-    // md - min width 960px
-    // lg - min width 1280px
-    // xl - min width 1920px
 
-    <Grid container direction="row" spacing={6} justifyContent="space-evenly" sx={{ paddingTop: 10 }}>
-      {data && <ListPersonalidadesFiltered data={data} />}
-      {isError && <div>Error fetching data.</div>}
-    </Grid>
+  return (
+    <Box sx={{ paddingTop: 10, px: 2 }}>
+      <SelectorControl type={type} id={id} />
+      <Grid container direction="row" spacing={6} justifyContent="space-evenly">
+        {data && <ListPersonalidadesFiltered data={data} />}
+        {isError && <div>Error fetching data.</div>}
+      </Grid>
+    </Box>
   )
 }
 

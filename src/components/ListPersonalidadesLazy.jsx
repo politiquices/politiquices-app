@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Link from '@mui/material/Link';
 import CircularProgress from '@mui/material/CircularProgress';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Typography from '@mui/material/Typography';
 import { getPersonalitiesPaged } from '../api'
 
 function ListPersonalidades({ personalities }) {
@@ -11,7 +15,7 @@ function ListPersonalidades({ personalities }) {
       <Link justify="center" href={`personalidade/${entry.wiki_id}`}>
         <Avatar alt={entry.focus_ent} src={entry.local_image} sx={{ width: 125, height: 125 }} />
         {entry.label}
-      </Link>      
+      </Link>
     </Grid>
   ));
 }
@@ -21,16 +25,17 @@ function FetchPersonalidades() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [portugueseOnly, setPortugueseOnly] = useState(false);
   const loader = useRef(null);
-  const pageRef = useRef(1); // Use useRef to store the latest page value
+  const pageRef = useRef(1);
+  const portugueseOnlyRef = useRef(false);
 
   const fetchData = () => {
     setIsLoading(true);
-    getPersonalitiesPaged(pageRef.current)
+    getPersonalitiesPaged(pageRef.current, portugueseOnlyRef.current)
       .then((data) => {
         setIsLoading(false);
-        setPersonalities((prevPersonalities) => [...prevPersonalities, ...data]);
-        // eslint-disable-next-line no-plusplus
+        setPersonalities((prev) => [...prev, ...data]);
         pageRef.current++;
         setHasMore(data.length > 0);
       })
@@ -39,6 +44,16 @@ function FetchPersonalidades() {
         setIsError(true);
       });
   };
+
+  const handleFilterChange = (_, value) => {
+    if (value === null) return
+    const isPortuguese = value === 'portuguese'
+    portugueseOnlyRef.current = isPortuguese
+    setPortugueseOnly(isPortuguese)
+    setPersonalities([])
+    pageRef.current = 1
+    setHasMore(true)
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -54,15 +69,33 @@ function FetchPersonalidades() {
         observer.unobserve(loader.current);
       }
     };
-  }, [hasMore]); // Observe when loader is visible
+  }, [hasMore]);
 
   return (
-    <Grid container direction="row" spacing={6} justifyContent="space-evenly" sx={{ paddingTop: 10 }}>
-      <ListPersonalidades personalities={personalities} />
-      {isLoading && <CircularProgress sx={{ alignSelf: 'center' }} />}
-      {isError && <div>Error fetching data.</div>}
-      <div ref={loader} />
-    </Grid>
+    <Box sx={{ paddingTop: 10 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+        <ToggleButtonGroup
+          value={portugueseOnly ? 'portuguese' : 'all'}
+          exclusive
+          onChange={handleFilterChange}
+          size="small"
+        >
+          <ToggleButton value="all">
+            <Typography variant="body2">Todas</Typography>
+          </ToggleButton>
+          <ToggleButton value="portuguese">
+            <Typography variant="body2">Portuguesas</Typography>
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+
+      <Grid container direction="row" spacing={6} justifyContent="space-evenly">
+        <ListPersonalidades personalities={personalities} />
+        {isLoading && <CircularProgress sx={{ alignSelf: 'center' }} />}
+        {isError && <div>Error fetching data.</div>}
+        <div ref={loader} />
+      </Grid>
+    </Box>
   );
 }
 

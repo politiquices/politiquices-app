@@ -83,10 +83,6 @@ function Versus() {
 
       {/* Controls */}
       <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
-          Versus
-        </Typography>
-
         {/* Three selects in a row */}
         <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }}>
           <Grid item xs={12} md={4}>
@@ -132,10 +128,12 @@ function Versus() {
           />
         </Box>
 
-        <Button variant="contained" onClick={handleClick} disabled={!canSubmit}>
-          {loading ? <CircularProgress size={20} sx={{ mr: 1 }} /> : null}
-          Actualizar
-        </Button>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button variant="contained" onClick={handleClick} disabled={!canSubmit}>
+            {loading ? <CircularProgress size={20} sx={{ mr: 1 }} /> : null}
+            Actualizar
+          </Button>
+        </Box>
       </Paper>
 
       {isError && <Typography color="error" sx={{ mb: 2 }}>Erro ao carregar dados.</Typography>}

@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
@@ -140,23 +140,48 @@ function FetchPersonalidade() {
   const [newsPage, setNewsPage] = useState(1)
   const [selectedEdge, setSelectedEdge] = useState(null)
 
-  const fetchData = () => {
-    getPersonality(id).then(setInfo).catch(() => { setIsLoading(false); setIsError(true) })
-  }
-
-  const fetchDataHeadlines = () => {
-    getPersonalityRelationships(id).then(setHeadlines).catch(() => { setIsLoading(false); setIsError(true) })
-  }
-
-  const fetchTopRelated = () => {
-    getPersonalityTopRelated(id).then(setTopRelated).catch(() => { setIsLoading(false); setIsError(true) })
-  }
+  // Cache of relationship articles keyed by node ID.
+  // Starts with the main personality; grows as the graph expands to depth > 1.
+  const [headlinesCache, setHeadlinesCache] = useState({})
+  const headlinesCacheRef = useRef({})
 
   useEffect(() => {
-    fetchData()
-    fetchDataHeadlines()
-    fetchTopRelated()
+    headlinesCacheRef.current = headlinesCache
+  }, [headlinesCache])
+
+  useEffect(() => {
+    setInfo([])
+    setHeadlines([])
+    setTopRelated([])
+    setSelectedEdge(null)
+    setNewsPage(1)
+    setHeadlinesCache({})
+    headlinesCacheRef.current = {}
+
+    getPersonality(id).then(setInfo).catch(() => { setIsLoading(false); setIsError(true) })
+    getPersonalityTopRelated(id).then(setTopRelated).catch(() => { setIsLoading(false); setIsError(true) })
+    getPersonalityRelationships(id).then((data) => {
+      setHeadlines(data)
+      const initial = { [id]: data }
+      setHeadlinesCache(initial)
+      headlinesCacheRef.current = initial
+    }).catch(() => { setIsLoading(false); setIsError(true) })
   }, [id])
+
+  // Called by PersonalidadeGraph whenever new nodes are added to the graph cache.
+  // Fetches relationship articles for those nodes (best-effort, depth > 1 only).
+  const handleNodesChange = useCallback((newNodeIds) => {
+    newNodeIds
+      .filter((nodeId) => !headlinesCacheRef.current[nodeId])
+      .forEach((nodeId) => {
+        getPersonalityRelationships(nodeId)
+          .then((data) => {
+            headlinesCacheRef.current = { ...headlinesCacheRef.current, [nodeId]: data }
+            setHeadlinesCache((prev) => ({ ...prev, [nodeId]: data }))
+          })
+          .catch(() => {})
+      })
+  }, [])
 
   if (isLoading || !info.relationships_charts || !headlines) {
     return <CircularIndeterminate />
@@ -164,13 +189,14 @@ function FetchPersonalidade() {
 
   info.wiki_id = id
 
-  const allArticles = [
-    ...(headlines.sentiment ?? []),
-    ...(headlines.opposed_by ?? []),
-    ...(headlines.supported_by ?? []),
-  ]
+  // Flatten all cached relationship articles into one pool.
+  const allArticles = Object.values(headlinesCache).flatMap((h) => [
+    ...(h.sentiment ?? []),
+    ...(h.opposed_by ?? []),
+    ...(h.supported_by ?? []),
+  ])
 
-  const filteredArticles = selectedEdge
+  const rawFiltered = selectedEdge
     ? allArticles.filter((a) => {
         const directMatch = a.ent1_id === selectedEdge.from && a.ent2_id === selectedEdge.to
         const reverseMatch = a.ent1_id === selectedEdge.to && a.ent2_id === selectedEdge.from
@@ -184,6 +210,16 @@ function FetchPersonalidade() {
         }
       })
     : allArticles
+
+  // Both caches may contain the same underlying article from different perspectives;
+  // deduplicate by arquivo_doc URL so each article appears only once.
+  const seenUrls = new Set()
+  const filteredArticles = rawFiltered.filter((a) => {
+    const key = a.arquivo_doc || a.original_url
+    if (seenUrls.has(key)) return false
+    seenUrls.add(key)
+    return true
+  })
 
   const pagedArticles = filteredArticles.slice((newsPage - 1) * PAGE_SIZE, newsPage * PAGE_SIZE)
 
@@ -210,6 +246,7 @@ function FetchPersonalidade() {
           mainImageUrl={info.image_url}
           onEdgeClick={handleEdgeClick}
           onBackgroundClick={handleClearEdge}
+          onNodesChange={handleNodesChange}
         />
       )}
 
