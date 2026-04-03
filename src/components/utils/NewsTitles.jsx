@@ -247,33 +247,21 @@ function NewsTitles(props) {
     handleClose();
   };
 
-  const translateRelType = (rel_type) => {
-    let translatedText;
-    let color;
-
-
-    // Translate rel_type and assign color
-    switch (rel_type.rel_type) {
-      case 'ent1_opposes_ent2':
-      case 'opposes':
-      case 'opposed_by':
-        translatedText = 'opõe-se';
-        color = 'red';
-        break;
+  const relTypeStyle = (relType) => {
+    switch (relType) {
       case 'ent1_supports_ent2':
+      case 'ent2_supports_ent1':
       case 'supports':
       case 'supported_by':
-        translatedText = 'apoia';
-        color = 'green';
-        break;
+        return { label: 'apoia', color: '#44861E', bg: '#e8f5e9', border: '#44861E' }
+      case 'ent1_opposes_ent2':
+      case 'ent2_opposes_ent1':
+      case 'opposes':
+      case 'opposed_by':
+        return { label: 'opõe-se', color: '#c62828', bg: '#ffebee', border: '#FF0000' }
       default:
-        return null;
+        return { label: 'outro', color: '#757575', bg: '#f5f5f5', border: '#bdbdbd' }
     }
-
-    // Return JSX element with translated text and color
-    return (
-      <span style={{ color }}>{translatedText}</span>
-    );
   };
 
   const titlesRendered = headlines.map((entry, index) => (
@@ -282,7 +270,7 @@ function NewsTitles(props) {
         width: '100%',
         margin: '0.5rem',
         position: 'relative',
-        borderTop: `4px solid ${entry.rel_type.includes('supports') ? '#44861E' : '#FF0000'}`,
+        borderTop: `4px solid ${relTypeStyle(entry.rel_type).border}`,
         transition: 'box-shadow 0.2s',
         '&:hover': { boxShadow: 6 },
       }}>
@@ -308,12 +296,12 @@ function NewsTitles(props) {
               {dateConverter({ dateString: entry.date })}
             </Typography>
             <Chip
-              label={translateRelType({ rel_type: entry.rel_type })}
+              label={relTypeStyle(entry.rel_type).label}
               size="small"
               sx={{
                 fontWeight: 'bold',
-                bgcolor: entry.rel_type.includes('supports') ? '#e8f5e9' : '#ffebee',
-                color: entry.rel_type.includes('supports') ? '#44861E' : '#c62828',
+                bgcolor: relTypeStyle(entry.rel_type).bg,
+                color: relTypeStyle(entry.rel_type).color,
               }}
             />
           </Box>

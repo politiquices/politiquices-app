@@ -139,6 +139,7 @@ function FetchPersonalidade() {
 
   const [newsPage, setNewsPage] = useState(1)
   const [selectedEdge, setSelectedEdge] = useState(null)
+  const [graphState, setGraphState] = useState({ visibleNodeIds: null, showSupports: true, showOpposes: true })
 
   // Cache of relationship articles keyed by node ID.
   // Starts with the main personality; grows as the graph expands to depth > 1.
@@ -157,6 +158,7 @@ function FetchPersonalidade() {
     setNewsPage(1)
     setHeadlinesCache({})
     headlinesCacheRef.current = {}
+    setGraphState({ visibleNodeIds: null, showSupports: true, showOpposes: true })
 
     getPersonality(id).then(setInfo).catch(() => { setIsLoading(false); setIsError(true) })
     getPersonalityTopRelated(id).then(setTopRelated).catch(() => { setIsLoading(false); setIsError(true) })
@@ -183,6 +185,12 @@ function FetchPersonalidade() {
       })
   }, [])
 
+  const handleGraphChange = useCallback(({ visibleNodeIds, showSupports, showOpposes }) => {
+    setGraphState({ visibleNodeIds, showSupports, showOpposes })
+    setSelectedEdge(null)
+    setNewsPage(1)
+  }, [])
+
   if (isLoading || !info.relationships_charts || !headlines) {
     return <CircularIndeterminate />
   }
@@ -194,10 +202,26 @@ function FetchPersonalidade() {
     ...(h.sentiment ?? []),
     ...(h.opposed_by ?? []),
     ...(h.supported_by ?? []),
+    ...(h.other ?? []),
+    ...(h.other_by ?? []),
   ])
 
+  // Filter to nodes visible in the current graph state
+  const visibleArticles = graphState.visibleNodeIds
+    ? allArticles.filter((a) =>
+        graphState.visibleNodeIds.has(a.ent1_id) && graphState.visibleNodeIds.has(a.ent2_id)
+      )
+    : allArticles
+
+  // Filter by rel type matching the graph toggles (other always passes)
+  const typeFilteredArticles = visibleArticles.filter((a) => {
+    if (a.rel_type === 'supports' || a.rel_type === 'supported_by') return graphState.showSupports
+    if (a.rel_type === 'opposes'  || a.rel_type === 'opposed_by')   return graphState.showOpposes
+    return true
+  })
+
   const rawFiltered = selectedEdge
-    ? allArticles.filter((a) => {
+    ? typeFilteredArticles.filter((a) => {
         const directMatch = a.ent1_id === selectedEdge.from && a.ent2_id === selectedEdge.to
         const reverseMatch = a.ent1_id === selectedEdge.to && a.ent2_id === selectedEdge.from
         if (!directMatch && !reverseMatch) return false
@@ -209,7 +233,7 @@ function FetchPersonalidade() {
           return a.rel_type === 'opposed_by'
         }
       })
-    : allArticles
+    : typeFilteredArticles
 
   // Both caches may contain the same underlying article from different perspectives;
   // deduplicate by arquivo_doc URL so each article appears only once.
@@ -247,15 +271,36 @@ function FetchPersonalidade() {
           onEdgeClick={handleEdgeClick}
           onBackgroundClick={handleClearEdge}
           onNodesChange={handleNodesChange}
+          onGraphChange={handleGraphChange}
         />
       )}
 
       {/* News */}
       {headlines.sentiment && (
         <Paper elevation={2} sx={{ p: 2, mt: 1 }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
-            Notícias {filteredArticles.length > 0 && `(${filteredArticles.length})`}
-          </Typography>
+          <Stack direction="row" spacing={1} alignItems="center" justifyContent="center" flexWrap="wrap" sx={{ mb: 1 }}>
+            {[
+              { key: 'supports',     label: 'Apoia',       color: '#44861E' },
+              { key: 'opposes',      label: 'Opõe-se',     color: '#d32f2f' },
+              { key: 'supported_by', label: 'Apoiado por', color: '#66bb6a' },
+              { key: 'opposed_by',   label: 'Oposto por',  color: '#ef9a9a' },
+              { key: 'other',        label: 'Outro',       color: '#9e9e9e' },
+            ].map(({ key, label, color }) => {
+              const count = filteredArticles.filter(
+                (a) => a.rel_type === key || (key === 'other' && a.rel_type === 'other_by')
+              ).length
+              if (count === 0) return null
+              return (
+                <Chip
+                  key={key}
+                  label={`${label}: ${count}`}
+                  size="small"
+                  variant="outlined"
+                  sx={{ borderColor: color, color, fontWeight: 'bold' }}
+                />
+              )
+            })}
+          </Stack>
 
           {selectedEdge && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
