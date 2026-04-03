@@ -90,9 +90,6 @@ function Versus() {
         {/* Three selects in a row */}
         <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }}>
           <Grid item xs={12} md={4}>
-            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', mb: 0.5 }}>
-              Entidade 1
-            </Typography>
             <Select
               value={ent1}
               onChange={setEnt1}
@@ -102,9 +99,6 @@ function Versus() {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', mb: 0.5 }}>
-              Relação
-            </Typography>
             <Select
               value={relType}
               onChange={setRelType}
@@ -114,9 +108,6 @@ function Versus() {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', mb: 0.5 }}>
-              Entidade 2
-            </Typography>
             <Select
               value={ent2}
               onChange={setEnt2}

@@ -17,7 +17,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SiWikidata } from 'react-icons/si'
 import { HiAcademicCap } from 'react-icons/hi'
 import NewsTitles from './utils/NewsTitles'
-import ArticlesYearBar from './utils/ArticlesYearBar'
 import PersonalidadeGraph from './PersonalidadeGraph'
 import CircularIndeterminate from './utils/Circular'
 import { getPersonality, getPersonalityRelationships, getPersonalityTopRelated } from '../api'
@@ -165,13 +164,25 @@ function FetchPersonalidade() {
 
   info.wiki_id = id
 
-  const allArticles = headlines.sentiment ?? []
+  const allArticles = [
+    ...(headlines.sentiment ?? []),
+    ...(headlines.opposed_by ?? []),
+    ...(headlines.supported_by ?? []),
+  ]
 
   const filteredArticles = selectedEdge
-    ? allArticles.filter((a) =>
-        (a.ent1_id === selectedEdge.from && a.ent2_id === selectedEdge.to) ||
-        (a.ent1_id === selectedEdge.to && a.ent2_id === selectedEdge.from)
-      )
+    ? allArticles.filter((a) => {
+        const directMatch = a.ent1_id === selectedEdge.from && a.ent2_id === selectedEdge.to
+        const reverseMatch = a.ent1_id === selectedEdge.to && a.ent2_id === selectedEdge.from
+        if (!directMatch && !reverseMatch) return false
+        if (selectedEdge.label === 'apoia') {
+          if (directMatch) return a.rel_type === 'supports'
+          return a.rel_type === 'supported_by'
+        } else {
+          if (directMatch) return a.rel_type === 'opposes'
+          return a.rel_type === 'opposed_by'
+        }
+      })
     : allArticles
 
   const pagedArticles = filteredArticles.slice((newsPage - 1) * PAGE_SIZE, newsPage * PAGE_SIZE)
@@ -203,10 +214,14 @@ function FetchPersonalidade() {
       )}
 
       {/* News */}
-      <Box sx={{ mt: 1 }}>
-          {/* Active edge indicator */}
+      {headlines.sentiment && (
+        <Paper elevation={2} sx={{ p: 2, mt: 1 }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+            Notícias {filteredArticles.length > 0 && `(${filteredArticles.length})`}
+          </Typography>
+
           {selectedEdge && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 1, mb: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
               <Chip
                 label={`${selectedEdge.from} ${selectedEdge.label} ${selectedEdge.to}`}
                 onDelete={handleClearEdge}
@@ -216,7 +231,8 @@ function FetchPersonalidade() {
             </Box>
           )}
 
-          {headlines.sentiment && <NewsTitles data={pagedArticles} />}
+          <NewsTitles data={pagedArticles} />
+
           {isError && <div>Error fetching data.</div>}
 
           {filteredArticles.length > PAGE_SIZE && (
@@ -229,9 +245,9 @@ function FetchPersonalidade() {
               />
             </Box>
           )}
-      </Box>
+        </Paper>
+      )}
 
-      <ArticlesYearBar data={info.relationships_charts} />
     </div>
   )
 }

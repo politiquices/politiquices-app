@@ -184,21 +184,24 @@ function NewsTitles(props) {
     );
   }
 
-  const headlines = data.map((RawData) => ({
-    title: RawData.title,
-    paragraph: RawData.paragraph,
-    url: RawData.arquivo_doc,
-    date: RawData.date,
-    rel_type: RawData.rel_type,
-    original_url: RawData.original_url,
-    original_url_image: ProcessArticleLink(RawData.domain),
-    main_ent_image: RawData.ent1_img,
-    main_ent_name: RawData.ent1_str,
-    main_ent_url: RawData.ent1_id,
-    other_ent_image: RawData.ent2_img,
-    other_ent_name: RawData.ent2_str,
-    other_ent_url: RawData.ent2_id,
-  }));
+  const headlines = data.map((RawData) => {
+    const isReverse = RawData.rel_type === 'opposed_by' || RawData.rel_type === 'supported_by'
+    return {
+      title: RawData.title,
+      paragraph: RawData.paragraph,
+      url: RawData.arquivo_doc,
+      date: RawData.date,
+      rel_type: RawData.rel_type,
+      original_url: RawData.original_url,
+      original_url_image: ProcessArticleLink(RawData.domain),
+      main_ent_image: isReverse ? RawData.ent2_img : RawData.ent1_img,
+      main_ent_name: isReverse ? RawData.ent2_str : RawData.ent1_str,
+      main_ent_url: isReverse ? RawData.ent2_id : RawData.ent1_id,
+      other_ent_image: isReverse ? RawData.ent1_img : RawData.ent2_img,
+      other_ent_name: isReverse ? RawData.ent1_str : RawData.ent2_str,
+      other_ent_url: isReverse ? RawData.ent1_id : RawData.ent2_id,
+    }
+  });
 
   const handleOpen = (clickedIndex) => {
     if (isOpenCollapse === clickedIndex) {
@@ -253,16 +256,17 @@ function NewsTitles(props) {
     switch (rel_type.rel_type) {
       case 'ent1_opposes_ent2':
       case 'opposes':
+      case 'opposed_by':
         translatedText = 'opõe-se';
         color = 'red';
         break;
       case 'ent1_supports_ent2':
       case 'supports':
+      case 'supported_by':
         translatedText = 'apoia';
         color = 'green';
         break;
       default:
-        // For any other rel_type, return null
         return null;
     }
 
