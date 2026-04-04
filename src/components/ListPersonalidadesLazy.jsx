@@ -29,17 +29,21 @@ function FetchPersonalidades() {
   const loader = useRef(null);
   const pageRef = useRef(1);
   const portugueseOnlyRef = useRef(false);
+  const sessionRef = useRef(0);
 
   const fetchData = () => {
+    const session = sessionRef.current;
     setIsLoading(true);
     getPersonalitiesPaged(pageRef.current, portugueseOnlyRef.current)
       .then((data) => {
+        if (sessionRef.current !== session) return;
         setIsLoading(false);
         setPersonalities((prev) => [...prev, ...data]);
         pageRef.current++;
         setHasMore(data.length > 0);
       })
       .catch(() => {
+        if (sessionRef.current !== session) return;
         setIsLoading(false);
         setIsError(true);
       });
@@ -52,7 +56,9 @@ function FetchPersonalidades() {
     setPortugueseOnly(isPortuguese)
     setPersonalities([])
     pageRef.current = 1
+    sessionRef.current += 1
     setHasMore(true)
+    fetchData()
   }
 
   useEffect(() => {
