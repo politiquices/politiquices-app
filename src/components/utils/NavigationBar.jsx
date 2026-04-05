@@ -12,7 +12,7 @@ import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 // import AdbIcon from '@mui/icons-material/Adb'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import { getPersonsAndParties, getParties, getPersons } from '../../api'
@@ -21,7 +21,7 @@ import { GOVERNMENTS, ASSEMBLIES } from '../../constants'
 const pages = [
   ['Home', 'home'],
   ['Personalidades', 'personalidades'],
-  ['Random', 'random'], // Add this new option
+  ['Random', 'random'],
   ['Versus', 'versus'],
   ['Explorar', 'explorar'],
   ['Sobre', 'sobre'],
@@ -29,6 +29,7 @@ const pages = [
 
 
 function NewResponsiveAppBar() {
+  const navigate = useNavigate()
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [anchorElUserAss, setAnchorElUserAss] = React.useState(null)
@@ -67,11 +68,10 @@ function NewResponsiveAppBar() {
 
   function handleChange(e, selected) {
     if (isParty(selected)) {
-      window.open(`/party/${selected.value}`, '_self')
+      navigate(`/party/${selected.value}`)
+    } else {
+      navigate(`/personalidade/${selected.value}`)
     }
-    else {
-      window.open(`/personalidade/${selected.value}`, '_self')
-      }
   }
 
   function ComboBox() {
@@ -110,8 +110,7 @@ function NewResponsiveAppBar() {
     setAnchorElUserAss(null)
   }
   const handleNavClick = (value) => {
-    // navigate(`/${pageName}`)
-    window.open(`/government/${value}`, '_self')
+    navigate(`/government/${value}`)
     setAnchorElUser(null)
   }
 
@@ -121,18 +120,16 @@ function NewResponsiveAppBar() {
   }
 
   const handleNavClickAss = (value) => {
-    // navigate(`/${pageName}`)
-    window.open(`/assembly/${value}`, '_self')
+    navigate(`/assembly/${value}`)
     setAnchorElUserAss(null)
   }
 
   const handleRandomPersonality = () => {
     if (personsWithNews.length > 0) {
-      const randomIndex = Math.floor(Math.random() * personsWithNews.length);
-      const randomPerson = personsWithNews[randomIndex];
-      window.open(`/personalidade/${randomPerson.value}`, '_self');
+      const randomIndex = Math.floor(Math.random() * personsWithNews.length)
+      navigate(`/personalidade/${personsWithNews[randomIndex].value}`)
     }
-  };
+  }
 
   return (
     <AppBar position="fixed">
@@ -189,7 +186,10 @@ function NewResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page[0]} onClick={handleCloseNavMenu}>
+                <MenuItem
+                  key={page[0]}
+                  onClick={() => { handleCloseNavMenu(); if (page[1] === 'random') handleRandomPersonality() }}
+                >
                   <Typography textAlign="center">{page[0]}</Typography>
                 </MenuItem>
               ))}
@@ -197,22 +197,30 @@ function NewResponsiveAppBar() {
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Link 
-                key={page[0]} 
-                style={{ textDecoration: 'none' }} 
-                to={page[1] === 'random' ? '#' : `/${page[1]}`}
-                onClick={page[1] === 'random' ? handleRandomPersonality : undefined}
-              >
-                <Button 
-                  key={page[0]} 
-                  onClick={handleCloseNavMenu} 
+            {pages.map((page) =>
+              page[1] === 'random' ? (
+                <Button
+                  key={page[0]}
+                  onClick={handleRandomPersonality}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
                   {page[0]}
                 </Button>
-              </Link>
-            ))}
+              ) : (
+                <Link
+                  key={page[0]}
+                  style={{ textDecoration: 'none' }}
+                  to={`/${page[1]}`}
+                >
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    {page[0]}
+                  </Button>
+                </Link>
+              )
+            )}
           </Box>
 
           {/* Pesquisa */}

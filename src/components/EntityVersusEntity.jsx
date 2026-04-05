@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
 import { useParams } from 'react-router-dom'
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
@@ -43,7 +44,7 @@ function EntityVersusEntity() {
       sx={{ paddingTop: 10 }}
     >
       {headlines && <NewsTitles data={headlines} />}
-      {isError && <div>Error fetching data.</div>}
+      {isError && <Typography color="error">Erro ao carregar dados.</Typography>}
     </Grid>
   )
 }

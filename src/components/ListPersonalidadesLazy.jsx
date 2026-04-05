@@ -98,7 +98,7 @@ function FetchPersonalidades() {
       <Grid container direction="row" spacing={6} justifyContent="space-evenly">
         <ListPersonalidades personalities={personalities} />
         {isLoading && <CircularProgress sx={{ alignSelf: 'center' }} />}
-        {isError && <div>Error fetching data.</div>}
+        {isError && <Typography color="error">Erro ao carregar dados.</Typography>}
         <div ref={loader} />
       </Grid>
     </Box>

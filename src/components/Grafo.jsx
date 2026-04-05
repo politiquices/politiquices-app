@@ -11,7 +11,10 @@ function VisNetwork() {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [selectedOption, setSelectedOption] = useState();
-  const [Yearsvalues, setValue] = useState([2000, 2024]);
+  const [Yearsvalues, setValue] = useState([
+    Number(import.meta.env.VITE_MIN_YEAR),
+    Number(import.meta.env.VITE_MAX_YEAR),
+  ]);
   const [personalities, setPersonalities] = useState();
   const [minNoticias, setMinNoticias] = useState(10);
   const [onlyAmongSelected, setOnlyAmongSelected] = useState(true);

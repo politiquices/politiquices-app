@@ -10,6 +10,7 @@ import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { getPersonalitiesFiltered, getParties } from '../api'
+import CircularIndeterminate from './utils/Circular'
 import { GOVERNMENTS, ASSEMBLIES } from '../constants'
 
 function ListPersonalidadesFiltered(personalities) {
@@ -119,7 +120,7 @@ function FetchPersonalidades(requestType) {
   }, [type, id])
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <CircularIndeterminate />
   }
 
   const entityLabel = (type === 'occupation' || type === 'education') && data.length > 0
@@ -133,7 +134,7 @@ function FetchPersonalidades(requestType) {
       <SelectorControl type={type} id={id} />
       <Grid container direction="row" spacing={6} justifyContent="space-evenly">
         {data && <ListPersonalidadesFiltered data={data} />}
-        {isError && <div>Error fetching data.</div>}
+        {isError && <Typography color="error">Erro ao carregar dados.</Typography>}
       </Grid>
     </Box>
   )

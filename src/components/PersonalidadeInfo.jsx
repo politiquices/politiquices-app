@@ -315,7 +315,7 @@ function FetchPersonalidade() {
 
           <NewsTitles data={pagedArticles} />
 
-          {isError && <div>Error fetching data.</div>}
+          {isError && <Typography color="error">Erro ao carregar dados.</Typography>}
 
           {filteredArticles.length > PAGE_SIZE && (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>

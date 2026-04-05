@@ -1,7 +1,10 @@
 const BASE = import.meta.env.VITE_POLITIQUICES_API
 
 function get(path) {
-  return fetch(`${BASE}${path}`).then((r) => r.json())
+  return fetch(`${BASE}${path}`).then((r) => {
+    if (!r.ok) throw new Error(`HTTP ${r.status}`)
+    return r.json()
+  })
 }
 
 export function getPersonsAndParties() {
