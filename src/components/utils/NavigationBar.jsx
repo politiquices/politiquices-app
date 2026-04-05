@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-bind */
-/* eslint-disable react/no-unstable-nested-components */
 import React, { useEffect } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -11,7 +10,8 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
-// import AdbIcon from '@mui/icons-material/Adb'
+import InputAdornment from '@mui/material/InputAdornment'
+import SearchIcon from '@mui/icons-material/Search'
 import { Link, useNavigate } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -27,6 +27,51 @@ const pages = [
   ['Sobre', 'sobre'],
 ]
 
+function SearchComboBox({ personalities, isLoading, onSelect }) {
+  const [inputValue, setInputValue] = React.useState('')
+
+  return (
+    <Autocomplete
+      disablePortal
+      disableClearable
+      id="personalidade-search"
+      options={personalities ?? []}
+      loading={isLoading}
+      inputValue={inputValue}
+      onInputChange={(_, value, reason) => {
+        if (reason !== 'reset') setInputValue(value)
+      }}
+      onChange={(e, selected) => {
+        if (selected) {
+          onSelect(selected)
+          setInputValue('')
+        }
+      }}
+      sx={{ width: { xs: 160, sm: 220, md: 280 } }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          placeholder={isLoading ? 'A carregar...' : 'Pesquisar...'}
+          InputLabelProps={{ shrink: false }}
+          InputProps={{
+            ...params.InputProps,
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: 'rgba(255,255,255,0.7)', fontSize: 20 }} />
+              </InputAdornment>
+            ),
+          }}
+          sx={{
+            '& .MuiInputBase-input': { color: 'white' },
+            '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.6)', opacity: 1 },
+            '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.4)' },
+            '& .MuiSvgIcon-root': { color: 'rgba(255,255,255,0.7)' },
+          }}
+        />
+      )}
+    />
+  )
+}
 
 function NewResponsiveAppBar() {
   const navigate = useNavigate()
@@ -37,92 +82,32 @@ function NewResponsiveAppBar() {
   const [parties, setParties] = React.useState(null)
   const [personsWithNews, setPersonsWithNews] = React.useState([])
 
-  // read the persons.json to fill the select
-  function loadPersonalities() {
-    getPersonsAndParties()
-      .then((data) => {
-        setPersonalities(data)
-      })
-      .catch(() => {})
-  }
-
-  function loadParties() {
-    getParties()
-      .then((data) => {
-        const partiesWikis = new Set(data.map((item) => item.wiki_id));
-        setParties(partiesWikis)
-      })
-      .catch(() => {})
-  }
-
   useEffect(() => {
-    loadPersonalities()
-    loadParties()
+    getPersonsAndParties().then(setPersonalities).catch(() => {})
+    getParties()
+      .then((data) => setParties(new Set(data.map((item) => item.wiki_id))))
+      .catch(() => {})
     getPersons().then(setPersonsWithNews).catch(() => {})
   }, [])
 
-  function isParty(selected) {
-    // check if the selected value is in partiesWikis
-    return parties.has(selected.value)
-  }
-
-  function handleChange(e, selected) {
-    if (isParty(selected)) {
+  const handleSelect = (selected) => {
+    if (parties?.has(selected.value)) {
       navigate(`/party/${selected.value}`)
     } else {
       navigate(`/personalidade/${selected.value}`)
     }
   }
 
-  function ComboBox() {
-    return (
-      <Autocomplete
-        disablePortal
-        id="combo-box-demo"
-        onChange={handleChange}
-        options={personalities}
-        sx={{ width: 300 }}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        renderInput={(params) => (
-          <TextField
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...params}
-            InputLabelProps={{ style: { color: 'white', fontSize: 15 } }}
-            label="Personalidade.."
-          />
-        )}
-      />
-    )
-  }
-
   // Governos
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget)
-  }
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null)
-  }
-  const handleOpenUserMenuGov = (event) => {
-    setAnchorElUser(event.currentTarget)
-  }
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null)
-    setAnchorElUserAss(null)
-  }
-  const handleNavClick = (value) => {
-    navigate(`/government/${value}`)
-    setAnchorElUser(null)
-  }
+  const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget)
+  const handleCloseNavMenu = () => setAnchorElNav(null)
+  const handleOpenUserMenuGov = (event) => setAnchorElUser(event.currentTarget)
+  const handleCloseUserMenu = () => { setAnchorElUser(null); setAnchorElUserAss(null) }
+  const handleNavClick = (value) => { navigate(`/government/${value}`); setAnchorElUser(null) }
 
   // Assembleias
-  const handleOpenUserMenuAss = (event) => {
-    setAnchorElUserAss(event.currentTarget)
-  }
-
-  const handleNavClickAss = (value) => {
-    navigate(`/assembly/${value}`)
-    setAnchorElUserAss(null)
-  }
+  const handleOpenUserMenuAss = (event) => setAnchorElUserAss(event.currentTarget)
+  const handleNavClickAss = (value) => { navigate(`/assembly/${value}`); setAnchorElUserAss(null) }
 
   const handleRandomPersonality = () => {
     if (personsWithNews.length > 0) {
@@ -135,31 +120,11 @@ function NewResponsiveAppBar() {
     <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* Logotipo
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 200,
-              letterSpacing: '.05rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Politiquices
-          </Typography>
-          */}
-          
+          {/* Mobile menu */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -170,20 +135,12 @@ function NewResponsiveAppBar() {
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
               keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
+              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
+              sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
                 <MenuItem
@@ -196,6 +153,7 @@ function NewResponsiveAppBar() {
             </Menu>
           </Box>
 
+          {/* Desktop nav */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) =>
               page[1] === 'random' ? (
@@ -224,25 +182,23 @@ function NewResponsiveAppBar() {
           </Box>
 
           {/* Pesquisa */}
-          <ComboBox />
-         
+          <SearchComboBox
+            personalities={personalities}
+            isLoading={personalities === null}
+            onSelect={handleSelect}
+          />
+
           {/* Governos */}
           <Button onClick={handleOpenUserMenuGov} sx={{ my: 2, color: 'white', display: 'block' }}>
             Governos
           </Button>
           <Menu
             sx={{ mt: '45px' }}
-            id="menu-appbar"
+            id="menu-governos"
             anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
@@ -252,24 +208,18 @@ function NewResponsiveAppBar() {
               </MenuItem>
             ))}
           </Menu>
-          
+
           {/* Assembleias */}
           <Button onClick={handleOpenUserMenuAss} sx={{ my: 2, color: 'white', display: 'block' }}>
             Assembleias
           </Button>
           <Menu
             sx={{ mt: '45px' }}
-            id="menu-appbar"
+            id="menu-assembleias"
             anchorEl={anchorElUserAss}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={Boolean(anchorElUserAss)}
             onClose={handleCloseUserMenu}
           >
@@ -284,4 +234,5 @@ function NewResponsiveAppBar() {
     </AppBar>
   )
 }
+
 export default NewResponsiveAppBar
