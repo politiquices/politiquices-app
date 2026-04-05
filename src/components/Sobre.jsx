@@ -130,9 +130,6 @@ function Sobre() {
 
       {/* Os dados em números */}
       <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
-          Os dados em números
-        </Typography>
         {isLoading && <CircularIndeterminate />}
         {isError && <Typography color="error">Erro ao carregar estatísticas.</Typography>}
         {stats && (

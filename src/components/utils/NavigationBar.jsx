@@ -145,7 +145,11 @@ function NewResponsiveAppBar() {
               {pages.map((page) => (
                 <MenuItem
                   key={page[0]}
-                  onClick={() => { handleCloseNavMenu(); if (page[1] === 'random') handleRandomPersonality() }}
+                  onClick={() => {
+                    handleCloseNavMenu()
+                    if (page[1] === 'random') handleRandomPersonality()
+                    else navigate(`/${page[1]}`)
+                  }}
                 >
                   <Typography textAlign="center">{page[0]}</Typography>
                 </MenuItem>
