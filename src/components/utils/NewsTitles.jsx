@@ -26,6 +26,7 @@ import Chip from '@mui/material/Chip';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { postCorrection } from '../../api'
+import { COLOR_SUPPORTS, COLOR_OPPOSES, COLOR_SUPPORTS_BG, COLOR_OPPOSES_BG } from '../../constants'
 // import { Stack } from '@mui/material'
 
 const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
@@ -253,12 +254,12 @@ function NewsTitles(props) {
       case 'ent2_supports_ent1':
       case 'supports':
       case 'supported_by':
-        return { label: 'apoia', color: '#44861E', bg: '#e8f5e9', border: '#44861E' }
+        return { label: 'apoia', color: COLOR_SUPPORTS, bg: COLOR_SUPPORTS_BG, border: COLOR_SUPPORTS }
       case 'ent1_opposes_ent2':
       case 'ent2_opposes_ent1':
       case 'opposes':
       case 'opposed_by':
-        return { label: 'opõe-se', color: '#c62828', bg: '#ffebee', border: '#FF0000' }
+        return { label: 'opõe-se', color: COLOR_OPPOSES, bg: COLOR_OPPOSES_BG, border: COLOR_OPPOSES }
       default:
         return { label: 'outro', color: '#757575', bg: '#f5f5f5', border: '#bdbdbd' }
     }

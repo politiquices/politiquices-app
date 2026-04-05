@@ -20,6 +20,7 @@ import NewsTitles from './utils/NewsTitles'
 import PersonalidadeGraph from './PersonalidadeGraph'
 import CircularIndeterminate from './utils/Circular'
 import { getPersonality, getPersonalityRelationships, getPersonalityTopRelated } from '../api'
+import { COLOR_SUPPORTS, COLOR_OPPOSES } from '../constants'
 
 
 function FillIn(elements, url, baseURL) {
@@ -280,8 +281,8 @@ function FetchPersonalidade() {
         <Paper elevation={2} sx={{ p: 2, mt: 1 }}>
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="center" flexWrap="wrap" sx={{ mb: 1 }}>
             {[
-              { key: 'supports',     label: 'Apoia',       color: '#44861E' },
-              { key: 'opposes',      label: 'Opõe-se',     color: '#d32f2f' },
+              { key: 'supports',     label: 'Apoia',       color: COLOR_SUPPORTS },
+              { key: 'opposes',      label: 'Opõe-se',     color: COLOR_OPPOSES },
               { key: 'supported_by', label: 'Apoiado por', color: '#66bb6a' },
               { key: 'opposed_by',   label: 'Oposto por',  color: '#ef9a9a' },
               { key: 'other',        label: 'Outro',       color: '#9e9e9e' },

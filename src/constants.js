@@ -1,6 +1,11 @@
 export const MIN_YEAR = parseInt(import.meta.env.VITE_MIN_YEAR, 10)
 export const MAX_YEAR = parseInt(import.meta.env.VITE_MAX_YEAR, 10)
 
+export const COLOR_SUPPORTS = '#44861E'
+export const COLOR_OPPOSES = '#d32f2f'
+export const COLOR_SUPPORTS_BG = '#e8f5e9'
+export const COLOR_OPPOSES_BG = '#ffebee'
+
 /*
   SPARQL query used to build ASSEMBLIES (run against Wikidata):
 

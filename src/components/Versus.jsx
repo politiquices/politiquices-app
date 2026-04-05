@@ -12,7 +12,7 @@ import Chip from '@mui/material/Chip'
 import Pagination from '@mui/material/Pagination'
 import CircularProgress from '@mui/material/CircularProgress'
 import NewsTitles from './utils/NewsTitles'
-import { MIN_YEAR, MAX_YEAR } from '../constants'
+import { MIN_YEAR, MAX_YEAR, COLOR_SUPPORTS, COLOR_OPPOSES, COLOR_SUPPORTS_BG, COLOR_OPPOSES_BG } from '../constants'
 import { getPersonsAndParties, getQueries } from '../api'
 
 const PAGE_SIZE = 10
@@ -149,8 +149,8 @@ function Versus() {
               label={relType?.label}
               size="small"
               sx={{
-                bgcolor: relType?.value === 'ent1_supports_ent2' ? '#e8f5e9' : relType?.value === 'ent1_opposes_ent2' ? '#ffebee' : undefined,
-                color: relType?.value === 'ent1_supports_ent2' ? '#44861E' : relType?.value === 'ent1_opposes_ent2' ? '#c62828' : undefined,
+                bgcolor: relType?.value === 'ent1_supports_ent2' ? COLOR_SUPPORTS_BG : relType?.value === 'ent1_opposes_ent2' ? COLOR_OPPOSES_BG : undefined,
+                color: relType?.value === 'ent1_supports_ent2' ? COLOR_SUPPORTS : relType?.value === 'ent1_opposes_ent2' ? COLOR_OPPOSES : undefined,
                 fontWeight: 'bold',
               }}
             />

@@ -8,7 +8,7 @@ import { getRelationships } from '../api'
 
 function EntityVersusEntity() {
   const { ent1, ent2, relType, start, end} = useParams()
-  const [headlines, setData] = useState([])
+  const [headlines, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
 
@@ -29,10 +29,9 @@ function EntityVersusEntity() {
     fetchData()
   }, [ent1, ent2, relType, start, end])
 
-  if (isLoading || !headlines) {
-    return <CircularIndeterminate />
-  }
-  
+  if (isLoading) return <CircularIndeterminate />
+  if (isError) return <Typography color="error">Erro ao carregar dados.</Typography>
+
   return (
     <Grid
       container
@@ -43,8 +42,7 @@ function EntityVersusEntity() {
       style={{ minHeight: '100vh' }}
       sx={{ paddingTop: 10 }}
     >
-      {headlines && <NewsTitles data={headlines} />}
-      {isError && <Typography color="error">Erro ao carregar dados.</Typography>}
+      <NewsTitles data={headlines} />
     </Grid>
   )
 }

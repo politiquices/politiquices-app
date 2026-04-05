@@ -26,6 +26,7 @@ import ArticleIcon from '@mui/icons-material/Article'
 import FactCheckIcon from '@mui/icons-material/FactCheck'
 import CircularIndeterminate from './utils/Circular'
 import { getStats } from '../api'
+import { COLOR_SUPPORTS, COLOR_OPPOSES } from '../constants'
 
 
 const METRIC_CARDS = (data) => [
@@ -45,7 +46,7 @@ const METRIC_CARDS = (data) => [
     label: 'Artigos com personalidades',
   },
   {
-    icon: <FactCheckIcon sx={{ fontSize: 36, color: '#44861E' }} />,
+    icon: <FactCheckIcon sx={{ fontSize: 36, color: COLOR_SUPPORTS }} />,
     value: data.nr_all_articles_sentiment?.toLocaleString('pt-PT'),
     label: 'Artigos com apoio ou oposição',
   },
@@ -172,8 +173,8 @@ function Sobre() {
                 <YAxis label={{ value: 'nº notícias', angle: -90, position: 'insideLeft', offset: 10 }} />
                 <Tooltip />
                 <Legend verticalAlign="top" />
-                <Bar dataKey="oposição" fill="#FF0000" />
-                <Bar dataKey="apoio" fill="#44861E" />
+                <Bar dataKey="oposição" fill={COLOR_OPPOSES} />
+                <Bar dataKey="apoio" fill={COLOR_SUPPORTS} />
               </BarChart>
             </ResponsiveContainer>
             <Typography align="center" color="text.secondary" sx={{ mt: 2, fontSize: 11 }}>
