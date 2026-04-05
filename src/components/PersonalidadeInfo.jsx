@@ -148,10 +148,6 @@ function FetchPersonalidade() {
   const headlinesCacheRef = useRef({})
 
   useEffect(() => {
-    headlinesCacheRef.current = headlinesCache
-  }, [headlinesCache])
-
-  useEffect(() => {
     setInfo([])
     setHeadlines([])
     setTopRelated([])
