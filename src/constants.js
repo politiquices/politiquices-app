@@ -1,6 +1,46 @@
 export const MIN_YEAR = parseInt(import.meta.env.VITE_MIN_YEAR, 10)
 export const MAX_YEAR = parseInt(import.meta.env.VITE_MAX_YEAR, 10)
 
+/* Domains present in the data but without a logo yet — to be mapped in DOMAIN_LOGOS (NewsTitles.jsx):
+  dc:creator "PUBLICO-CHAVE"^^xsd:string
+  dc:creator "acorianooriental.pt"^^xsd:string
+  dc:creator "anoticia.pt"^^xsd:string
+  dc:creator "asbeiras.pt"^^xsd:string
+  dc:creator "avozdetrasosmontes.pt"^^xsd:string
+  dc:creator "cmpt"^^xsd:string
+  dc:creator "correiodominho.com"^^xsd:string
+  dc:creator "diarioaveiro.pt"^^xsd:string
+  dc:creator "diariocoimbra.pt"^^xsd:string
+  dc:creator "diariodetrasosmontes.com"^^xsd:string
+  dc:creator "diariodigitalcastelobranco.pt"^^xsd:string
+  dc:creator "diariodominho.pt"^^xsd:string
+  dc:creator "diariodosacores.pt"^^xsd:string
+  dc:creator "diariodosul.com.pt"^^xsd:string
+  dc:creator "diarioleiria.pt"^^xsd:string
+  dc:creator "diarioviseu.pt"^^xsd:string
+  dc:creator "dinheirodigital.sapo.pt"^^xsd:string
+  dc:creator "dinheirovivo.pt"^^xsd:string
+  dc:creator "guimaraesdigital.com"^^xsd:string
+  dc:creator "imediato.pt"^^xsd:string
+  dc:creator "iol.pt"^^xsd:string
+  dc:creator "jm-madeira.pt"^^xsd:string
+  dc:creator "jornaldamadeira.pt"^^xsd:string
+  dc:creator "jornaldiabo.com"^^xsd:string
+  dc:creator "jornaldoalgarve.pt"^^xsd:string
+  dc:creator "jornaldofundao.pt"^^xsd:string
+  dc:creator "linhasdeelvas.pt"^^xsd:string
+  dc:creator "ointerior.pt"^^xsd:string
+  dc:creator "omirante.pt"^^xsd:string
+  dc:creator "osetubalense.com"^^xsd:string
+  dc:creator "postal.pt"^^xsd:string
+  dc:creator "regiao-sul.pt"^^xsd:string
+  dc:creator "regiaodeleiria.pt"^^xsd:string
+  dc:creator "rr.pt"^^xsd:string
+  dc:creator "terrasdabeira.gmpress.pt"^^xsd:string
+  dc:creator "visao.sapo.pt"^^xsd:string
+  dc:creator "zap.aeiou.pt"^^xsd:string
+*/
+
 export const COLOR_SUPPORTS = '#44861E'
 export const COLOR_OPPOSES = '#d32f2f'
 export const COLOR_SUPPORTS_BG = '#e8f5e9'
