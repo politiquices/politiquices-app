@@ -24,8 +24,7 @@ const pages = [
   ['Random', 'random'], // Add this new option
   ['Versus', 'versus'],
   ['Explorar', 'explorar'],
-  ['Estatística', 'estatistica'],
-  ['Sobre', 'sobre'],  
+  ['Sobre', 'sobre'],
 ]
 
 

@@ -4,48 +4,43 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
-import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
+import Link from '@mui/material/Link'
+import AccountTreeIcon from '@mui/icons-material/AccountTree'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
-import ArticleIcon from '@mui/icons-material/Article'
-import FactCheckIcon from '@mui/icons-material/FactCheck'
-import SearchIcon from '@mui/icons-material/Search'
-import ShuffleIcon from '@mui/icons-material/Shuffle'
-import { getStats, getPersons } from '../api'
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
+import CasinoIcon from '@mui/icons-material/Casino'
+import { getPersons } from '../api'
 
-function MetricCard({ icon, value, label }) {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        py: 2,
-        px: 1,
-        borderRadius: 2,
-        bgcolor: 'background.default',
-        height: '100%',
-      }}
-    >
-      {icon}
-      <Typography variant="h4" sx={{ fontWeight: 'bold', mt: 1, mb: 0.5 }}>
-        {value ?? '…'}
-      </Typography>
-      <Typography variant="caption" color="text.secondary" align="center">
-        {label}
-      </Typography>
-    </Box>
-  )
-}
+const CARDS = [
+  {
+    icon: <AccountTreeIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    title: 'Explorar Relações',
+    description: 'Selecciona personalidades e visualiza quem apoia e quem se opõe a quem num grafo interactivo.',
+    action: '/relacoes',
+    label: 'Explorar',
+  },
+  {
+    icon: <PeopleAltIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    title: 'Personalidades',
+    description: 'Navega pelo catálogo de figuras políticas e descobre as suas relações.',
+    action: '/personalidades',
+    label: 'Ver Personalidades',
+  },
+  {
+    icon: <CompareArrowsIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    title: 'Versus',
+    description: 'Compara directamente duas personalidades ou partidos e as relações entre eles.',
+    action: '/versus',
+    label: 'Comparar',
+  },
+]
 
 function Home() {
   const navigate = useNavigate()
-  const [stats, setStats] = useState(null)
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
-    getStats().then(setStats).catch(() => {})
     getPersons().then(setPersons).catch(() => {})
   }, [])
 
@@ -63,72 +58,52 @@ function Home() {
         <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
           Politiquices.PT
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto', mb: 3 }}>
-          Pesquise relações de apoio ou oposição entre personalidades e partidos políticos
-          expressas em títulos de notícias arquivadas pela web portuguesa.
+        <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 560, mx: 'auto', mb: 3 }}>
+          Explora títulos de notícias arquivadas pela web portuguesa para descobrir
+          quem apoia e quem se opõe a quem na política portuguesa.
         </Typography>
-        <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
-          <Button
-            variant="contained"
-            startIcon={<SearchIcon />}
-            onClick={() => navigate('/relacoes')}
-          >
-            Explorar Relações
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<PeopleAltIcon />}
-            onClick={() => navigate('/personalidades')}
-          >
-            Ver Personalidades
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<ShuffleIcon />}
-            onClick={handleRandom}
-            disabled={!persons.length}
-          >
-            Personalidade Aleatória
-          </Button>
-        </Stack>
+        <Link
+          component="button"
+          variant="body1"
+          color="text.secondary"
+          onClick={handleRandom}
+          disabled={!persons.length}
+          sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, cursor: 'pointer' }}
+        >
+          <CasinoIcon fontSize="small" />
+          Personalidade aleatória
+        </Link>
       </Paper>
 
-      {/* Stats */}
-      {stats && (
-        <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={6} md={3}>
-              <MetricCard
-                icon={<AccountBalanceIcon sx={{ fontSize: 36, color: 'primary.main' }} />}
-                value={stats.nr_parties}
-                label="Partidos Políticos"
-              />
-            </Grid>
-            <Grid item xs={6} md={3}>
-              <MetricCard
-                icon={<PeopleAltIcon sx={{ fontSize: 36, color: 'primary.main' }} />}
-                value={stats.nr_persons}
-                label="Personalidades"
-              />
-            </Grid>
-            <Grid item xs={6} md={3}>
-              <MetricCard
-                icon={<ArticleIcon sx={{ fontSize: 36, color: 'text.secondary' }} />}
-                value={stats.nr_all_articles?.toLocaleString('pt-PT')}
-                label="Artigos com personalidades"
-              />
-            </Grid>
-            <Grid item xs={6} md={3}>
-              <MetricCard
-                icon={<FactCheckIcon sx={{ fontSize: 36, color: '#44861E' }} />}
-                value={stats.nr_all_articles_sentiment?.toLocaleString('pt-PT')}
-                label="Artigos com apoio ou oposição"
-              />
-            </Grid>
+      {/* Feature cards */}
+      <Grid container spacing={3}>
+        {CARDS.map((card) => (
+          <Grid item xs={12} md={4} key={card.title}>
+            <Paper
+              elevation={2}
+              sx={{
+                p: 3,
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+              }}
+            >
+              {card.icon}
+              <Typography variant="h6" sx={{ fontWeight: 'bold', mt: 1.5, mb: 1 }}>
+                {card.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2, flexGrow: 1 }}>
+                {card.description}
+              </Typography>
+              <Button variant="contained" size="small" onClick={() => navigate(card.action)}>
+                {card.label}
+              </Button>
+            </Paper>
           </Grid>
-        </Paper>
-      )}
-
+        ))}
+      </Grid>
 
     </Box>
   )
