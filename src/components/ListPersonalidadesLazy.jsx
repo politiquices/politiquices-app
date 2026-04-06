@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
-import Link from '@mui/material/Link';
 import CircularProgress from '@mui/material/CircularProgress';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
@@ -12,7 +12,7 @@ import { getPersonalitiesPaged } from '../api'
 function ListPersonalidades({ personalities }) {
   return personalities.map((entry) => (
     <Grid item key={entry.wiki_id} width={250} align="center" columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }}>
-      <Link justify="center" href={`/personalidade/${entry.wiki_id}`}>
+      <Link to={`/personalidade/${entry.wiki_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
         <Avatar alt={entry.focus_ent} src={entry.local_image} sx={{ width: 125, height: 125 }} />
         {entry.label}
       </Link>
