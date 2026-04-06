@@ -12,7 +12,7 @@ import { getPersonalitiesPaged } from '../api'
 function ListPersonalidades({ personalities }) {
   return personalities.map((entry) => (
     <Grid item key={entry.wiki_id} width={250} align="center" columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }}>
-      <Link justify="center" href={`personalidade/${entry.wiki_id}`}>
+      <Link justify="center" href={`/personalidade/${entry.wiki_id}`}>
         <Avatar alt={entry.focus_ent} src={entry.local_image} sx={{ width: 125, height: 125 }} />
         {entry.label}
       </Link>
