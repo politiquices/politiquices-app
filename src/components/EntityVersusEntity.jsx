@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import NewsTitles from './utils/NewsTitles'
 import CircularIndeterminate from './utils/Circular'
 import { getRelationships } from '../api'
 
 function EntityVersusEntity() {
+  const { t } = useTranslation()
   const { ent1, ent2, relType, start, end} = useParams()
   const [headlines, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -30,7 +32,7 @@ function EntityVersusEntity() {
   }, [ent1, ent2, relType, start, end])
 
   if (isLoading) return <CircularIndeterminate />
-  if (isError) return <Typography color="error">Erro ao carregar dados.</Typography>
+  if (isError) return <Typography color="error">{t('common.error')}</Typography>
 
   return (
     <Grid

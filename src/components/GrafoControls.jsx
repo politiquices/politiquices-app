@@ -6,6 +6,7 @@ import Switch from '@mui/material/Switch'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
+import { useTranslation } from 'react-i18next'
 import { MIN_YEAR as minYear, MAX_YEAR as maxYear } from '../constants'
 
 function GrafoControls({
@@ -22,6 +23,7 @@ function GrafoControls({
   handleChangeRelationships,
   handleClick,
 }) {
+  const { t } = useTranslation()
   return (
     <>
       {/* select personalities */}
@@ -40,7 +42,7 @@ function GrafoControls({
           <center>
             <Box sx={{ width: 400 }}>
               <Slider
-                getAriaLabel={() => 'Intervalo Datas'}
+                getAriaLabel={() => t('grafo.dateRange')}
                 value={Yearsvalues}
                 onChange={handleChangeYears}
                 valueLabelDisplay="auto"
@@ -58,7 +60,7 @@ function GrafoControls({
         <Grid item xs={2} container direction="column" alignItems="center">
           <TextField
             id="minNoticias"
-            label="nº min noticias"
+            label={t('grafoControls.minNews')}
             type="number"
             InputLabelProps={{
               shrink: true,
@@ -74,7 +76,7 @@ function GrafoControls({
             <Switch checked={onlyAmongSelected} onChange={handleChangePersons} />
           </Grid>
           <Grid item>
-            <Typography variant="body1">Apenas entre os seleccionados</Typography>
+            <Typography variant="body1">{t('grafoControls.onlyAmongSelected')}</Typography>
           </Grid>
         </Grid>
         <Grid item xs={4} container direction="column" alignItems="center">
@@ -82,7 +84,7 @@ function GrafoControls({
             <Switch checked={onlySentiment} onChange={handleChangeRelationships} />
           </Grid>
           <Grid item>
-            <Typography variant="body1">Apenas notícias apoio/oposição</Typography>
+            <Typography variant="body1">{t('grafoControls.onlySentiment')}</Typography>
           </Grid>
         </Grid>
         <Grid item xs={2} />
@@ -99,7 +101,7 @@ function GrafoControls({
                 handleClick();
               }}
             >
-              Actualizar
+              {t('grafoControls.update')}
             </Button>
           </center>
         </Grid>

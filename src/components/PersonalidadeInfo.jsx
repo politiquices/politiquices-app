@@ -21,6 +21,7 @@ import PersonalidadeGraph from './PersonalidadeGraph'
 import CircularIndeterminate from './utils/Circular'
 import { getPersonality, getPersonalityRelationships, getPersonalityTopRelated } from '../api'
 import { COLOR_SUPPORTS, COLOR_OPPOSES } from '../constants'
+import { useTranslation } from 'react-i18next'
 
 
 function FillIn(elements, url, baseURL) {
@@ -41,6 +42,7 @@ function FillIn(elements, url, baseURL) {
 
 
 function PersonalidadeInfo({ data }) {
+  const { t } = useTranslation()
   const wikiURL = `http://www.wikidata.org/wiki/${data.wiki_id}`
   const baseURL = window.location.href.replace(window.location.pathname, '')
 
@@ -70,7 +72,7 @@ function PersonalidadeInfo({ data }) {
             {data.parties && data.parties.length > 0 && (
               <Box sx={{ mb: 2 }}>
                 <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 'bold' }}>
-                  Partido(s)
+                  {t('personality.parties')}
                 </Typography>
                 <Stack direction="row" flexWrap="wrap" gap={1} sx={{ mt: 0.5 }}>
                   {data.parties.map((entry) => (
@@ -85,15 +87,15 @@ function PersonalidadeInfo({ data }) {
             {/* Info fields as Accordions */}
             <Box sx={{ mt: 1 }}>
               {[
-                { label: 'Profissões', items: data.occupations, url: 'occupation' },
-                { label: 'Cargos Públicos', items: data.positions, url: 'public_office' },
+                { label: t('personality.occupations'), items: data.occupations, url: 'occupation' },
+                { label: t('personality.publicOffices'), items: data.positions, url: 'public_office' },
                 {
-                  label: 'Mandatos',
+                  label: t('personality.mandates'),
                   items: [...(data.governments ?? []), ...(data.assemblies ?? [])],
                   url: null,
                   mixed: true,
                 },
-                { label: 'Educação', items: data.education, url: 'education', icon: <HiAcademicCap size={16} /> },
+                { label: t('personality.education'), items: data.education, url: 'education', icon: <HiAcademicCap size={16} /> },
               ]
                 .filter((s) => s.items && s.items.length > 0)
                 .map((section) => (
@@ -131,6 +133,7 @@ const PAGE_SIZE = 10
 
 
 function FetchPersonalidade() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const [info, setInfo] = useState([])
   const [headlines, setHeadlines] = useState([])
@@ -277,11 +280,11 @@ function FetchPersonalidade() {
         <Paper elevation={2} sx={{ p: 2, mt: 1 }}>
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="center" flexWrap="wrap" sx={{ mb: 1 }}>
             {[
-              { key: 'supports',     label: 'Apoia',       color: COLOR_SUPPORTS },
-              { key: 'opposes',      label: 'Opõe-se',     color: COLOR_OPPOSES },
-              { key: 'supported_by', label: 'Apoiado por', color: '#66bb6a' },
-              { key: 'opposed_by',   label: 'Oposto por',  color: '#ef9a9a' },
-              { key: 'other',        label: 'Outro',       color: '#9e9e9e' },
+              { key: 'supports',     label: t('personality.supports'),    color: COLOR_SUPPORTS },
+              { key: 'opposes',      label: t('personality.opposes'),     color: COLOR_OPPOSES },
+              { key: 'supported_by', label: t('personality.supportedBy'), color: '#66bb6a' },
+              { key: 'opposed_by',   label: t('personality.opposedBy'),   color: '#ef9a9a' },
+              { key: 'other',        label: t('personality.other'),        color: '#9e9e9e' },
             ].map(({ key, label, color }) => {
               const count = filteredArticles.filter(
                 (a) => a.rel_type === key || (key === 'other' && a.rel_type === 'other_by')
@@ -312,7 +315,7 @@ function FetchPersonalidade() {
 
           <NewsTitles data={pagedArticles} />
 
-          {isError && <Typography color="error">Erro ao carregar dados.</Typography>}
+          {isError && <Typography color="error">{t('common.error')}</Typography>}
 
           {filteredArticles.length > PAGE_SIZE && (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>

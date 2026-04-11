@@ -3,11 +3,13 @@
 /* eslint-disable react/self-closing-comp */
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
+import { useTranslation } from 'react-i18next'
 import { getPersons, getTimeline } from '../api'
 import GrafoControls from './GrafoControls'
 import useVisNetwork from '../hooks/useVisNetwork.jsx'
 
 function VisNetwork() {
+  const { t } = useTranslation()
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [selectedOption, setSelectedOption] = useState();
@@ -93,7 +95,7 @@ function VisNetwork() {
       {nodePopover}
       {edgePopover}
 
-      {isError && <div>Erro ao carregar dados.</div>}
+      {isError && <div>{t('grafo.error')}</div>}
 
       <Box alignItems="center">
         <div

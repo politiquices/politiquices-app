@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { withTranslation } from 'react-i18next'
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -15,11 +16,12 @@ class ErrorBoundary extends Component {
   }
 
   render() {
+    const { t } = this.props
     if (this.state.hasError) {
       return (
         <div style={{ padding: '2rem', textAlign: 'center' }}>
-          <h2>Algo correu mal.</h2>
-          <p>Tente recarregar a página.</p>
+          <h2>{t('errors.generic')}</h2>
+          <p>{t('errors.reload')}</p>
         </div>
       )
     }
@@ -27,4 +29,4 @@ class ErrorBoundary extends Component {
   }
 }
 
-export default ErrorBoundary
+export default withTranslation()(ErrorBoundary)

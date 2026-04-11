@@ -15,19 +15,18 @@ import SearchIcon from '@mui/icons-material/Search'
 import { Link, useNavigate } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
+import { useTranslation } from 'react-i18next'
 import { getPersonsAndParties, getParties, getPersons } from '../../api'
 import { GOVERNMENTS, ASSEMBLIES } from '../../constants'
 
-const pages = [
-  ['Home', 'home'],
-  ['Personalidades', 'personalidades'],
-  ['Random', 'random'],
-  ['Versus', 'versus'],
-  ['Explorar', 'explorar'],
-  ['Sobre', 'sobre'],
-]
+function localizeLabel(label, t) {
+  return label
+    .replace('Governo', t('constants.government'))
+    .replace('Legislatura', t('constants.legislature'))
+}
 
 function SearchComboBox({ personalities, isLoading, onSelect }) {
+  const { t } = useTranslation()
   const [inputValue, setInputValue] = React.useState('')
 
   return (
@@ -51,7 +50,7 @@ function SearchComboBox({ personalities, isLoading, onSelect }) {
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder={isLoading ? 'A carregar...' : 'Pesquisar...'}
+          placeholder={isLoading ? t('nav.loading') : t('nav.search')}
           InputLabelProps={{ shrink: false }}
           InputProps={{
             ...params.InputProps,
@@ -75,12 +74,25 @@ function SearchComboBox({ personalities, isLoading, onSelect }) {
 
 function NewResponsiveAppBar() {
   const navigate = useNavigate()
+  const { t, i18n } = useTranslation()
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [anchorElUserAss, setAnchorElUserAss] = React.useState(null)
   const [personalities, setPersonalities] = React.useState(null)
   const [parties, setParties] = React.useState(null)
   const [personsWithNews, setPersonsWithNews] = React.useState([])
+
+  const pagesLeft = [
+    ['nav.home', 'home'],
+    ['nav.personalities', 'personalidades'],
+    ['nav.random', 'random'],
+    ['nav.versus', 'versus'],
+    ['nav.explore', 'explorar'],
+  ]
+  const pagesRight = [
+    ['nav.about', 'sobre'],
+  ]
+  const pages = [...pagesLeft, ...pagesRight]
 
   useEffect(() => {
     getPersonsAndParties().then(setPersonalities).catch(() => {})
@@ -114,6 +126,11 @@ function NewResponsiveAppBar() {
       const randomIndex = Math.floor(Math.random() * personsWithNews.length)
       navigate(`/personalidade/${personsWithNews[randomIndex].value}`)
     }
+  }
+
+  const handleLangChange = (lang) => {
+    i18n.changeLanguage(lang)
+    localStorage.setItem('lang', lang)
   }
 
   return (
@@ -151,88 +168,120 @@ function NewResponsiveAppBar() {
                     else navigate(`/${page[1]}`)
                   }}
                 >
-                  <Typography textAlign="center">{page[0]}</Typography>
+                  <Typography textAlign="center">{t(page[0])}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
 
           {/* Desktop nav */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) =>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', ml: 20 }}>
+            {/* Left pages: Home … Explorar */}
+            {pagesLeft.map((page) =>
               page[1] === 'random' ? (
                 <Button
                   key={page[0]}
                   onClick={handleRandomPersonality}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
-                  {page[0]}
+                  {t(page[0])}
                 </Button>
               ) : (
-                <Link
-                  key={page[0]}
-                  style={{ textDecoration: 'none' }}
-                  to={`/${page[1]}`}
-                >
-                  <Button
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
-                  >
-                    {page[0]}
+                <Link key={page[0]} style={{ textDecoration: 'none' }} to={`/${page[1]}`}>
+                  <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
+                    {t(page[0])}
                   </Button>
                 </Link>
               )
             )}
+
+            {/* Governos dropdown */}
+            <Button onClick={handleOpenUserMenuGov} sx={{ my: 2, color: 'white', display: 'block' }}>
+              {t('nav.governments')}
+            </Button>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-governos"
+              anchorEl={anchorElUser}
+              anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+              keepMounted
+              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {GOVERNMENTS.map((government) => (
+                <MenuItem key={government[0]} onClick={() => handleNavClick(government[0])}>
+                  <Typography textAlign="center">{localizeLabel(government[1], t)}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+
+            {/* Assembleias dropdown */}
+            <Button onClick={handleOpenUserMenuAss} sx={{ my: 2, color: 'white', display: 'block' }}>
+              {t('nav.assemblies')}
+            </Button>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-assembleias"
+              anchorEl={anchorElUserAss}
+              anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+              keepMounted
+              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+              open={Boolean(anchorElUserAss)}
+              onClose={handleCloseUserMenu}
+            >
+              {ASSEMBLIES.map((assembleia) => (
+                <MenuItem key={assembleia[0]} onClick={() => handleNavClickAss(assembleia[0])}>
+                  <Typography textAlign="center">{localizeLabel(assembleia[1], t)}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+
+            {/* Right pages: Sobre */}
+            {pagesRight.map((page) => (
+              <Link key={page[0]} style={{ textDecoration: 'none' }} to={`/${page[1]}`}>
+                <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
+                  {t(page[0])}
+                </Button>
+              </Link>
+            ))}
           </Box>
 
           {/* Pesquisa */}
-          <SearchComboBox
-            personalities={personalities}
-            isLoading={personalities === null}
-            onSelect={handleSelect}
-          />
+          <Box sx={{ ml: 8 }}>
+            <SearchComboBox
+              personalities={personalities}
+              isLoading={personalities === null}
+              onSelect={handleSelect}
+            />
+          </Box>
 
-          {/* Governos */}
-          <Button onClick={handleOpenUserMenuGov} sx={{ my: 2, color: 'white', display: 'block' }}>
-            Governos
-          </Button>
-          <Menu
-            sx={{ mt: '45px' }}
-            id="menu-governos"
-            anchorEl={anchorElUser}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            keepMounted
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
-            {GOVERNMENTS.map((government) => (
-              <MenuItem key={government[0]} onClick={() => handleNavClick(government[0])}>
-                <Typography textAlign="center">{government[1]}</Typography>
-              </MenuItem>
+          {/* Language toggle */}
+          <Box sx={{ display: 'flex', ml: 3, gap: 0.5 }}>
+            {[
+              { lang: 'pt', flag: '🇵🇹' },
+              { lang: 'en', flag: '🇬🇧' },
+            ].map(({ lang, flag }) => (
+              <Button
+                key={lang}
+                onClick={() => handleLangChange(lang)}
+                title={lang.toUpperCase()}
+                sx={{
+                  minWidth: 0,
+                  px: 0.75,
+                  py: 0.5,
+                  fontSize: 20,
+                  lineHeight: 1,
+                  opacity: i18n.language === lang ? 1 : 0.4,
+                  filter: i18n.language === lang ? 'none' : 'grayscale(40%)',
+                  transition: 'opacity 0.2s',
+                  '&:hover': { opacity: 0.85 },
+                }}
+              >
+                {flag}
+              </Button>
             ))}
-          </Menu>
-
-          {/* Assembleias */}
-          <Button onClick={handleOpenUserMenuAss} sx={{ my: 2, color: 'white', display: 'block' }}>
-            Assembleias
-          </Button>
-          <Menu
-            sx={{ mt: '45px' }}
-            id="menu-assembleias"
-            anchorEl={anchorElUserAss}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            keepMounted
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={Boolean(anchorElUserAss)}
-            onClose={handleCloseUserMenu}
-          >
-            {ASSEMBLIES.map((assembleia) => (
-              <MenuItem key={assembleia[0]} onClick={() => handleNavClickAss(assembleia[0])}>
-                <Typography textAlign="center">{assembleia[1]}</Typography>
-              </MenuItem>
-            ))}
-          </Menu>
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

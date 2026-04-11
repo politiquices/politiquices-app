@@ -14,15 +14,9 @@ import CircularProgress from '@mui/material/CircularProgress'
 import NewsTitles from './utils/NewsTitles'
 import { MIN_YEAR, MAX_YEAR, COLOR_SUPPORTS, COLOR_OPPOSES, COLOR_SUPPORTS_BG, COLOR_OPPOSES_BG } from '../constants'
 import { getPersonsAndParties, getQueries } from '../api'
+import { useTranslation } from 'react-i18next'
 
 const PAGE_SIZE = 10
-
-const RELATIONS = [
-  { label: 'apoia',               value: 'ent1_supports_ent2' },
-  { label: 'opõe-se',             value: 'ent1_opposes_ent2' },
-  { label: 'todas c/ sentimento', value: 'all_sentiment' },
-  { label: 'todas',               value: 'all' },
-]
 
 function EntityAvatar({ option }) {
   if (!option) return null
@@ -41,6 +35,15 @@ function EntityAvatar({ option }) {
 }
 
 function Versus() {
+  const { t } = useTranslation()
+
+  const RELATIONS = [
+    { label: t('versus.supports'),    value: 'ent1_supports_ent2' },
+    { label: t('versus.opposes'),     value: 'ent1_opposes_ent2' },
+    { label: t('versus.allSentiment'), value: 'all_sentiment' },
+    { label: t('versus.all'),         value: 'all' },
+  ]
+
   const [personalities, setPersonalities] = useState([])
   const [ent1, setEnt1] = useState(null)
   const [ent2, setEnt2] = useState(null)
@@ -90,7 +93,7 @@ function Versus() {
               value={ent1}
               onChange={setEnt1}
               options={personalities}
-              placeholder="Personalidade ou partido..."
+              placeholder={t('versus.placeholder')}
             />
           </Grid>
 
@@ -99,7 +102,7 @@ function Versus() {
               value={relType}
               onChange={setRelType}
               options={RELATIONS}
-              placeholder="Tipo de relação..."
+              placeholder={t('versus.relTypePlaceholder')}
             />
           </Grid>
 
@@ -108,7 +111,7 @@ function Versus() {
               value={ent2}
               onChange={setEnt2}
               options={personalities}
-              placeholder="Personalidade ou partido..."
+              placeholder={t('versus.placeholder')}
             />
           </Grid>
         </Grid>
@@ -116,7 +119,7 @@ function Versus() {
         {/* Year slider */}
         <Box sx={{ mb: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 0.5 }}>
-            Intervalo de Anos: {yearsValues[0]} – {yearsValues[1]}
+            {t('versus.yearRange', { start: yearsValues[0], end: yearsValues[1] })}
           </Typography>
           <Slider
             value={yearsValues}
@@ -131,12 +134,12 @@ function Versus() {
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Button variant="contained" onClick={handleClick} disabled={!canSubmit}>
             {loading ? <CircularProgress size={20} sx={{ mr: 1 }} /> : null}
-            Actualizar
+            {t('versus.update')}
           </Button>
         </Box>
       </Paper>
 
-      {isError && <Typography color="error" sx={{ mb: 2 }}>Erro ao carregar dados.</Typography>}
+      {isError && <Typography color="error" sx={{ mb: 2 }}>{t('versus.error')}</Typography>}
 
       {/* Results */}
       {hasResults && (
@@ -158,11 +161,11 @@ function Versus() {
           </Stack>
 
           <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
-            Notícias {articles.length > 0 && `(${articles.length})`}
+            {t('versus.news')} {articles.length > 0 && `(${articles.length})`}
           </Typography>
 
           {articles.length === 0
-            ? <Typography variant="body2" color="text.secondary">Nenhuma notícia encontrada.</Typography>
+            ? <Typography variant="body2" color="text.secondary">{t('versus.noNews')}</Typography>
             : <NewsTitles data={pagedArticles} />
           }
 

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -21,6 +22,7 @@ function ListPersonalidades({ personalities }) {
 }
 
 function FetchPersonalidades() {
+  const { t } = useTranslation()
   const [personalities, setPersonalities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -87,10 +89,10 @@ function FetchPersonalidades() {
           size="small"
         >
           <ToggleButton value="all">
-            <Typography variant="body2">Todas</Typography>
+            <Typography variant="body2">{t('personalities.all')}</Typography>
           </ToggleButton>
           <ToggleButton value="portuguese">
-            <Typography variant="body2">Portuguesas</Typography>
+            <Typography variant="body2">{t('personalities.portuguese')}</Typography>
           </ToggleButton>
         </ToggleButtonGroup>
       </Box>
@@ -98,7 +100,7 @@ function FetchPersonalidades() {
       <Grid container direction="row" spacing={6} justifyContent="space-evenly">
         <ListPersonalidades personalities={personalities} />
         {isLoading && <CircularProgress sx={{ alignSelf: 'center' }} />}
-        {isError && <Typography color="error">Erro ao carregar dados.</Typography>}
+        {isError && <Typography color="error">{t('personalities.error')}</Typography>}
         <div ref={loader} />
       </Grid>
     </Box>

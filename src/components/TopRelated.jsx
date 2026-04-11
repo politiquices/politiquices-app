@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
@@ -23,10 +24,11 @@ function TabLabel({ label, count }) {
 }
 
 function RelatedList({ entries, versusHref }) {
+  const { t } = useTranslation()
   if (!entries || entries.length === 0) {
     return (
       <Typography color="text.secondary" sx={{ mt: 2, ml: 2 }}>
-        Sem resultados.
+        {t('topRelated.noResults')}
       </Typography>
     )
   }
@@ -55,6 +57,7 @@ function RelatedList({ entries, versusHref }) {
 }
 
 function TopRelated(data) {
+  const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState(0)
   const [showSection, setShowSection] = useState(false)
 
@@ -73,22 +76,22 @@ function TopRelated(data) {
 
   const tabs = [
     {
-      label: 'Apoiado Por',
+      label: t('topRelated.supportedBy'),
       entries: apoiadoPor,
       versusHref: (entry) => `/versus/${entry.wiki_id}/ent1_supports_ent2/${wikiId}/${minYear}/${maxYear}`,
     },
     {
-      label: 'Apoia',
+      label: t('topRelated.supports'),
       entries: apoia,
       versusHref: (entry) => `/versus/${wikiId}/ent1_supports_ent2/${entry.wiki_id}/${minYear}/${maxYear}`,
     },
     {
-      label: 'Oposto Por',
+      label: t('topRelated.opposedBy'),
       entries: opostoPor,
       versusHref: (entry) => `/versus/${entry.wiki_id}/ent1_opposes_ent2/${wikiId}/${minYear}/${maxYear}`,
     },
     {
-      label: 'Opõe-se',
+      label: t('topRelated.opposes'),
       entries: opoeSe,
       versusHref: (entry) => `/versus/${wikiId}/ent1_opposes_ent2/${entry.wiki_id}/${minYear}/${maxYear}`,
     },
@@ -100,7 +103,7 @@ function TopRelated(data) {
     <Box sx={{ width: '100%', mt: 4 }}>
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: showSection ? 1 : 0 }}>
         <Button variant="contained" onClick={() => setShowSection(!showSection)}>
-          Personalidades
+          {t('topRelated.personalities')}
         </Button>
       </Box>
       {showSection && (

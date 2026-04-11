@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
@@ -34,6 +35,15 @@ function ListPersonalidadesFiltered(personalities) {
   ))
 }
 
+function CountLabel({ count }) {
+  const { t } = useTranslation()
+  return (
+    <Typography variant="body2" color="text.secondary">
+      {t('filtered.count', { count })}
+    </Typography>
+  )
+}
+
 function PartyHeader({ partyInfo, count }) {
   if (!partyInfo) return null
   return (
@@ -42,9 +52,7 @@ function PartyHeader({ partyInfo, count }) {
       <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 1 }}>
         {partyInfo.party_label}
       </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {count} personalidades
-      </Typography>
+      <CountLabel count={count} />
     </Box>
   )
 }
@@ -56,20 +64,19 @@ function EntityHeader({ label, count }) {
       <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
         {label}
       </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {count} personalidades
-      </Typography>
+      <CountLabel count={count} />
     </Box>
   )
 }
 
 function SelectorControl({ type, id }) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   if (type !== 'government' && type !== 'assembly') return null
 
   const items = type === 'government' ? GOVERNMENTS : ASSEMBLIES
-  const label = type === 'government' ? 'Governo' : 'Assembleia'
+  const label = type === 'government' ? t('filtered.government') : t('filtered.assembly')
   const basePath = type === 'government' ? '/government' : '/assembly'
 
   return (
@@ -82,7 +89,9 @@ function SelectorControl({ type, id }) {
           onChange={(e) => navigate(`${basePath}/${e.target.value}`)}
         >
           {items.map(([wikiId, name]) => (
-            <MenuItem key={wikiId} value={wikiId}>{name}</MenuItem>
+            <MenuItem key={wikiId} value={wikiId}>
+              {name.replace('Governo', t('constants.government')).replace('Legislatura', t('constants.legislature'))}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -93,6 +102,7 @@ function SelectorControl({ type, id }) {
 function FetchPersonalidades(requestType) {
   const { type } = requestType
   const { id } = useParams()
+  const { t } = useTranslation()
 
   const [data, setNotes] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -134,7 +144,7 @@ function FetchPersonalidades(requestType) {
       <SelectorControl type={type} id={id} />
       <Grid container direction="row" spacing={6} justifyContent="space-evenly">
         {data && <ListPersonalidadesFiltered data={data} />}
-        {isError && <Typography color="error">Erro ao carregar dados.</Typography>}
+        {isError && <Typography color="error">{t('filtered.error')}</Typography>}
       </Grid>
     </Box>
   )

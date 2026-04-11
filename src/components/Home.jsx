@@ -10,35 +10,37 @@ import AccountTreeIcon from '@mui/icons-material/AccountTree'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import CasinoIcon from '@mui/icons-material/Casino'
+import { useTranslation } from 'react-i18next'
 import { getPersons } from '../api'
-
-const CARDS = [
-  {
-    icon: <AccountTreeIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
-    title: 'Explorar Relações',
-    description: 'Selecciona personalidades e visualiza quem apoia e quem se opõe a quem num grafo interactivo.',
-    action: '/relacoes',
-    label: 'Explorar',
-  },
-  {
-    icon: <PeopleAltIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
-    title: 'Personalidades',
-    description: 'Navega pelo catálogo de figuras políticas e descobre as suas relações.',
-    action: '/personalidades',
-    label: 'Ver Personalidades',
-  },
-  {
-    icon: <CompareArrowsIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
-    title: 'Versus',
-    description: 'Compara directamente duas personalidades ou partidos e as relações entre eles.',
-    action: '/versus',
-    label: 'Comparar',
-  },
-]
 
 function Home() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [persons, setPersons] = useState([])
+
+  const CARDS = [
+    {
+      icon: <AccountTreeIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+      title: t('home.exploreTitle'),
+      description: t('home.exploreDesc'),
+      action: '/relacoes',
+      label: t('home.exploreBtn'),
+    },
+    {
+      icon: <PeopleAltIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+      title: t('home.personalitiesTitle'),
+      description: t('home.personalitiesDesc'),
+      action: '/personalidades',
+      label: t('home.personalitiesBtn'),
+    },
+    {
+      icon: <CompareArrowsIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+      title: t('home.versusTitle'),
+      description: t('home.versusDesc'),
+      action: '/versus',
+      label: t('home.versusBtn'),
+    },
+  ]
 
   useEffect(() => {
     getPersons().then(setPersons).catch(() => {})
@@ -59,8 +61,7 @@ function Home() {
           Politiquices.PT
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 560, mx: 'auto', mb: 3 }}>
-          Explora títulos de notícias arquivadas pela web portuguesa para descobrir
-          quem apoia e quem se opõe a quem na política portuguesa.
+          {t('home.subtitle')}
         </Typography>
         <Link
           component="button"
@@ -71,7 +72,7 @@ function Home() {
           sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, cursor: 'pointer' }}
         >
           <CasinoIcon fontSize="small" />
-          Personalidade aleatória
+          {t('home.randomPersonality')}
         </Link>
       </Paper>
 

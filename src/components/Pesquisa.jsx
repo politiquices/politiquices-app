@@ -4,11 +4,13 @@
 import React, { useState } from 'react'
 import Grid from '@mui/material/Grid'
 import { TextField, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import CircularIndeterminate from './utils/Circular'
 import Answers from './utils/Answers'
 import { getQA } from '../api'
 
 function Pesquisa() {
+  const { t } = useTranslation()
   const [loading, setIsLoading] = useState(false)
   const [data, setData] = useState([])
   const [question, setQuestion] = useState('')
@@ -40,7 +42,7 @@ function Pesquisa() {
           <Grid justifyContent="center" container sx={{ paddingTop: 20 }}>
             <Grid item xs={12} />
             <Typography align="center" sx={{ fontSize: 18 }} color="text.primary" gutterBottom>
-              Indique uma pergunta a fazer à colecção de documentos
+              {t('pesquisa.prompt')}
             </Typography>
           </Grid>
 
@@ -82,7 +84,7 @@ function Pesquisa() {
             style={{ minHeight: '100vh' }}
             sx={{ paddingTop: 2 }}
           >
-            {isError && <div>Erro ao carregar dados.</div>}
+            {isError && <div>{t('pesquisa.error')}</div>}
             {!data ? <p /> : <Answers data={data} />}
           </Grid>
         </React.Fragment>

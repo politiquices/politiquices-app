@@ -27,6 +27,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { postCorrection } from '../../api'
 import { COLOR_SUPPORTS, COLOR_OPPOSES, COLOR_SUPPORTS_BG, COLOR_OPPOSES_BG } from '../../constants'
+import { useTranslation } from 'react-i18next'
 // import { Stack } from '@mui/material'
 
 const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
@@ -97,21 +98,16 @@ const ExpandMore = styled((props) => {
   }),
 }))
 
-function dateConverter({ dateString }) {
-  
-    const months = [
-      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-    ];
-
-    const dateObj = new Date(dateString);
-    const year = dateObj.getFullYear();
-    const monthIndex = dateObj.getMonth();
-    const monthName = months[monthIndex];
-    const day = dateObj.getDate();
-
-    return `${day} ${monthName} de ${year}`;
-  
+function useDateConverter() {
+  const { t } = useTranslation()
+  return function dateConverter(dateString) {
+    const dateObj = new Date(dateString)
+    const year = dateObj.getFullYear()
+    const monthIndex = dateObj.getMonth()
+    const month = t(`news.months.${monthIndex}`)
+    const day = dateObj.getDate()
+    return t('news.dateFormat', { day, month, year })
+  }
 }
 
 function ProcessArticleLink(domain) {
@@ -121,6 +117,8 @@ function ProcessArticleLink(domain) {
 
 // loads news titles
 function NewsTitles(props) {
+  const { t } = useTranslation()
+  const dateConverter = useDateConverter()
   const [isOpenCollapse, setIsOpenCollapse] = React.useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedNewsIndex, setSelectedNewsIndex] = React.useState(null);
@@ -130,7 +128,7 @@ function NewsTitles(props) {
   if (data.length === 0) {
     return (
       <Grid item sx={{ paddingTop: 1.5 }}>
-        <Alert severity="info">Não foram encontrados resultados.</Alert>
+        <Alert severity="info">{t('news.noResults')}</Alert>
       </Grid>
     );
   }
@@ -204,14 +202,14 @@ function NewsTitles(props) {
       case 'ent2_supports_ent1':
       case 'supports':
       case 'supported_by':
-        return { label: 'apoia', color: COLOR_SUPPORTS, bg: COLOR_SUPPORTS_BG, border: COLOR_SUPPORTS }
+        return { label: t('news.supportsLabel'), color: COLOR_SUPPORTS, bg: COLOR_SUPPORTS_BG, border: COLOR_SUPPORTS }
       case 'ent1_opposes_ent2':
       case 'ent2_opposes_ent1':
       case 'opposes':
       case 'opposed_by':
-        return { label: 'opõe-se', color: COLOR_OPPOSES, bg: COLOR_OPPOSES_BG, border: COLOR_OPPOSES }
+        return { label: t('news.opposesLabel'), color: COLOR_OPPOSES, bg: COLOR_OPPOSES_BG, border: COLOR_OPPOSES }
       default:
-        return { label: 'outro', color: '#757575', bg: '#f5f5f5', border: '#bdbdbd' }
+        return { label: t('news.otherLabel'), color: '#757575', bg: '#f5f5f5', border: '#bdbdbd' }
     }
   };
 
@@ -244,7 +242,7 @@ function NewsTitles(props) {
           {/* Centre: date + sentiment chip */}
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, px: 1, pt: 1 }}>
             <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5 }}>
-              {dateConverter({ dateString: entry.date })}
+              {dateConverter(entry.date)}
             </Typography>
             <Chip
               label={relTypeStyle(entry.rel_type).label}
@@ -295,7 +293,7 @@ function NewsTitles(props) {
                 maxHeight: { xs: 233, md: 167 },
                 maxWidth: { xs: 350, md: 250 },
               }}
-              alt="Link Arquivo.PT"
+              alt={t('news.arquivoLink')}
               src={ArquivoLogo}
             />
           </Link>
@@ -308,7 +306,7 @@ function NewsTitles(props) {
                 maxHeight: { xs: 233, md: 167 },
                 maxWidth: { xs: 350, md: 250 },
               }}
-              alt="Link Original"
+              alt={t('news.originalLink')}
               src={entry.original_url_image}
             />
           </Link>
