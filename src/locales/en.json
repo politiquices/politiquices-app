@@ -1,0 +1,160 @@
+{
+  "nav": {
+    "home": "Home",
+    "personalities": "Personalities",
+    "random": "Random",
+    "versus": "Versus",
+    "explore": "Explore",
+    "about": "About",
+    "governments": "Governments",
+    "assemblies": "Assemblies",
+    "loading": "Loading...",
+    "search": "Search..."
+  },
+  "home": {
+    "subtitle": "Explore archived Portuguese web news headlines to discover who supports and who opposes whom in Portuguese politics.",
+    "randomPersonality": "Random personality",
+    "exploreTitle": "Explore Relations",
+    "exploreDesc": "Select personalities and visualise who supports and who opposes whom in an interactive graph.",
+    "exploreBtn": "Explore",
+    "personalitiesTitle": "Personalities",
+    "personalitiesDesc": "Browse the catalogue of political figures and discover their relationships.",
+    "personalitiesBtn": "View Personalities",
+    "versusTitle": "Versus",
+    "versusDesc": "Directly compare two personalities or parties and the relations between them.",
+    "versusBtn": "Compare"
+  },
+  "explore": {
+    "title": "Explore Relations",
+    "personalities": "Personalities",
+    "selectPersonalities": "Select personalities...",
+    "yearRange": "Year Range: {{start}} – {{end}}",
+    "depth": "Depth",
+    "minNews": "Min. articles",
+    "type": "Type",
+    "supports": "Supports",
+    "opposes": "Opposes",
+    "supportsLegend": "supports",
+    "opposesLegend": "opposes",
+    "update": "Update",
+    "noNews": "No articles found.",
+    "error": "Error loading data."
+  },
+  "versus": {
+    "placeholder": "Personality or party...",
+    "relTypePlaceholder": "Relation type...",
+    "supports": "supports",
+    "opposes": "opposes",
+    "allSentiment": "all w/ sentiment",
+    "all": "all",
+    "yearRange": "Year Range: {{start}} – {{end}}",
+    "update": "Update",
+    "news": "Articles",
+    "noNews": "No articles found.",
+    "error": "Error loading data."
+  },
+  "about": {
+    "title": "What is Politiquices.PT?",
+    "description": "Politiquices.PT explores archived Portuguese web news headlines to discover who supports and who opposes whom in Portuguese politics.",
+    "award": "Arquivo.PT 2021 Award",
+    "awardDesc": "— distinction for cross-referencing Arquivo.PT data with Wikidata",
+    "paper": "Scientific paper",
+    "paperDesc": "published in the Linguamática journal",
+    "video": "Presentation video",
+    "videoDesc": "as part of the Café com Arquivo.PT 2022 seminars",
+    "sourceCode": "Source code available at",
+    "sparqlEndpoint": "SPARQL Endpoint:",
+    "sparqlExamples": "query examples",
+    "parties": "Political Parties",
+    "personalities": "Personalities",
+    "articlesWithPersonalities": "Articles with personalities",
+    "articlesWithSentiment": "Articles with support or opposition",
+    "statsError": "Error loading statistics.",
+    "chartYear": "year",
+    "chartNews": "no. articles",
+    "chartOpposes": "opposition",
+    "chartSupports": "support",
+    "dataCollection": "Data collected using the Arquivo.PT API on 2024-03-08"
+  },
+  "personality": {
+    "parties": "Party/Parties",
+    "occupations": "Occupations",
+    "publicOffices": "Public Offices",
+    "mandates": "Mandates",
+    "education": "Education",
+    "supports": "Supports",
+    "opposes": "Opposes",
+    "supportedBy": "Supported by",
+    "opposedBy": "Opposed by",
+    "other": "Other"
+  },
+  "graph": {
+    "depth": "Depth",
+    "topN": "Top-N: {{n}}",
+    "minNews": "Min. articles",
+    "type": "Type",
+    "supports": "Supports",
+    "opposes": "Opposes",
+    "supportsLegend": "supports",
+    "opposesLegend": "opposes"
+  },
+  "topRelated": {
+    "supportedBy": "Supported By",
+    "supports": "Supports",
+    "opposedBy": "Opposed By",
+    "opposes": "Opposes",
+    "personalities": "Personalities",
+    "noResults": "No results."
+  },
+  "personalities": {
+    "all": "All",
+    "portuguese": "Portuguese",
+    "error": "Error loading data."
+  },
+  "filtered": {
+    "government": "Government",
+    "assembly": "Assembly",
+    "count": "{{count}} personalities",
+    "error": "Error loading data."
+  },
+  "news": {
+    "noResults": "No results found.",
+    "supportsLabel": "supports",
+    "opposesLabel": "opposes",
+    "otherLabel": "other",
+    "arquivoLink": "Arquivo.PT Link",
+    "originalLink": "Original Link",
+    "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    "dateFormat": "{{month}} {{day}}, {{year}}"
+  },
+  "grafo": {
+    "error": "Error loading data.",
+    "dateRange": "Date Range"
+  },
+  "grafoControls": {
+    "minNews": "min no. articles",
+    "onlyAmongSelected": "Only among selected",
+    "onlySentiment": "Only support/opposition articles",
+    "update": "Update"
+  },
+  "pesquisa": {
+    "prompt": "Enter a question to ask the document collection",
+    "error": "Error loading data."
+  },
+  "footer": {
+    "github": "GitHub",
+    "report": "Report"
+  },
+  "errors": {
+    "generic": "Something went wrong.",
+    "reload": "Please try reloading the page."
+  },
+  "common": {
+    "error": "Error loading data.",
+    "update": "Update"
+  },
+  "constants": {
+    "government": "Government",
+    "legislature": "Legislature"
+  }
+}

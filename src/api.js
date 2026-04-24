@@ -72,10 +72,6 @@ export function getStats() {
   return get('/stats')
 }
 
-export function getQA(question) {
-  return get(`/qa/${question}`)
-}
-
 export function postCorrection(data) {
   return fetch(`${BASE}/corrections/`, {
     method: 'POST',

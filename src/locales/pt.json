@@ -1,0 +1,160 @@
+{
+  "nav": {
+    "home": "Home",
+    "personalities": "Personalidades",
+    "random": "Random",
+    "versus": "Versus",
+    "explore": "Explorar",
+    "about": "Sobre",
+    "governments": "Governos",
+    "assemblies": "Assembleias",
+    "loading": "A carregar...",
+    "search": "Pesquisar..."
+  },
+  "home": {
+    "subtitle": "Explora títulos de notícias arquivadas pela web portuguesa para descobrir quem apoia e quem se opõe a quem na política portuguesa.",
+    "randomPersonality": "Personalidade aleatória",
+    "exploreTitle": "Explorar Relações",
+    "exploreDesc": "Selecciona personalidades e visualiza quem apoia e quem se opõe a quem num grafo interactivo.",
+    "exploreBtn": "Explorar",
+    "personalitiesTitle": "Personalidades",
+    "personalitiesDesc": "Navega pelo catálogo de figuras políticas e descobre as suas relações.",
+    "personalitiesBtn": "Ver Personalidades",
+    "versusTitle": "Versus",
+    "versusDesc": "Compara directamente duas personalidades ou partidos e as relações entre eles.",
+    "versusBtn": "Comparar"
+  },
+  "explore": {
+    "title": "Explorar Relações",
+    "personalities": "Personalidades",
+    "selectPersonalities": "Selecione personalidades...",
+    "yearRange": "Intervalo de Anos: {{start}} – {{end}}",
+    "depth": "Profundidade",
+    "minNews": "Mín. notícias",
+    "type": "Tipo",
+    "supports": "Apoia",
+    "opposes": "Opõe-se",
+    "supportsLegend": "apoia",
+    "opposesLegend": "opõe-se",
+    "update": "Actualizar",
+    "noNews": "Nenhuma notícia encontrada.",
+    "error": "Erro ao carregar dados."
+  },
+  "versus": {
+    "placeholder": "Personalidade ou partido...",
+    "relTypePlaceholder": "Tipo de relação...",
+    "supports": "apoia",
+    "opposes": "opõe-se",
+    "allSentiment": "todas c/ sentimento",
+    "all": "todas",
+    "yearRange": "Intervalo de Anos: {{start}} – {{end}}",
+    "update": "Actualizar",
+    "news": "Notícias",
+    "noNews": "Nenhuma notícia encontrada.",
+    "error": "Erro ao carregar dados."
+  },
+  "about": {
+    "title": "O que é Politiquices.PT?",
+    "description": "Politiquices.PT explora títulos de notícias arquivadas pela web portuguesa para descobrir quem apoia e quem se opõe a quem na política portuguesa.",
+    "award": "Prémio Arquivo.PT 2021",
+    "awardDesc": "— distinção pelo cruzamento de dados do Arquivo.PT com a Wikidata",
+    "paper": "Artigo científico",
+    "paperDesc": "publicado na revista Linguamática",
+    "video": "Vídeo de apresentação",
+    "videoDesc": "no âmbito dos seminários Café com Arquivo.PT 2022",
+    "sourceCode": "Código fonte disponível em",
+    "sparqlEndpoint": "Endpoint SPARQL:",
+    "sparqlExamples": "exemplos de queries",
+    "parties": "Partidos Políticos",
+    "personalities": "Personalidades",
+    "articlesWithPersonalities": "Artigos com personalidades",
+    "articlesWithSentiment": "Artigos com apoio ou oposição",
+    "statsError": "Erro ao carregar estatísticas.",
+    "chartYear": "ano",
+    "chartNews": "nº notícias",
+    "chartOpposes": "oposição",
+    "chartSupports": "apoio",
+    "dataCollection": "Recolha feita com a API do Arquivo.PT a 2024-03-08"
+  },
+  "personality": {
+    "parties": "Partido(s)",
+    "occupations": "Profissões",
+    "publicOffices": "Cargos Públicos",
+    "mandates": "Mandatos",
+    "education": "Educação",
+    "supports": "Apoia",
+    "opposes": "Opõe-se",
+    "supportedBy": "Apoiado por",
+    "opposedBy": "Oposto por",
+    "other": "Outro"
+  },
+  "graph": {
+    "depth": "Profundidade",
+    "topN": "Top-N: {{n}}",
+    "minNews": "Mín. notícias",
+    "type": "Tipo",
+    "supports": "Apoia",
+    "opposes": "Opõe-se",
+    "supportsLegend": "apoia",
+    "opposesLegend": "opõe-se"
+  },
+  "topRelated": {
+    "supportedBy": "Apoiado Por",
+    "supports": "Apoia",
+    "opposedBy": "Oposto Por",
+    "opposes": "Opõe-se",
+    "personalities": "Personalidades",
+    "noResults": "Sem resultados."
+  },
+  "personalities": {
+    "all": "Todas",
+    "portuguese": "Portuguesas",
+    "error": "Erro ao carregar dados."
+  },
+  "filtered": {
+    "government": "Governo",
+    "assembly": "Assembleia",
+    "count": "{{count}} personalidades",
+    "error": "Erro ao carregar dados."
+  },
+  "news": {
+    "noResults": "Não foram encontrados resultados.",
+    "supportsLabel": "apoia",
+    "opposesLabel": "opõe-se",
+    "otherLabel": "outro",
+    "arquivoLink": "Link Arquivo.PT",
+    "originalLink": "Link Original",
+    "months": ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+    "dateFormat": "{{day}} {{month}} de {{year}}"
+  },
+  "grafo": {
+    "error": "Erro ao carregar dados.",
+    "dateRange": "Intervalo Datas"
+  },
+  "grafoControls": {
+    "minNews": "nº min noticias",
+    "onlyAmongSelected": "Apenas entre os seleccionados",
+    "onlySentiment": "Apenas notícias apoio/oposição",
+    "update": "Actualizar"
+  },
+  "pesquisa": {
+    "prompt": "Indique uma pergunta a fazer à colecção de documentos",
+    "error": "Erro ao carregar dados."
+  },
+  "footer": {
+    "github": "GitHub",
+    "report": "Relatório"
+  },
+  "errors": {
+    "generic": "Algo correu mal.",
+    "reload": "Tente recarregar a página."
+  },
+  "common": {
+    "error": "Erro ao carregar dados.",
+    "update": "Actualizar"
+  },
+  "constants": {
+    "government": "Governo",
+    "legislature": "Legislatura"
+  }
+}

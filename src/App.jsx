@@ -8,7 +8,6 @@ import ListPersonalidadesFiltered from './components/ListPersonalidadesFiltered'
 import FetchPersonalidade from './components/PersonalidadeInfo'
 import EntityVersusEntity from './components/EntityVersusEntity'
 import Sobre from './components/Sobre'
-import Pesquisa from './components/Pesquisa'
 import Home from './components/Home'
 import ErrorBoundary from './components/utils/ErrorBoundary'
 import './App.css';
@@ -25,7 +24,6 @@ function App() {
         <Route path="/explorar" element={<Explorar />} />
         <Route path="/relacoes" element={<Explorar />} />
         <Route path="/grafo" element={<Explorar />} />
-        <Route path="/pesquisa" element={<Pesquisa />} />
         <Route path="/personalidades" element={<ListPersonalidades />} />
         <Route path="/sobre" element={<Sobre />} />        
         <Route path="/versus/:ent1/:relType/:ent2/:start/:end" element={<EntityVersusEntity />} />
