@@ -17,6 +17,7 @@
 
 # misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -28,5 +29,9 @@ yarn-debug.log*
 yarn-error.log*
 .idea/
 
-# personality images
+# deployment (contains server credentials)
+deploy.sh
+
+# generated/external image assets
 public/assets/images/personalities_small/
+public/assets/images/parties/
