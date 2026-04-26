@@ -1,39 +1,38 @@
-### __1. SPARQL endpoint__
+# politiquices-app
 
-	git clone https://github.com/politiquices/SPARQL-endpoint
-	make sparql
+Frontend for [politiquices.pt](http://politiquices.pt) — a tool to explore relationships between Portuguese political personalities extracted from news articles.
 
+Built with React + MUI + Vite. Talks to the [politiquices-api](https://github.com/politiquices/politiquices-api) backend.
 
-### __2. API for graphical interface__
+## Features
 
-	git clone https://github.com/politiquices/politiquices-api
-	make cache
-	make images
-	make build 
-	make production
+- browse political personalities and their party affiliations
+- explore support/opposition relationships as an interactive network graph
+- compare two personalities head-to-head
+- available in PT and EN
 
-	# ToDo: --env sparql_endpoint='http://jena_sparql:3030' pass the correct SPARQL IP+PORT
-	docker run -dit --env SPARQL_ENDPOINT='http://127.0.0.1:3030' --name politiquices-api -p 127.0.0.1:8000:8000 politiquices-api
+## Run locally
 
-	# ToDo: get the SPARQL IP+PORT from the docker network
-	docker run -dit --env SPARQL_ENDPOINT='http://172.17.0.2:3030' --name politiquices-api -p 127.0.0.1:8000:8000 politiquices-api
+```bash
+npm install
+npm start
+```
 
-	docker run --rm -it --entrypoint bash --env sparql_endpoint='http://jena_sparql:3030' --name politiquices-api --net politiquices -p 127.0.0.1:8000:8000 politiquices-api
+Needs the API running. Set the endpoint in `.env`:
 
+```
+VITE_POLITIQUICES_API=http://localhost:8000
+```
 
-## 3. __Start politiquices-app__
+## Build & deploy
 
-Build webapp locally:
-  
-	npm install
+```bash
+npm run build
+cp htaccess dist/.htaccess
+rsync -avz --delete dist/ user@server:/var/www/html/politiquices/
+```
 
-Will install the needed modules, creating `node_modules` and `package-lock.json`. Check if the app runs:
+## Related repos
 
-	npm start
-
-If it looks ok build it to send it to the remove server. Make sure `REACT_APP_POLITIQUICES_API=http://politiquices.pt:8000` in the `.env`
-
-	echo "REACT_APP_POLITIQUICES_API=http:/api.politiquices.pt" >> .env
-	npm run build
-	cp htaccess build/.htaccess
-	rsync -avz --delete build/ politiquices.pt:/var/www/html/politiquices/
+- [politiquices-api](https://github.com/politiquices/politiquices-api) — REST API
+- [SPARQL-endpoint](https://github.com/politiquices/SPARQL-endpoint) — knowledge base
