@@ -16,19 +16,17 @@ import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import CardActions from '@mui/material/CardActions'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import EditIcon from '@mui/icons-material/Edit';
+import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
 import Collapse from '@mui/material/Collapse'
 import { red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
 import { styled } from '@mui/material/styles'
-import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { postCorrection } from '../../api'
 import { COLOR_SUPPORTS, COLOR_OPPOSES, COLOR_SUPPORTS_BG, COLOR_OPPOSES_BG } from '../../constants'
 import { useTranslation } from 'react-i18next'
 // import { Stack } from '@mui/material'
+
+const ANNOTATOR_URL = import.meta.env.VITE_ANNOTATOR_URL || 'http://localhost:5174'
 
 const ArquivoLogo = '/assets/images/logos/arquivo_logo.png'
 const AEIOU = '/assets/images/jornais/logotipo-aeiou-2010-240.png'
@@ -120,8 +118,6 @@ function NewsTitles(props) {
   const { t } = useTranslation()
   const dateConverter = useDateConverter()
   const [isOpenCollapse, setIsOpenCollapse] = React.useState(null);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedNewsIndex, setSelectedNewsIndex] = React.useState(null);
 
   const { data } = props;
 
@@ -158,42 +154,6 @@ function NewsTitles(props) {
     } else {
       setIsOpenCollapse(clickedIndex);
     }
-  };
-
-  const handleCorrectClick = (event, index) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedNewsIndex(index);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-    setSelectedNewsIndex(null);
-  };
-
-  const handleRelationshipSelect = async (relationship) => {
-    if (selectedNewsIndex !== null) {
-      const selectedNews = headlines[selectedNewsIndex];
-      const dataToSend = {
-          title: selectedNews.title,
-          selectedRelationship: relationship,
-          paragraph: selectedNews.paragraph,
-          url: selectedNews.url,
-          date: selectedNews.date,
-          main_ent_name: selectedNews.main_ent_name,
-          main_ent_url: selectedNews.main_ent_url,
-          other_ent_name: selectedNews.other_ent_name,
-          other_ent_url: selectedNews.other_ent_url,
-          original_rel_type: selectedNews.rel_type,
-          timestamp: new Date().toISOString(),
-      };
-
-      try {
-        await postCorrection(dataToSend);
-      } catch (error) {
-        console.error('Error sending data:', error);
-      }
-    }
-    handleClose();
   };
 
   const relTypeStyle = (relType) => {
@@ -317,18 +277,17 @@ function NewsTitles(props) {
           </IconButton>
         </CardActions>
         
-        {/* Corrigir button positioned absolutely */}
-        <Button
+        <IconButton
           size="small"
-          onClick={(event) => handleCorrectClick(event, index)}
-          sx={{
-            position: 'absolute',
-            bottom: 8,
-            right: 8,
+          title="Abrir no anotador"
+          onClick={() => {
+            const annotatorUrl = `${ANNOTATOR_URL}/?url=${encodeURIComponent(entry.url)}&source=sparql`;
+            window.open(annotatorUrl, '_blank');
           }}
+          sx={{ position: 'absolute', bottom: 8, right: 8 }}
         >
-          <EditIcon />
-        </Button>
+          <FlagOutlinedIcon fontSize="small" />
+        </IconButton>
       </Card>
     </Grid>
   ));
@@ -338,17 +297,6 @@ function NewsTitles(props) {
       <Grid container direction="row" flexWrap="wrap" justifyContent="center">
         {titlesRendered}
       </Grid>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={() => handleRelationshipSelect('ent1_supports_ent2')}>ent1 supports ent2</MenuItem>
-        <MenuItem onClick={() => handleRelationshipSelect('ent1_opposes_ent2')}>ent1 opposes ent2</MenuItem>
-        <MenuItem onClick={() => handleRelationshipSelect('ent2_supports_ent1')}>ent2 supports ent1</MenuItem>
-        <MenuItem onClick={() => handleRelationshipSelect('ent2_opposes_ent1')}>ent2 opposes ent1</MenuItem>
-        <MenuItem onClick={() => handleRelationshipSelect('other')}>other</MenuItem>
-      </Menu>
     </>
   );
 }

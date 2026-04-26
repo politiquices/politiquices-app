@@ -71,11 +71,3 @@ export function getPersonalitiesFiltered(type, id) {
 export function getStats() {
   return get('/stats')
 }
-
-export function postCorrection(data) {
-  return fetch(`${BASE}/corrections/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  }).then((r) => r.json())
-}
