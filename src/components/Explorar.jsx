@@ -12,15 +12,37 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Chip from '@mui/material/Chip'
 import Pagination from '@mui/material/Pagination'
 import CircularProgress from '@mui/material/CircularProgress'
+import IconButton from '@mui/material/IconButton'
+import Dialog from '@mui/material/Dialog'
+import FullscreenIcon from '@mui/icons-material/Fullscreen'
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit'
+import MuiSelect from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
 import useVisNetwork from '../hooks/useVisNetwork.jsx'
 import { useRelTypeToggle } from '../hooks/useRelTypeToggle'
 import NewsTitles from './utils/NewsTitles'
-import { MIN_YEAR, MAX_YEAR, COLOR_SUPPORTS, COLOR_OPPOSES, COLOR_SUPPORTS_BG, COLOR_OPPOSES_BG } from '../constants'
-import { getPersons, getTimeline, getPersonalityTopRelated, getPersonalityRelationships } from '../api'
+import { MIN_YEAR, MAX_YEAR, COLOR_SUPPORTS, COLOR_OPPOSES, COLOR_SUPPORTS_BG, COLOR_OPPOSES_BG, GOVERNMENTS, ASSEMBLIES } from '../constants'
+import { getPersons, getTimeline, getPersonalityTopRelated, getPersonalityRelationships, getPersonalitiesFiltered } from '../api'
 import { entityId } from '../utils'
 import { useTranslation } from 'react-i18next'
 
 const PAGE_SIZE = 10
+
+function localizeLabel(label, t) {
+  return label
+    .replace('Governo', t('constants.government'))
+    .replace('Legislatura', t('constants.legislature'))
+}
+
+function parseYearsFromLabel(label) {
+  const match = label.match(/\((\d{4})\s*-\s*(\d{4})?/)
+  if (!match) return null
+  const start = parseInt(match[1], 10)
+  const end = match[2] ? parseInt(match[2], 10) : MAX_YEAR
+  return [Math.max(start, MIN_YEAR), Math.min(end, MAX_YEAR)]
+}
 
 function enrichNodes(nodes) {
   return nodes.map((node) => ({
@@ -94,24 +116,77 @@ function buildExtraGraph(dataCache, baseNodeIds, showSupports, showOpposes, minF
   return { extraNodes: Array.from(nodesMap.values()), extraEdges: edges }
 }
 
-function GraphCanvas({ nodes, edges, yearsValues, onEdgeClick, onBackgroundClick }) {
+function GraphControls({ depth, setDepth, minNoticias, setMinNoticias, relTypeValue, handleRelTypeChange, isExpandLoading, onReset }) {
   const { t } = useTranslation()
-  const { container, nodePopover, edgePopover } = useVisNetwork({
+  return (
+    <Stack direction="row" spacing={2} alignItems="center" justifyContent="center" flexWrap="wrap" gap={1} sx={{ mb: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography variant="caption" color="text.secondary" noWrap>{t('explore.depth')}</Typography>
+        <ToggleButtonGroup value={depth} exclusive onChange={(_, v) => { if (v !== null) setDepth(v) }} size="small">
+          {[1, 2, 3].map((d) => (
+            <ToggleButton key={d} value={d} sx={{ px: 1.5, py: 0.5 }}>{d}</ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography variant="caption" color="text.secondary" noWrap>{t('explore.minNews')}</Typography>
+        <TextField
+          type="number"
+          value={minNoticias}
+          onChange={(e) => setMinNoticias(Math.max(1, parseInt(e.target.value) || 1))}
+          size="small"
+          inputProps={{ min: 1, style: { width: 48, padding: '4px 8px' } }}
+        />
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography variant="caption" color="text.secondary" noWrap>{t('explore.type')}</Typography>
+        <ToggleButtonGroup value={relTypeValue} onChange={handleRelTypeChange} size="small">
+          <ToggleButton value="supports" sx={{ px: 1.5, py: 0.5, color: COLOR_SUPPORTS, '&.Mui-selected': { bgcolor: COLOR_SUPPORTS_BG, color: COLOR_SUPPORTS } }}>
+            {t('explore.supports')}
+          </ToggleButton>
+          <ToggleButton value="opposes" sx={{ px: 1.5, py: 0.5, color: COLOR_OPPOSES, '&.Mui-selected': { bgcolor: COLOR_OPPOSES_BG, color: COLOR_OPPOSES } }}>
+            {t('explore.opposes')}
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+      {isExpandLoading && <CircularProgress size={18} />}
+      <Button size="small" variant="outlined" onClick={onReset} sx={{ textTransform: 'none' }}>
+        {t('explore.resetLayout')}
+      </Button>
+    </Stack>
+  )
+}
+
+function GraphCanvas({ nodes, edges, yearsValues, onEdgeClick, onBackgroundClick, onFullscreen, fullscreen, resetRef }) {
+  const { t } = useTranslation()
+  const { container, nodePopover, edgePopover, resetLayout } = useVisNetwork({
     nodes,
     edges,
     Yearsvalues: yearsValues,
     onEdgeClick,
     onBackgroundClick,
   })
+
+  useEffect(() => {
+    if (resetRef) resetRef.current = resetLayout
+  }, [resetLayout, resetRef])
   return (
     <>
       {nodePopover}
       {edgePopover}
-      <Box sx={{ position: 'relative' }}>
+      <Box sx={fullscreen ? { position: 'absolute', inset: 0 } : { position: 'relative' }}>
         <Box
           ref={container}
-          sx={{ width: '100%', height: 500, border: '1px solid #ccc', borderRadius: 1 }}
+          sx={{ width: '100%', height: fullscreen ? '100%' : 500, border: '1px solid #ccc', borderRadius: 1 }}
         />
+        {/* Fullscreen toggle — top-right */}
+        <IconButton
+          size="small"
+          onClick={onFullscreen}
+          sx={{ position: 'absolute', top: 6, right: 6, bgcolor: 'rgba(255,255,255,0.85)', '&:hover': { bgcolor: 'rgba(255,255,255,1)' } }}
+        >
+          {fullscreen ? <FullscreenExitIcon fontSize="small" /> : <FullscreenIcon fontSize="small" />}
+        </IconButton>
         {/* Legend overlay — bottom-right */}
         <Stack
           direction="row"
@@ -172,6 +247,11 @@ function Explorar() {
   const [isExpandLoading, setIsExpandLoading] = useState(false)
   const [hasResults, setHasResults] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [presetGoverno, setPresetGoverno] = useState('')
+  const [presetAssembly, setPresetAssembly] = useState('')
+  const [presetLoading, setPresetLoading] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const resetLayoutRef = useRef(null)
 
   const [selectedEdge, setSelectedEdge] = useState(null)
   const [newsPage, setNewsPage] = useState(1)
@@ -183,6 +263,38 @@ function Explorar() {
   useEffect(() => {
     getPersons().then(setPersonalities).catch(() => setIsError(true))
   }, [])
+
+  const handlePresetSelect = (type, wikiId) => {
+    if (type === 'government') {
+      setPresetGoverno(wikiId)
+      setPresetAssembly('')
+    } else {
+      setPresetAssembly(wikiId)
+      setPresetGoverno('')
+    }
+    if (!wikiId) { setSelectedOption([]); return }
+
+    const items = type === 'government' ? GOVERNMENTS : ASSEMBLIES
+    const entry = items.find(([id]) => id === wikiId)
+
+    setPresetLoading(true)
+    getPersonalitiesFiltered(type, wikiId)
+      .then((results) => {
+        const options = results
+          .filter((r) => r.nr_articles > 0)
+          .map((r) => ({
+            label: r.ent1_name.value,
+            value: r.ent1.value.split('/').at(-1),
+          }))
+        setSelectedOption(options)
+        if (entry) {
+          const years = parseYearsFromLabel(entry[1])
+          if (years) setYearsValues(years)
+        }
+      })
+      .catch(() => {})
+      .finally(() => setPresetLoading(false))
+  }
 
   const handleClick = () => {
     const persons = selectedOption ? selectedOption.map((a) => a.value) : []
@@ -253,10 +365,11 @@ function Explorar() {
   const { displayedNodes, displayedEdges } = useMemo(() => {
     const baseNodeIds = new Set(baseNodes.map((n) => n.id))
 
-    // Filter base edges by relation type
+    // Filter base edges by relation type and min frequency
     const filteredBase = baseEdges.filter((e) =>
-      (showSupports && e.title === 'apoia') ||
-      (showOpposes && e.title === 'opõe-se')
+      ((showSupports && e.title === 'apoia') ||
+       (showOpposes && e.title === 'opõe-se')) &&
+      e.value >= minNoticias
     )
 
     if (depth === 1) {
@@ -362,9 +475,41 @@ function Explorar() {
 
       {/* Controls */}
       <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
-          {t('explore.title')}
-        </Typography>
+        {/* Preset: Governo / Assembleia */}
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', mb: 0.5, textAlign: 'center' }}>
+            {t('explore.preselect')}
+          </Typography>
+          <Stack direction="row" spacing={2} alignItems="center" justifyContent="center" flexWrap="wrap">
+            <FormControl size="small" sx={{ minWidth: 240 }}>
+              <InputLabel>{t('filtered.government')}</InputLabel>
+              <MuiSelect
+                value={presetGoverno}
+                label={t('filtered.government')}
+                onChange={(e) => handlePresetSelect('government', e.target.value)}
+              >
+                <MenuItem value=""><em>{t('explore.presetNone')}</em></MenuItem>
+                {GOVERNMENTS.map(([wikiId, name]) => (
+                  <MenuItem key={wikiId} value={wikiId}>{localizeLabel(name, t)}</MenuItem>
+                ))}
+              </MuiSelect>
+            </FormControl>
+            <FormControl size="small" sx={{ minWidth: 240 }}>
+              <InputLabel>{t('filtered.assembly')}</InputLabel>
+              <MuiSelect
+                value={presetAssembly}
+                label={t('filtered.assembly')}
+                onChange={(e) => handlePresetSelect('assembly', e.target.value)}
+              >
+                <MenuItem value=""><em>{t('explore.presetNone')}</em></MenuItem>
+                {ASSEMBLIES.map(([wikiId, name]) => (
+                  <MenuItem key={wikiId} value={wikiId}>{localizeLabel(name, t)}</MenuItem>
+                ))}
+              </MuiSelect>
+            </FormControl>
+            {presetLoading && <CircularProgress size={20} />}
+          </Stack>
+        </Box>
 
         {/* Personality select */}
         <Box sx={{ mb: 2 }}>
@@ -410,49 +555,13 @@ function Explorar() {
         <Paper elevation={2} sx={{ p: 2, mb: 3 }}>
 
           {/* Graph controls */}
-          <Stack direction="row" spacing={2} alignItems="center" justifyContent="center" flexWrap="wrap" gap={1} sx={{ mb: 2 }}>
-
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="caption" color="text.secondary" noWrap>{t('explore.depth')}</Typography>
-              <ToggleButtonGroup
-                value={depth}
-                exclusive
-                onChange={(_, v) => { if (v !== null) setDepth(v) }}
-                size="small"
-              >
-                {[1, 2, 3].map((d) => (
-                  <ToggleButton key={d} value={d} sx={{ px: 1.5, py: 0.5 }}>{d}</ToggleButton>
-                ))}
-              </ToggleButtonGroup>
-            </Box>
-
-            {/* Mín. notícias */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="caption" color="text.secondary" noWrap>{t('explore.minNews')}</Typography>
-              <TextField
-                type="number"
-                value={minNoticias}
-                onChange={(e) => setMinNoticias(Math.max(1, parseInt(e.target.value) || 1))}
-                size="small"
-                inputProps={{ min: 1, style: { width: 48, padding: '4px 8px' } }}
-              />
-            </Box>
-
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="caption" color="text.secondary" noWrap>{t('explore.type')}</Typography>
-              <ToggleButtonGroup value={relTypeValue} onChange={handleRelTypeChange} size="small">
-                <ToggleButton value="supports" sx={{ px: 1.5, py: 0.5, color: COLOR_SUPPORTS, '&.Mui-selected': { bgcolor: COLOR_SUPPORTS_BG, color: COLOR_SUPPORTS } }}>
-                  {t('explore.supports')}
-                </ToggleButton>
-                <ToggleButton value="opposes" sx={{ px: 1.5, py: 0.5, color: COLOR_OPPOSES, '&.Mui-selected': { bgcolor: COLOR_OPPOSES_BG, color: COLOR_OPPOSES } }}>
-                  {t('explore.opposes')}
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Box>
-
-            {isExpandLoading && <CircularProgress size={18} />}
-
-          </Stack>
+          <GraphControls
+            depth={depth} setDepth={setDepth}
+            minNoticias={minNoticias} setMinNoticias={setMinNoticias}
+            relTypeValue={relTypeValue} handleRelTypeChange={handleRelTypeChange}
+            isExpandLoading={isExpandLoading}
+            onReset={() => resetLayoutRef.current?.()}
+          />
 
           <GraphCanvas
             nodes={displayedNodes}
@@ -460,7 +569,37 @@ function Explorar() {
             yearsValues={yearsValues}
             onEdgeClick={handleEdgeClick}
             onBackgroundClick={handleClearEdge}
+            onFullscreen={() => setIsFullscreen(true)}
+            fullscreen={false}
+            resetRef={resetLayoutRef}
           />
+          <Dialog
+            fullScreen
+            open={isFullscreen}
+            onClose={() => setIsFullscreen(false)}
+          >
+            <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', p: 1 }}>
+              <GraphControls
+                depth={depth} setDepth={setDepth}
+                minNoticias={minNoticias} setMinNoticias={setMinNoticias}
+                relTypeValue={relTypeValue} handleRelTypeChange={handleRelTypeChange}
+                isExpandLoading={isExpandLoading}
+                onReset={() => resetLayoutRef.current?.()}
+              />
+              <Box sx={{ position: 'relative', flex: 1 }}>
+                <GraphCanvas
+                  nodes={displayedNodes}
+                  edges={displayedEdges}
+                  yearsValues={yearsValues}
+                  onEdgeClick={handleEdgeClick}
+                  onBackgroundClick={handleClearEdge}
+                  onFullscreen={() => setIsFullscreen(false)}
+                  fullscreen={true}
+                  resetRef={resetLayoutRef}
+                />
+              </Box>
+            </Box>
+          </Dialog>
         </Paper>
       )}
 

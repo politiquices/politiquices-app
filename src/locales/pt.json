@@ -36,6 +36,9 @@
     "opposes": "Opõe-se",
     "supportsLegend": "apoia",
     "opposesLegend": "opõe-se",
+    "preselect": "Pré-seleccionar por",
+    "presetNone": "Nenhum",
+    "resetLayout": "Regenerar grafo",
     "update": "Actualizar",
     "noNews": "Nenhuma notícia encontrada.",
     "error": "Erro ao carregar dados."

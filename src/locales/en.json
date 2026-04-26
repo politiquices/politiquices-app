@@ -36,6 +36,9 @@
     "opposes": "Opposes",
     "supportsLegend": "supports",
     "opposesLegend": "opposes",
+    "preselect": "Pre-select by",
+    "presetNone": "None",
+    "resetLayout": "Regenerate graph",
     "update": "Update",
     "noNews": "No articles found.",
     "error": "Error loading data."

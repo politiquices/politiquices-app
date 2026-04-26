@@ -78,6 +78,16 @@ function useVisNetwork({ nodes, edges, Yearsvalues, onEdgeClick, onBackgroundCli
   };
 
   useEffect(() => {
+    if (!container.current) return
+    const observer = new ResizeObserver(() => {
+      networkRef.current?.redraw()
+      networkRef.current?.fit()
+    })
+    observer.observe(container.current)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
     if (networkRef.current) {
       networkRef.current.setData({ nodes, edges });
     } else {
@@ -167,7 +177,11 @@ function useVisNetwork({ nodes, edges, Yearsvalues, onEdgeClick, onBackgroundCli
     </Popover>
   );
 
-  return { container, nodePopover, edgePopover };
+  const resetLayout = () => {
+    networkRef.current?.stabilize()
+  }
+
+  return { container, nodePopover, edgePopover, resetLayout };
 }
 
 export default useVisNetwork;
