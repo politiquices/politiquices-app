@@ -28,11 +28,6 @@ function Footer() {
       <div style={phantomStyle} />
       <div style={footerStyle}>
         &copy; 2021-{new Date().getFullYear()} Politiquices.PT
-        <span style={{ marginLeft: '20px' }}/>
-          <a href="https://github.com/politiquices" style={{ color: 'white', textDecoration: 'none'}} target="_blank" rel="noreferrer">{t('footer.github')}</a>
-        <span style={{ marginLeft: '20px' }}/>
-          <a href="https://www.davidsbatista.net/assets/documents/publications/politiquices_dsbatista_20230705.pdf"
-          style={{ color: 'white', textDecoration: 'none' }}  target="_blank" rel="noreferrer">{t('footer.report')}</a>
         </div>
     </div>
   );

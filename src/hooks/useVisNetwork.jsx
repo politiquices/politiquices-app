@@ -8,6 +8,16 @@ function useVisNetwork({ nodes, edges, Yearsvalues, onEdgeClick, onBackgroundCli
   const container = useRef(null);
   const networkRef = useRef(null);
 
+  // Keep refs fresh so the stable click handler always sees current values
+  const edgesRef = useRef(edges);
+  const yearsRef = useRef(Yearsvalues);
+  const onEdgeClickRef = useRef(onEdgeClick);
+  const onBackgroundClickRef = useRef(onBackgroundClick);
+  useEffect(() => { edgesRef.current = edges; }, [edges]);
+  useEffect(() => { yearsRef.current = Yearsvalues; }, [Yearsvalues]);
+  useEffect(() => { onEdgeClickRef.current = onEdgeClick; }, [onEdgeClick]);
+  useEffect(() => { onBackgroundClickRef.current = onBackgroundClick; }, [onBackgroundClick]);
+
   const options = {
     physics: {
       enabled: true,
@@ -87,42 +97,44 @@ function useVisNetwork({ nodes, edges, Yearsvalues, onEdgeClick, onBackgroundCli
     return () => observer.disconnect()
   }, [])
 
+  // Create network once on mount, destroy on unmount
   useEffect(() => {
-    if (networkRef.current) {
-      networkRef.current.setData({ nodes, edges });
-    } else {
-      networkRef.current = new Network(container.current, { nodes, edges }, options);
-      networkRef.current.on('click', (params) => {
-        if (params.nodes.length > 0) {
-          const nodeId = params.nodes[0];
-          const nodeName = networkRef.current.body.nodes[nodeId].options.label;
-          setNodePopoverContent({ id: nodeId, label: nodeName });
-          setNodePopoverAnchor(params.event.center);
-          setNodePopoverOpen(true);
-        } else if (params.edges.length > 0) {
-          const edgeId = params.edges[0];
-          const edge = networkRef.current.body.edges[edgeId];
-          const rel_type = edge.title === 'apoia' ? 'ent1_supports_ent2' : 'ent1_opposes_ent2';
-          if (onEdgeClick) {
-            onEdgeClick({ from: edge.from.id, to: edge.to.id, rel_type, label: edge.title });
-          } else {
-            const numNoticias = edges[edgeId-1].value;
-            const [min, max] = Yearsvalues;
-            setEdgePopoverContent({ from: edge.from.id, to: edge.to.id, rel_type, start: min, end: max, n_noticias: numNoticias, label: edge.title });
-            setEdgePopoverAnchor(params.event.center);
-            setEdgePopoverOpen(true);
-          }
+    if (!container.current) return;
+    networkRef.current = new Network(container.current, { nodes, edges }, options);
+    networkRef.current.on('click', (params) => {
+      if (params.nodes.length > 0) {
+        const nodeId = params.nodes[0];
+        const nodeName = networkRef.current.body.nodes[nodeId].options.label;
+        setNodePopoverContent({ id: nodeId, label: nodeName });
+        setNodePopoverAnchor(params.event.center);
+        setNodePopoverOpen(true);
+      } else if (params.edges.length > 0) {
+        const edgeId = params.edges[0];
+        const edge = networkRef.current.body.edges[edgeId];
+        const rel_type = edge.title === 'apoia' ? 'ent1_supports_ent2' : 'ent1_opposes_ent2';
+        if (onEdgeClickRef.current) {
+          onEdgeClickRef.current({ from: edge.from.id, to: edge.to.id, rel_type, label: edge.title });
         } else {
-          if (onBackgroundClick) onBackgroundClick();
+          const numNoticias = edgesRef.current[edgeId - 1]?.value;
+          const [min, max] = yearsRef.current;
+          setEdgePopoverContent({ from: edge.from.id, to: edge.to.id, rel_type, start: min, end: max, n_noticias: numNoticias, label: edge.title });
+          setEdgePopoverAnchor(params.event.center);
+          setEdgePopoverOpen(true);
         }
-      });
-    }
-    return () => {
-      if (networkRef.current) {
-        networkRef.current.destroy();
-        networkRef.current = null;
+      } else {
+        if (onBackgroundClickRef.current) onBackgroundClickRef.current();
       }
+    });
+    return () => {
+      networkRef.current?.destroy();
+      networkRef.current = null;
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Update data without destroying/recreating — preserves layout
+  useEffect(() => {
+    networkRef.current?.setData({ nodes, edges });
   }, [nodes, edges]);
 
   const nodePopover = (

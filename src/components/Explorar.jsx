@@ -157,7 +157,7 @@ function GraphControls({ depth, setDepth, minNoticias, setMinNoticias, relTypeVa
   )
 }
 
-function GraphCanvas({ nodes, edges, yearsValues, onEdgeClick, onBackgroundClick, onFullscreen, fullscreen, resetRef }) {
+function GraphCanvas({ nodes, edges, yearsValues, onEdgeClick, onBackgroundClick, onFullscreen, fullscreen, resetRef, isLoading }) {
   const { t } = useTranslation()
   const { container, nodePopover, edgePopover, resetLayout } = useVisNetwork({
     nodes,
@@ -179,6 +179,17 @@ function GraphCanvas({ nodes, edges, yearsValues, onEdgeClick, onBackgroundClick
           ref={container}
           sx={{ width: '100%', height: fullscreen ? '100%' : 500, border: '1px solid #ccc', borderRadius: 1 }}
         />
+        {/* Loading overlay */}
+        {isLoading && (
+          <Box sx={{
+            position: 'absolute', inset: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            bgcolor: 'rgba(255,255,255,0.6)',
+            borderRadius: 1,
+          }}>
+            <CircularProgress />
+          </Box>
+        )}
         {/* Fullscreen toggle — top-right */}
         <IconButton
           size="small"
@@ -219,11 +230,7 @@ function GraphCanvas({ nodes, edges, yearsValues, onEdgeClick, onBackgroundClick
 function Explorar() {
   const { t } = useTranslation()
   const [personalities, setPersonalities] = useState([])
-  const [selectedOption, setSelectedOption] = useState([
-    { label: 'José Sócrates', value: 'Q182367' },
-    { label: 'Pedro Passos Coelho', value: 'Q57615' },
-    { label: 'António Costa', value: 'Q610788' },
-  ])
+  const [selectedOption, setSelectedOption] = useState([])
   const [yearsValues, setYearsValues] = useState([2000, MAX_YEAR])
   // Graph display controls (client-side, no re-fetch needed)
   const [depth, setDepth] = useState(1)
@@ -291,6 +298,7 @@ function Explorar() {
           const years = parseYearsFromLabel(entry[1])
           if (years) setYearsValues(years)
         }
+        setMinNoticias(5)
       })
       .catch(() => {})
       .finally(() => setPresetLoading(false))
@@ -307,7 +315,8 @@ function Explorar() {
     setNewsCache({})
     newsCacheRef.current = {}
     setDepth(1)
-    getTimeline({ persons, onlyAmongSelected: true, onlySentiment: true, start: min, end: max, minFreq: minNoticias })
+    const isPreset = !!(presetGoverno || presetAssembly)
+    getTimeline({ persons, onlyAmongSelected: !isPreset, onlySentiment: true, start: min, end: max, minFreq: minNoticias })
       .then((data) => {
         setBaseNodes(enrichNodes(data.nodes ?? []))
         setBaseEdges(data.edges ?? [])
@@ -540,6 +549,15 @@ function Explorar() {
           />
         </Box>
 
+        {/* Graph controls — always visible so user can set before generating */}
+        <GraphControls
+          depth={depth} setDepth={setDepth}
+          minNoticias={minNoticias} setMinNoticias={setMinNoticias}
+          relTypeValue={relTypeValue} handleRelTypeChange={handleRelTypeChange}
+          isExpandLoading={isExpandLoading}
+          onReset={() => resetLayoutRef.current?.()}
+        />
+
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Button variant="contained" onClick={handleClick} disabled={loading}>
             {loading ? <CircularProgress size={20} sx={{ mr: 1 }} /> : null}
@@ -554,15 +572,6 @@ function Explorar() {
       {hasResults && displayedNodes.length > 0 && (
         <Paper elevation={2} sx={{ p: 2, mb: 3 }}>
 
-          {/* Graph controls */}
-          <GraphControls
-            depth={depth} setDepth={setDepth}
-            minNoticias={minNoticias} setMinNoticias={setMinNoticias}
-            relTypeValue={relTypeValue} handleRelTypeChange={handleRelTypeChange}
-            isExpandLoading={isExpandLoading}
-            onReset={() => resetLayoutRef.current?.()}
-          />
-
           <GraphCanvas
             nodes={displayedNodes}
             edges={displayedEdges}
@@ -572,6 +581,7 @@ function Explorar() {
             onFullscreen={() => setIsFullscreen(true)}
             fullscreen={false}
             resetRef={resetLayoutRef}
+            isLoading={isExpandLoading}
           />
           <Dialog
             fullScreen
@@ -596,6 +606,7 @@ function Explorar() {
                   onFullscreen={() => setIsFullscreen(false)}
                   fullscreen={true}
                   resetRef={resetLayoutRef}
+                  isLoading={isExpandLoading}
                 />
               </Box>
             </Box>

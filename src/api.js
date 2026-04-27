@@ -51,9 +51,12 @@ export function getPersonalityTopRelated(id) {
   return get(`/personality/top_related_personalities/${id}`)
 }
 
-export function getPersonalitiesPaged(page, portugueseOnly = false) {
-  const params = portugueseOnly ? '?portuguese_only=true' : ''
-  return get(`/personalities/${page}${params}`)
+export function getPersonalitiesPaged(page, { portugueseOnly = false, internationalOnly = false } = {}) {
+  const params = new URLSearchParams()
+  if (portugueseOnly) params.set('portuguese_only', 'true')
+  if (internationalOnly) params.set('international_only', 'true')
+  const qs = params.toString()
+  return get(`/personalities/${page}${qs ? `?${qs}` : ''}`)
 }
 
 export function getPersonalitiesFiltered(type, id) {

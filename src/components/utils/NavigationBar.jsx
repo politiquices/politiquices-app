@@ -17,13 +17,6 @@ import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import { useTranslation } from 'react-i18next'
 import { getPersonsAndParties, getParties, getPersons } from '../../api'
-import { GOVERNMENTS, ASSEMBLIES } from '../../constants'
-
-function localizeLabel(label, t) {
-  return label
-    .replace('Governo', t('constants.government'))
-    .replace('Legislatura', t('constants.legislature'))
-}
 
 function SearchComboBox({ personalities, isLoading, onSelect }) {
   const { t } = useTranslation()
@@ -76,8 +69,6 @@ function NewResponsiveAppBar() {
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const [anchorElNav, setAnchorElNav] = React.useState(null)
-  const [anchorElUser, setAnchorElUser] = React.useState(null)
-  const [anchorElUserAss, setAnchorElUserAss] = React.useState(null)
   const [personalities, setPersonalities] = React.useState(null)
   const [parties, setParties] = React.useState(null)
   const [personsWithNews, setPersonsWithNews] = React.useState([])
@@ -86,8 +77,8 @@ function NewResponsiveAppBar() {
     ['nav.home', 'home'],
     ['nav.personalities', 'personalidades'],
     ['nav.random', 'random'],
-    ['nav.versus', 'versus'],
     ['nav.explore', 'explorar'],
+    ['nav.versus', 'versus'],
   ]
   const pagesRight = [
     ['nav.about', 'sobre'],
@@ -110,16 +101,8 @@ function NewResponsiveAppBar() {
     }
   }
 
-  // Governos
   const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget)
   const handleCloseNavMenu = () => setAnchorElNav(null)
-  const handleOpenUserMenuGov = (event) => setAnchorElUser(event.currentTarget)
-  const handleCloseUserMenu = () => { setAnchorElUser(null); setAnchorElUserAss(null) }
-  const handleNavClick = (value) => { navigate(`/government/${value}`); setAnchorElUser(null) }
-
-  // Assembleias
-  const handleOpenUserMenuAss = (event) => setAnchorElUserAss(event.currentTarget)
-  const handleNavClickAss = (value) => { navigate(`/assembly/${value}`); setAnchorElUserAss(null) }
 
   const handleRandomPersonality = () => {
     if (personsWithNews.length > 0) {
@@ -194,48 +177,6 @@ function NewResponsiveAppBar() {
                 </Link>
               )
             )}
-
-            {/* Governos dropdown */}
-            <Button onClick={handleOpenUserMenuGov} sx={{ my: 2, color: 'white', display: 'block' }}>
-              {t('nav.governments')}
-            </Button>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-governos"
-              anchorEl={anchorElUser}
-              anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-              keepMounted
-              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {GOVERNMENTS.map((government) => (
-                <MenuItem key={government[0]} onClick={() => handleNavClick(government[0])}>
-                  <Typography textAlign="center">{localizeLabel(government[1], t)}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-
-            {/* Assembleias dropdown */}
-            <Button onClick={handleOpenUserMenuAss} sx={{ my: 2, color: 'white', display: 'block' }}>
-              {t('nav.assemblies')}
-            </Button>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-assembleias"
-              anchorEl={anchorElUserAss}
-              anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-              keepMounted
-              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-              open={Boolean(anchorElUserAss)}
-              onClose={handleCloseUserMenu}
-            >
-              {ASSEMBLIES.map((assembleia) => (
-                <MenuItem key={assembleia[0]} onClick={() => handleNavClickAss(assembleia[0])}>
-                  <Typography textAlign="center">{localizeLabel(assembleia[1], t)}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
 
             {/* Right pages: Sobre */}
             {pagesRight.map((page) => (

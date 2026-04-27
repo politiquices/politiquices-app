@@ -112,6 +112,7 @@
   "personalities": {
     "all": "Todas",
     "portuguese": "Portuguesas",
+    "international": "Internacionais",
     "error": "Erro ao carregar dados."
   },
   "filtered": {

@@ -112,6 +112,7 @@
   "personalities": {
     "all": "All",
     "portuguese": "Portuguese",
+    "international": "International",
     "error": "Error loading data."
   },
   "filtered": {

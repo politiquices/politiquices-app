@@ -7,8 +7,11 @@ import Slider from '@mui/material/Slider'
 import TextField from '@mui/material/TextField'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
-import Chip from '@mui/material/Chip'
 import CircularProgress from '@mui/material/CircularProgress'
+import IconButton from '@mui/material/IconButton'
+import Dialog from '@mui/material/Dialog'
+import FullscreenIcon from '@mui/icons-material/Fullscreen'
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit'
 import useVisNetwork from '../hooks/useVisNetwork.jsx'
 import { useRelTypeToggle } from '../hooks/useRelTypeToggle'
 import { getPersonalityTopRelated } from '../api'
@@ -146,8 +149,9 @@ function buildGraphData(cache, mainId, mainName, mainImageUrl, topN, minFreq, sh
   return { nodes: Array.from(nodesMap.values()), edges }
 }
 
-function GraphCanvas({ nodes, edges, onEdgeClick, onBackgroundClick }) {
-  const { container, nodePopover, edgePopover } = useVisNetwork({
+function GraphCanvas({ nodes, edges, onEdgeClick, onBackgroundClick, onFullscreen, fullscreen, resetRef, isLoading }) {
+  const { t } = useTranslation()
+  const { container, nodePopover, edgePopover, resetLayout } = useVisNetwork({
     nodes,
     edges,
     Yearsvalues: [MIN_YEAR, MAX_YEAR],
@@ -155,15 +159,103 @@ function GraphCanvas({ nodes, edges, onEdgeClick, onBackgroundClick }) {
     onBackgroundClick,
   })
 
+  useEffect(() => {
+    if (resetRef) resetRef.current = resetLayout
+  }, [resetLayout, resetRef])
+
   return (
     <>
       {nodePopover}
       {edgePopover}
-      <Box
-        ref={container}
-        sx={{ width: '100%', height: 450, border: '1px solid #ccc', borderRadius: 1 }}
-      />
+      <Box sx={fullscreen ? { position: 'absolute', inset: 0 } : { position: 'relative' }}>
+        <Box
+          ref={container}
+          sx={{ width: '100%', height: fullscreen ? '100%' : 450, border: '1px solid #ccc', borderRadius: 1 }}
+        />
+        {isLoading && (
+          <Box sx={{
+            position: 'absolute', inset: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            bgcolor: 'rgba(255,255,255,0.6)', borderRadius: 1,
+          }}>
+            <CircularProgress />
+          </Box>
+        )}
+        <IconButton
+          size="small"
+          onClick={onFullscreen}
+          sx={{ position: 'absolute', top: 6, right: 6, bgcolor: 'rgba(255,255,255,0.85)', '&:hover': { bgcolor: 'rgba(255,255,255,1)' } }}
+        >
+          {fullscreen ? <FullscreenExitIcon fontSize="small" /> : <FullscreenIcon fontSize="small" />}
+        </IconButton>
+        {/* Legend overlay — bottom-right */}
+        <Stack
+          direction="row"
+          spacing={1.5}
+          sx={{
+            position: 'absolute', bottom: 8, right: 8,
+            bgcolor: 'rgba(255,255,255,0.85)', borderRadius: 1,
+            px: 1, py: 0.5, pointerEvents: 'none',
+          }}
+        >
+          <Stack direction="row" spacing={0.5} alignItems="center">
+            <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: COLOR_SUPPORTS }} />
+            <Typography variant="caption" color="text.secondary">{t('graph.supportsLegend')}</Typography>
+          </Stack>
+          <Stack direction="row" spacing={0.5} alignItems="center">
+            <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: COLOR_OPPOSES }} />
+            <Typography variant="caption" color="text.secondary">{t('graph.opposesLegend')}</Typography>
+          </Stack>
+        </Stack>
+      </Box>
     </>
+  )
+}
+
+function GraphControls({ depth, setDepth, topN, setTopN, minFreq, setMinFreq, relTypeValue, handleRelTypeChange, isLoading, onReset }) {
+  const { t } = useTranslation()
+  return (
+    <Stack direction="row" spacing={3} alignItems="center" justifyContent="center" flexWrap="wrap" gap={1} sx={{ mb: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography variant="caption" color="text.secondary" noWrap>{t('graph.depth')}</Typography>
+        <ToggleButtonGroup value={depth} exclusive onChange={(_, v) => { if (v !== null) setDepth(v) }} size="small">
+          {[1, 2, 3].map((d) => (
+            <ToggleButton key={d} value={d} sx={{ px: 1.5, py: 0.5 }}>{d}</ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 160 }}>
+        <Typography variant="caption" color="text.secondary" noWrap>{t('graph.topN', { n: topN })}</Typography>
+        <Slider value={topN} min={3} max={10} step={1} onChange={(_, v) => setTopN(v)} size="small" sx={{ width: 100 }} />
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography variant="caption" color="text.secondary" noWrap>{t('graph.minNews')}</Typography>
+        <TextField
+          type="number"
+          value={minFreq}
+          onChange={(e) => setMinFreq(Math.max(1, parseInt(e.target.value) || 1))}
+          size="small"
+          inputProps={{ min: 1, style: { width: 48, padding: '4px 8px' } }}
+        />
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography variant="caption" color="text.secondary" noWrap>{t('graph.type')}</Typography>
+        <ToggleButtonGroup value={relTypeValue} onChange={handleRelTypeChange} size="small">
+          <ToggleButton value="supports" sx={{ px: 1.5, py: 0.5, color: COLOR_SUPPORTS, '&.Mui-selected': { bgcolor: COLOR_SUPPORTS_BG, color: COLOR_SUPPORTS } }}>
+            {t('graph.supports')}
+          </ToggleButton>
+          <ToggleButton value="opposes" sx={{ px: 1.5, py: 0.5, color: COLOR_OPPOSES, '&.Mui-selected': { bgcolor: COLOR_OPPOSES_BG, color: COLOR_OPPOSES } }}>
+            {t('graph.opposes')}
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+      {isLoading && <CircularProgress size={18} />}
+      {onReset && (
+        <ToggleButton size="small" value="" onClick={onReset} sx={{ px: 1.5, py: 0.5, textTransform: 'none' }}>
+          {t('explore.resetLayout')}
+        </ToggleButton>
+      )}
+    </Stack>
   )
 }
 
@@ -174,6 +266,8 @@ function PersonalidadeGraph({ topRelated, mainId, mainName, mainImageUrl, onEdge
   const [minFreq, setMinFreq] = useState(1)
   const { showSupports, setShowSupports, showOpposes, setShowOpposes, relTypeValue, handleRelTypeChange } = useRelTypeToggle()
   const [isLoading, setIsLoading] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const resetLayoutRef = useRef(null)
 
   // Seed cache with main node's data on mount / personality change
   const [dataCache, setDataCache] = useState(() =>
@@ -253,107 +347,24 @@ function PersonalidadeGraph({ topRelated, mainId, mainName, mainImageUrl, onEdge
 
   if (!nodes.length) return null
 
+  const controlProps = { depth, setDepth, topN, setTopN, minFreq, setMinFreq, relTypeValue, handleRelTypeChange, isLoading, onReset: () => resetLayoutRef.current?.() }
+  const canvasProps = { nodes, edges, onEdgeClick, onBackgroundClick, isLoading, resetRef: resetLayoutRef }
+
   return (
     <Paper elevation={2} sx={{ p: 2 }}>
-      {/* Controls */}
-      <Stack spacing={1.5} sx={{ mb: 2 }}>
-        <Stack direction="row" spacing={3} alignItems="center" justifyContent="center" flexWrap="wrap" gap={1}>
-
-          {/* Depth */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="caption" color="text.secondary" noWrap>{t('graph.depth')}</Typography>
-            <ToggleButtonGroup
-              value={depth}
-              exclusive
-              onChange={(_, v) => { if (v !== null) setDepth(v) }}
-              size="small"
-            >
-              {[1, 2, 3].map((d) => (
-                <ToggleButton key={d} value={d} sx={{ px: 1.5, py: 0.5 }}>{d}</ToggleButton>
-              ))}
-            </ToggleButtonGroup>
-          </Box>
-
-          {/* Top-N */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 160 }}>
-            <Typography variant="caption" color="text.secondary" noWrap>{t('graph.topN', { n: topN })}</Typography>
-            <Slider
-              value={topN}
-              min={3}
-              max={10}
-              step={1}
-              onChange={(_, v) => setTopN(v)}
-              size="small"
-              sx={{ width: 100 }}
-            />
-          </Box>
-
-          {/* Min. notícias */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="caption" color="text.secondary" noWrap>{t('graph.minNews')}</Typography>
-            <TextField
-              type="number"
-              value={minFreq}
-              onChange={(e) => setMinFreq(Math.max(1, parseInt(e.target.value) || 1))}
-              size="small"
-              inputProps={{ min: 1, style: { width: 48, padding: '4px 8px' } }}
-            />
-          </Box>
-
-          {/* Tipo de relação */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="caption" color="text.secondary" noWrap>{t('graph.type')}</Typography>
-            <ToggleButtonGroup
-              value={relTypeValue}
-              onChange={handleRelTypeChange}
-              size="small"
-            >
-              <ToggleButton value="supports" sx={{ px: 1.5, py: 0.5, color: COLOR_SUPPORTS, '&.Mui-selected': { bgcolor: COLOR_SUPPORTS_BG, color: COLOR_SUPPORTS } }}>
-                {t('graph.supports')}
-              </ToggleButton>
-              <ToggleButton value="opposes" sx={{ px: 1.5, py: 0.5, color: COLOR_OPPOSES, '&.Mui-selected': { bgcolor: COLOR_OPPOSES_BG, color: COLOR_OPPOSES } }}>
-                {t('graph.opposes')}
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Box>
-
-          {isLoading && <CircularProgress size={18} />}
-        </Stack>
-
-      </Stack>
-
+      <GraphControls {...controlProps} />
       <Box sx={{ position: 'relative' }}>
-        <GraphCanvas
-          nodes={nodes}
-          edges={edges}
-          onEdgeClick={onEdgeClick}
-          onBackgroundClick={onBackgroundClick}
-        />
-        {/* Legend overlay — bottom-right */}
-        <Stack
-          direction="row"
-          spacing={1.5}
-          sx={{
-            position: 'absolute',
-            bottom: 8,
-            right: 8,
-            bgcolor: 'rgba(255,255,255,0.85)',
-            borderRadius: 1,
-            px: 1,
-            py: 0.5,
-            pointerEvents: 'none',
-          }}
-        >
-          <Stack direction="row" spacing={0.5} alignItems="center">
-            <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: COLOR_SUPPORTS }} />
-            <Typography variant="caption" color="text.secondary">{t('graph.supportsLegend')}</Typography>
-          </Stack>
-          <Stack direction="row" spacing={0.5} alignItems="center">
-            <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: COLOR_OPPOSES }} />
-            <Typography variant="caption" color="text.secondary">{t('graph.opposesLegend')}</Typography>
-          </Stack>
-        </Stack>
+        <GraphCanvas {...canvasProps} onFullscreen={() => setIsFullscreen(true)} fullscreen={false} />
       </Box>
+
+      <Dialog fullScreen open={isFullscreen} onClose={() => setIsFullscreen(false)}>
+        <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', p: 1 }}>
+          <GraphControls {...controlProps} />
+          <Box sx={{ position: 'relative', flex: 1 }}>
+            <GraphCanvas {...canvasProps} onFullscreen={() => setIsFullscreen(false)} fullscreen={true} />
+          </Box>
+        </Box>
+      </Dialog>
     </Paper>
   )
 }

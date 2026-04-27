@@ -15,6 +15,7 @@ import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import Stack from '@mui/material/Stack'
 import Link from '@mui/material/Link'
+import MuiTooltip from '@mui/material/Tooltip'
 import StorageIcon from '@mui/icons-material/Storage'
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
@@ -75,56 +76,24 @@ function Sobre() {
         <Typography color="text.secondary" sx={{ mb: 2 }}>
           {t('about.description')}
         </Typography>
-        <Stack spacing={1.5}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <EmojiEventsIcon fontSize="small" color="primary" />
-            <Typography variant="body2">
-              <Link href="https://www.publico.pt/2021/06/17/ciencia/noticia/arquivopt-premiada-plataforma-recolhe-dados-minorias-jornais-1966463" target="_blank">
-                {t('about.award')}
+        <Stack direction="row" flexWrap="wrap" gap={9} justifyContent="center" sx={{ mt: 2 }}>
+          {[
+            { href: 'https://www.publico.pt/2021/06/17/ciencia/noticia/arquivopt-premiada-plataforma-recolhe-dados-minorias-jornais-1966463', icon: <EmojiEventsIcon sx={{ fontSize: 32 }} />, label: t('about.award'), tooltip: t('about.awardDesc') },
+            { href: 'https://www.davidsbatista.net/assets/documents/publications/politiquices_dsbatista_20230705.pdf', icon: <ArticleOutlinedIcon sx={{ fontSize: 32 }} />, label: t('about.paper'), tooltip: t('about.paperDesc') },
+            { href: 'https://www.youtube.com/watch?v=lfNS_F84N6k', icon: <OndemandVideoIcon sx={{ fontSize: 32 }} />, label: t('about.video'), tooltip: t('about.videoDesc') },
+            { href: 'https://github.com/politiquices', icon: <GitHubIcon sx={{ fontSize: 32 }} />, label: 'GitHub' },
+            { href: 'http://sparql.politiquices.pt', icon: <StorageIcon sx={{ fontSize: 32 }} />, label: 'SPARQL' },
+            { href: 'https://github.com/politiquices/SPARQL-endpoint/blob/main/tutorials/sparql_queries.md', icon: <ArticleOutlinedIcon sx={{ fontSize: 32 }} />, label: t('about.sparqlExamples') },
+          ].map(({ href, icon, label, tooltip }) => (
+            <MuiTooltip key={label} title={tooltip ?? ''} arrow>
+              <Link href={href} target="_blank" underline="none" color="inherit">
+                <Stack alignItems="center" spacing={0.5} sx={{ width: 90, '&:hover': { color: 'primary.main' } }}>
+                  {icon}
+                  <Typography variant="caption" align="center" sx={{ lineHeight: 1.3 }}>{label}</Typography>
+                </Stack>
               </Link>
-              {' '}{t('about.awardDesc')}
-            </Typography>
-          </Stack>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <ArticleOutlinedIcon fontSize="small" color="primary" />
-            <Typography variant="body2">
-              <Link href="https://www.davidsbatista.net/assets/documents/publications/politiquices_dsbatista_20230705.pdf" target="_blank">
-                {t('about.paper')}
-              </Link>
-              {' '}{t('about.paperDesc')}
-            </Typography>
-          </Stack>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <OndemandVideoIcon fontSize="small" color="primary" />
-            <Typography variant="body2">
-              <Link href="https://www.youtube.com/watch?v=lfNS_F84N6k" target="_blank">
-                {t('about.video')}
-              </Link>
-              {' '}{t('about.videoDesc')}
-            </Typography>
-          </Stack>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <GitHubIcon fontSize="small" color="primary" />
-            <Typography variant="body2">
-              {t('about.sourceCode')}{' '}
-              <Link href="https://github.com/politiquices" target="_blank">
-                github.com/politiquices
-              </Link>
-            </Typography>
-          </Stack>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <StorageIcon fontSize="small" color="primary" />
-            <Typography variant="body2">
-              {t('about.sparqlEndpoint')}{' '}
-              <Link href="http://sparql.politiquices.pt" target="_blank">
-                sparql.politiquices.pt
-              </Link>
-              {' — '}
-              <Link href="https://github.com/politiquices/SPARQL-endpoint/blob/main/tutorials/sparql_queries.md" target="_blank">
-                {t('about.sparqlExamples')}
-              </Link>
-            </Typography>
-          </Stack>
+            </MuiTooltip>
+          ))}
         </Stack>
       </Paper>
 
