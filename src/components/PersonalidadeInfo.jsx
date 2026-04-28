@@ -236,14 +236,16 @@ function FetchPersonalidade() {
     : typeFilteredArticles
 
   // Both caches may contain the same underlying article from different perspectives;
-  // deduplicate by arquivo_doc URL so each article appears only once.
+  // deduplicate by arquivo_doc URL so each article appears only once, then sort newest first.
   const seenUrls = new Set()
-  const filteredArticles = rawFiltered.filter((a) => {
-    const key = a.arquivo_doc || a.original_url
-    if (seenUrls.has(key)) return false
-    seenUrls.add(key)
-    return true
-  })
+  const filteredArticles = rawFiltered
+    .filter((a) => {
+      const key = a.arquivo_doc || a.original_url
+      if (seenUrls.has(key)) return false
+      seenUrls.add(key)
+      return true
+    })
+    .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
 
   const pagedArticles = filteredArticles.slice((newsPage - 1) * PAGE_SIZE, newsPage * PAGE_SIZE)
 
@@ -301,17 +303,6 @@ function FetchPersonalidade() {
               )
             })}
           </Stack>
-
-          {selectedEdge && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-              <Chip
-                label={`${selectedEdge.from} ${selectedEdge.label} ${selectedEdge.to}`}
-                onDelete={handleClearEdge}
-                color="primary"
-                size="small"
-              />
-            </Box>
-          )}
 
           <NewsTitles data={pagedArticles} />
 

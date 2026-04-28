@@ -129,7 +129,9 @@
     "arquivoLink": "Arquivo.PT Link",
     "originalLink": "Original Link",
     "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    "dateFormat": "{{month}} {{day}}, {{year}}"
+    "dateFormat": "{{month}} {{day}}, {{year}}",
+    "showMore": "Show paragraph",
+    "showLess": "Hide paragraph"
   },
   "grafo": {
     "error": "Error loading data.",

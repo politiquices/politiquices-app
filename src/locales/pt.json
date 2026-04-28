@@ -129,7 +129,9 @@
     "arquivoLink": "Link Arquivo.PT",
     "originalLink": "Link Original",
     "months": ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
-    "dateFormat": "{{day}} {{month}} de {{year}}"
+    "dateFormat": "{{day}} {{month}} de {{year}}",
+    "showMore": "Ver parágrafo",
+    "showLess": "Esconder parágrafo"
   },
   "grafo": {
     "error": "Erro ao carregar dados.",

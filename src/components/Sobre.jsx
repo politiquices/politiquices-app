@@ -22,13 +22,18 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import ArticleIcon from '@mui/icons-material/Article'
 import FactCheckIcon from '@mui/icons-material/FactCheck'
 import CircularIndeterminate from './utils/Circular'
 import { getStats } from '../api'
 import { COLOR_SUPPORTS, COLOR_OPPOSES } from '../constants'
 import { useTranslation } from 'react-i18next'
+
+function fmtNum(n, lang) {
+  if (n == null) return ''
+  const sep = lang === 'pt' ? ' ' : ','
+  return String(Math.floor(n)).replace(/\B(?=(\d{3})+(?!\d))/g, sep)
+}
 
 function Sobre() {
   const { t, i18n } = useTranslation()
@@ -38,23 +43,18 @@ function Sobre() {
 
   const METRIC_CARDS = (data) => [
     {
-      icon: <AccountBalanceIcon sx={{ fontSize: 36, color: 'primary.main' }} />,
-      value: data.nr_parties,
-      label: t('about.parties'),
-    },
-    {
       icon: <PeopleAltIcon sx={{ fontSize: 36, color: 'primary.main' }} />,
-      value: data.nr_persons,
+      value: fmtNum(data.nr_persons, i18n.language),
       label: t('about.personalities'),
     },
     {
       icon: <ArticleIcon sx={{ fontSize: 36, color: 'text.secondary' }} />,
-      value: data.nr_all_articles?.toLocaleString(i18n.language === 'pt' ? 'pt-PT' : 'en-GB'),
+      value: fmtNum(data.nr_all_articles, i18n.language),
       label: t('about.articlesWithPersonalities'),
     },
     {
       icon: <FactCheckIcon sx={{ fontSize: 36, color: COLOR_SUPPORTS }} />,
-      value: data.nr_all_articles_sentiment?.toLocaleString(i18n.language === 'pt' ? 'pt-PT' : 'en-GB'),
+      value: fmtNum(data.nr_all_articles_sentiment, i18n.language),
       label: t('about.articlesWithSentiment'),
     },
   ]
@@ -70,12 +70,6 @@ function Sobre() {
 
       {/* O que é */}
       <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
-          {t('about.title')}
-        </Typography>
-        <Typography color="text.secondary" sx={{ mb: 2 }}>
-          {t('about.description')}
-        </Typography>
         <Stack direction="row" flexWrap="wrap" gap={9} justifyContent="center" sx={{ mt: 2 }}>
           {[
             { href: 'https://www.publico.pt/2021/06/17/ciencia/noticia/arquivopt-premiada-plataforma-recolhe-dados-minorias-jornais-1966463', icon: <EmojiEventsIcon sx={{ fontSize: 32 }} />, label: t('about.award'), tooltip: t('about.awardDesc') },
@@ -103,7 +97,7 @@ function Sobre() {
         {isError && <Typography color="error">{t('about.statsError')}</Typography>}
         {stats && (
           <>
-            <Grid container spacing={2} sx={{ mb: 3 }}>
+            <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
               {METRIC_CARDS(stats).map((card) => (
                 <Grid item xs={12} sm={6} md={3} key={card.label}>
                   <Box

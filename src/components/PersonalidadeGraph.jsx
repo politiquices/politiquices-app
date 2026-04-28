@@ -3,7 +3,6 @@ import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import Slider from '@mui/material/Slider'
 import TextField from '@mui/material/TextField'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
@@ -20,8 +19,28 @@ import { entityId } from '../utils'
 import { useTranslation } from 'react-i18next'
 
 // Returns the set of node IDs visible at the given depth from the cache.
+const MAX_INITIAL_NODES = 10
+
+function computeDynamicMinFreq(data) {
+  if (!data) return 1
+  const allRels = [
+    ...(data.who_supports_person ?? []),
+    ...(data.who_person_supports ?? []),
+    ...(data.who_opposes_person ?? []),
+    ...(data.who_person_opposes ?? []),
+  ]
+  const byEnt = {}
+  allRels.forEach((e) => {
+    const id = entityId(e.wiki_id)
+    if (!byEnt[id] || e.freq > byEnt[id]) byEnt[id] = e.freq
+  })
+  const freqs = Object.values(byEnt).sort((a, b) => b - a)
+  if (freqs.length <= MAX_INITIAL_NODES) return 1
+  return freqs[MAX_INITIAL_NODES - 1]
+}
+
 // Used to determine which nodes still need to be fetched.
-function getVisibleNodeIds(cache, mainId, topN, minFreq, showSupports, showOpposes, depth) {
+function getVisibleNodeIds(cache, mainId, minFreq, showSupports, showOpposes, depth) {
   const visible = new Set([mainId])
   let frontier = [mainId]
 
@@ -41,17 +60,8 @@ function getVisibleNodeIds(cache, mainId, topN, minFreq, showSupports, showOppos
         data.who_person_opposes.forEach((e) => rels.push(e))
       }
 
-      const byEnt = {}
       rels
         .filter((e) => e.freq >= minFreq)
-        .forEach((e) => {
-          const id = entityId(e.wiki_id)
-          if (!byEnt[id] || e.freq > byEnt[id].freq) byEnt[id] = e
-        })
-
-      Object.values(byEnt)
-        .sort((a, b) => b.freq - a.freq)
-        .slice(0, topN)
         .forEach((e) => {
           const id = entityId(e.wiki_id)
           if (!visible.has(id)) { visible.add(id); next.push(id) }
@@ -63,12 +73,27 @@ function getVisibleNodeIds(cache, mainId, topN, minFreq, showSupports, showOppos
   return visible
 }
 
-function buildGraphData(cache, mainId, mainName, mainImageUrl, topN, minFreq, showSupports, showOpposes, depth) {
+function buildGraphData(cache, mainId, mainName, mainImageUrl, minFreq, showSupports, showOpposes, depth) {
   if (!cache[mainId]) return { nodes: [], edges: [] }
 
   const nodesMap = new Map()
+  const edgeSet = new Set()
   const edges = []
   let edgeId = 1
+
+  function pushEdge(from, to, relType, freq) {
+    const key = `${from}:${to}:${relType}`
+    if (edgeSet.has(key)) return
+    edgeSet.add(key)
+    edges.push({
+      id: edgeId++,
+      from,
+      to,
+      title: relType,
+      value: Math.log1p(freq),
+      color: relType === 'apoia' ? COLOR_SUPPORTS : COLOR_OPPOSES,
+    })
+  }
 
   nodesMap.set(mainId, {
     id: mainId,
@@ -107,20 +132,10 @@ function buildGraphData(cache, mainId, mainName, mainImageUrl, topN, minFreq, sh
         )
       }
 
-      const byEnt = {}
       rels
         .filter((e) => e.freq >= minFreq)
-        .forEach((e) => {
-          const id = entityId(e.wiki_id)
-          if (!byEnt[id] || e.freq > byEnt[id].freq) byEnt[id] = e
-        })
-
-      Object.values(byEnt)
-        .sort((a, b) => b.freq - a.freq)
-        .slice(0, topN)
         .forEach((entry) => {
           const entId = entityId(entry.wiki_id)
-
           if (!nodesMap.has(entId)) {
             nodesMap.set(entId, {
               id: entId,
@@ -131,19 +146,38 @@ function buildGraphData(cache, mainId, mainName, mainImageUrl, topN, minFreq, sh
             })
             next.push(entId)
           }
-
-          edges.push({
-            id: edgeId++,
-            from: entry.from,
-            to: entry.to,
-            title: entry.relType,
-            value: Math.log1p(entry.freq),
-            color: entry.relType === 'apoia' ? COLOR_SUPPORTS : COLOR_OPPOSES,
-          })
+          pushEdge(entry.from, entry.to, entry.relType, entry.freq)
         })
     }
 
     frontier = next
+  }
+
+  // Cross-edges: for cached nodes already visible, draw edges between them
+  for (const [nodeId, data] of Object.entries(cache)) {
+    if (!nodesMap.has(nodeId) || !data || !data.who_opposes_person) continue
+
+    const crossRels = []
+    if (showSupports) {
+      data.who_supports_person.forEach((e) =>
+        crossRels.push({ from: entityId(e.wiki_id), to: nodeId, relType: 'apoia', freq: e.freq })
+      )
+      data.who_person_supports.forEach((e) =>
+        crossRels.push({ from: nodeId, to: entityId(e.wiki_id), relType: 'apoia', freq: e.freq })
+      )
+    }
+    if (showOpposes) {
+      data.who_opposes_person.forEach((e) =>
+        crossRels.push({ from: entityId(e.wiki_id), to: nodeId, relType: 'opõe-se', freq: e.freq })
+      )
+      data.who_person_opposes.forEach((e) =>
+        crossRels.push({ from: nodeId, to: entityId(e.wiki_id), relType: 'opõe-se', freq: e.freq })
+      )
+    }
+
+    crossRels
+      .filter((r) => r.freq >= minFreq && r.from !== r.to && nodesMap.has(r.from) && nodesMap.has(r.to))
+      .forEach((r) => pushEdge(r.from, r.to, r.relType, r.freq))
   }
 
   return { nodes: Array.from(nodesMap.values()), edges }
@@ -212,7 +246,7 @@ function GraphCanvas({ nodes, edges, onEdgeClick, onBackgroundClick, onFullscree
   )
 }
 
-function GraphControls({ depth, setDepth, topN, setTopN, minFreq, setMinFreq, relTypeValue, handleRelTypeChange, isLoading, onReset }) {
+function GraphControls({ depth, setDepth, minFreq, setMinFreq, relTypeValue, handleRelTypeChange, isLoading, onReset }) {
   const { t } = useTranslation()
   return (
     <Stack direction="row" spacing={3} alignItems="center" justifyContent="center" flexWrap="wrap" gap={1} sx={{ mb: 2 }}>
@@ -223,10 +257,6 @@ function GraphControls({ depth, setDepth, topN, setTopN, minFreq, setMinFreq, re
             <ToggleButton key={d} value={d} sx={{ px: 1.5, py: 0.5 }}>{d}</ToggleButton>
           ))}
         </ToggleButtonGroup>
-      </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 160 }}>
-        <Typography variant="caption" color="text.secondary" noWrap>{t('graph.topN', { n: topN })}</Typography>
-        <Slider value={topN} min={3} max={10} step={1} onChange={(_, v) => setTopN(v)} size="small" sx={{ width: 100 }} />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <Typography variant="caption" color="text.secondary" noWrap>{t('graph.minNews')}</Typography>
@@ -262,8 +292,7 @@ function GraphControls({ depth, setDepth, topN, setTopN, minFreq, setMinFreq, re
 function PersonalidadeGraph({ topRelated, mainId, mainName, mainImageUrl, onEdgeClick, onBackgroundClick, onNodesChange, onGraphChange }) {
   const { t } = useTranslation()
   const [depth, setDepth] = useState(1)
-  const [topN, setTopN] = useState(5)
-  const [minFreq, setMinFreq] = useState(1)
+  const [minFreq, setMinFreq] = useState(() => computeDynamicMinFreq(topRelated))
   const { showSupports, setShowSupports, showOpposes, setShowOpposes, relTypeValue, handleRelTypeChange } = useRelTypeToggle()
   const [isLoading, setIsLoading] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -280,6 +309,7 @@ function PersonalidadeGraph({ topRelated, mainId, mainName, mainImageUrl, onEdge
     setDataCache(initial)
     dataCacheRef.current = initial
     setDepth(1)
+    setMinFreq(computeDynamicMinFreq(topRelated))
   }, [mainId, topRelated])
 
   // Keep ref in sync with state so async loop always sees the latest cache
@@ -289,8 +319,6 @@ function PersonalidadeGraph({ topRelated, mainId, mainName, mainImageUrl, onEdge
 
   // Fetch missing nodes when depth or mainId changes
   useEffect(() => {
-    if (depth === 1) return
-
     let cancelled = false
 
     async function fetchMissing() {
@@ -299,7 +327,7 @@ function PersonalidadeGraph({ topRelated, mainId, mainName, mainImageUrl, onEdge
       // Run up to `depth` rounds so going 1→3 works in two passes
       for (let pass = 0; pass < depth && !cancelled; pass++) {
         const needed = getVisibleNodeIds(
-          dataCacheRef.current, mainId, topN, minFreq, showSupports, showOpposes, depth
+          dataCacheRef.current, mainId, minFreq, showSupports, showOpposes, depth
         )
         const missing = [...needed].filter((id) => !dataCacheRef.current[id])
         if (missing.length === 0) break
@@ -328,11 +356,11 @@ function PersonalidadeGraph({ topRelated, mainId, mainName, mainImageUrl, onEdge
 
     fetchMissing()
     return () => { cancelled = true }
-  }, [depth, mainId, minFreq, topN, showSupports, showOpposes])
+  }, [depth, mainId, minFreq, showSupports, showOpposes])
 
   const { nodes, edges } = useMemo(
-    () => buildGraphData(dataCache, mainId, mainName, mainImageUrl, topN, minFreq, showSupports, showOpposes, depth),
-    [dataCache, mainId, mainName, mainImageUrl, topN, minFreq, showSupports, showOpposes, depth]
+    () => buildGraphData(dataCache, mainId, mainName, mainImageUrl, minFreq, showSupports, showOpposes, depth),
+    [dataCache, mainId, mainName, mainImageUrl, minFreq, showSupports, showOpposes, depth]
   )
 
   useEffect(() => {
@@ -347,7 +375,7 @@ function PersonalidadeGraph({ topRelated, mainId, mainName, mainImageUrl, onEdge
 
   if (!nodes.length) return null
 
-  const controlProps = { depth, setDepth, topN, setTopN, minFreq, setMinFreq, relTypeValue, handleRelTypeChange, isLoading, onReset: () => resetLayoutRef.current?.() }
+  const controlProps = { depth, setDepth, minFreq, setMinFreq, relTypeValue, handleRelTypeChange, isLoading, onReset: () => resetLayoutRef.current?.() }
   const canvasProps = { nodes, edges, onEdgeClick, onBackgroundClick, isLoading, resetRef: resetLayoutRef }
 
   return (

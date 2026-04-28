@@ -15,12 +15,11 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import CardActions from '@mui/material/CardActions'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
+import Button from '@mui/material/Button'
 import Collapse from '@mui/material/Collapse'
 import { red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
-import { styled } from '@mui/material/styles'
 import Chip from '@mui/material/Chip';
 import { COLOR_SUPPORTS, COLOR_OPPOSES, COLOR_SUPPORTS_BG, COLOR_OPPOSES_BG } from '../../constants'
 import { useTranslation } from 'react-i18next'
@@ -85,16 +84,6 @@ const DOMAIN_LOGOS = {
   'tvi24.iol.pt':            TVI,
 }
 
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props
-  return <IconButton {...other} />
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}))
 
 function useDateConverter() {
   const { t } = useTranslation()
@@ -244,20 +233,20 @@ function NewsTitles(props) {
           </CardContent>
         </Collapse>
         <CardActions>
-        {entry.url !== entry.original_url && entry.url.includes("arquivo.pt") && (
-          <Link href={entry.url} target="_blank">
-            <Box
-              component="img"
-              sx={{
-                height: 33,
-                maxHeight: { xs: 233, md: 167 },
-                maxWidth: { xs: 350, md: 250 },
-              }}
-              alt={t('news.arquivoLink')}
-              src={ArquivoLogo}
-            />
-          </Link>
-        )}
+          {entry.url !== entry.original_url && entry.url.includes("arquivo.pt") && (
+            <Link href={entry.url} target="_blank">
+              <Box
+                component="img"
+                sx={{
+                  height: 33,
+                  maxHeight: { xs: 233, md: 167 },
+                  maxWidth: { xs: 350, md: 250 },
+                }}
+                alt={t('news.arquivoLink')}
+                src={ArquivoLogo}
+              />
+            </Link>
+          )}
           <Link href={entry.original_url} target="_blank">
             <Box
               component="img"
@@ -270,11 +259,14 @@ function NewsTitles(props) {
               src={entry.original_url_image}
             />
           </Link>
-          <IconButton>
-          <ExpandMore onClick={() => handleOpen(index)} expand={isOpenCollapse === index} aria-expanded={isOpenCollapse === index} aria-label="show more">
-            <ExpandMoreIcon />          
-          </ExpandMore>
-          </IconButton>
+          <Button
+            onClick={() => handleOpen(index)}
+            aria-expanded={isOpenCollapse === index}
+            size="small"
+            sx={{ textTransform: 'none', fontSize: '0.85rem', ml: 1.5 }}
+          >
+            {isOpenCollapse === index ? t('news.showLess') : t('news.showMore')}
+          </Button>
         </CardActions>
         
         <IconButton
