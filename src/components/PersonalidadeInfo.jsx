@@ -77,7 +77,13 @@ function PersonalidadeInfo({ data }) {
                 <Stack direction="row" flexWrap="wrap" gap={1} sx={{ mt: 0.5 }}>
                   {data.parties.map((entry) => (
                     <Link key={entry.wiki_id} href={`${baseURL}/party/${entry.wiki_id}`}>
-                      <img width="60" src={entry.image_url} alt={entry.name} title={entry.name} />
+                      <img
+                        width="60"
+                        src={entry.image_url}
+                        alt=""
+                        title={entry.name}
+                        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/assets/images/logos/no_picture.jpg' }}
+                      />
                     </Link>
                   ))}
                 </Stack>
